@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace YouYouFramework
 {
+    /// <summary>
+    /// 游戏的入口
+    /// </summary>
     public class GameEntry : MonoBehaviour
     {
         #region 组件属性

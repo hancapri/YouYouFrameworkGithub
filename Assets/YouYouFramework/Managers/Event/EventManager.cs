@@ -30,7 +30,8 @@ namespace YouYouFramework
 
         public void Dispose()
         {
-
+            SocketEvent.Dispose();
+            CommonEvent.Dispose();
         }
     }
 }

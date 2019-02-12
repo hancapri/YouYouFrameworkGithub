@@ -37,7 +37,6 @@ namespace YouYouFramework
         public override void Shutdown()
         {
             m_EventManager.Dispose();
-            m_EventManager = null;
         }
     }
 }

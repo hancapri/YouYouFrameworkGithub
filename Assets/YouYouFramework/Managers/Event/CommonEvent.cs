@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace YouYouFramework
 {
     /// <summary>
     /// 通用事件
     /// </summary>
-    public class CommonEvent
+    public class CommonEvent : IDisposable
     {
         //[CSharpCallLua]
         public delegate void OnActionHandler(object param);
@@ -21,16 +22,14 @@ namespace YouYouFramework
         /// <param name="handler"></param>
         public void AddEventListener(ushort key, OnActionHandler handler)
         {
-            if (dic.ContainsKey(key))
+            List<OnActionHandler> lstHandler = null;
+            dic.TryGetValue(key, out lstHandler);
+            if (lstHandler == null)
             {
-                dic[key].Add(handler);
-            }
-            else
-            {
-                List<OnActionHandler> lstHandler = new List<OnActionHandler>();
-                lstHandler.Add(handler);
+                lstHandler = new List<OnActionHandler>();
                 dic[key] = lstHandler;
             }
+            lstHandler.Add(handler);
         }
         #endregion
 
@@ -42,9 +41,10 @@ namespace YouYouFramework
         /// <param name="handler"></param>
         public void RemoveEventListener(ushort key, OnActionHandler handler)
         {
-            if (dic.ContainsKey(key))
+            List<OnActionHandler> lstHandler = null;
+            dic.TryGetValue(key, out lstHandler);
+            if (lstHandler != null)
             {
-                List<OnActionHandler> lstHandler = dic[key];
                 lstHandler.Remove(handler);
                 if (lstHandler.Count == 0)
                 {
@@ -62,17 +62,17 @@ namespace YouYouFramework
         /// <param name="p"></param>
         public void Dispatch(ushort key, object param)
         {
-            if (dic.ContainsKey(key))
+            List<OnActionHandler> lstHandler = null;
+            dic.TryGetValue(key, out lstHandler);
+            if (lstHandler != null)
             {
-                List<OnActionHandler> lstHandler = dic[key];
-                if (lstHandler != null && lstHandler.Count > 0)
+                int listCount = lstHandler.Count;
+                for (int i = 0; i < listCount; i++)
                 {
-                    for (int i = 0; i < lstHandler.Count; i++)
+                    OnActionHandler handler = lstHandler[i];
+                    if (handler != null && handler.Target != null)
                     {
-                        if (lstHandler[i] != null)
-                        {
-                            lstHandler[i](param);
-                        }
+                        handler(param);
                     }
                 }
             }
@@ -81,6 +81,11 @@ namespace YouYouFramework
         public void Dispatch(ushort key)
         {
             Dispatch(key, null);
+        }
+
+        public void Dispose()
+        {
+            dic.Clear();
         }
         #endregion
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace YouYouFramework
 {
     /// <summary>
-    /// 启动的入口
+    /// 项目启动的入口
     /// </summary>
     public class GameEntry : MonoBehaviour
     {

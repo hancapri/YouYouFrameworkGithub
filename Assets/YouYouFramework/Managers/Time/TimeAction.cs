@@ -1,0 +1,98 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace YouYouFramework
+{
+    /// <summary>
+    /// 定时器
+    /// </summary>
+    public class TimeAction : ManagerBase
+    {
+        /// <summary>
+        /// 是否运行中
+        /// </summary>
+        public bool IsRunning
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 当前运行了多长时间
+        /// </summary>
+        private float m_CurrRunTime;
+
+        /// <summary>
+        /// 当前运行了多少次
+        /// </summary>
+        private int m_CurrLoop;
+
+        /// <summary>
+        /// 延迟时间
+        /// </summary>
+        private float m_DelayTime;
+
+        /// <summary>
+        /// 每次间隔秒数
+        /// </summary>
+        private float m_Interval;
+
+        /// <summary>
+        /// 循环次数
+        /// </summary>
+        private int m_Loop;
+
+        /// <summary>
+        /// 开始运行委托
+        /// </summary>
+        private Action m_OnStartAction;
+
+        /// <summary>
+        /// 运行中的委托
+        /// </summary>
+        private Action<int> m_OnUpdateAction;
+
+        /// <summary>
+        /// 结束运行委托
+        /// </summary>
+        private Action m_OnCompleteAction;
+
+        /// <summary>
+        /// 初始化定时器
+        /// </summary>
+        /// <param name="delayTime">延迟时间</param>
+        /// <param name="interval">间隔秒数</param>
+        /// <param name="loop">循环次数</param>
+        /// <param name="onStartAction">开始回调</param>
+        /// <param name="onUpdateAction">运行中回调</param>
+        /// <param name="onCompleteAction">结束回调</param>
+        /// <returns></returns>
+        public TimeAction Init(float delayTime, float interval, int loop, Action onStartAction, Action<int> onUpdateAction, Action onCompleteAction)
+        {
+            m_DelayTime = delayTime;
+            m_Interval = interval;
+            m_Loop = loop;
+            m_OnStartAction = onStartAction;
+            m_OnUpdateAction = onUpdateAction;
+            m_OnCompleteAction = onCompleteAction;
+
+            return this;
+        }
+
+        public void Run()
+        {
+            //1.把自己加入时间管理器链表中
+            GameEntry.Time.TimeManager.RegisterTimeAction(this);
+            //2.设置当前运行的时间
+            m_CurrRunTime = Time.time;
+        }
+
+        public void OnUpdate()
+        {
+            
+        }
+    }
+}
+

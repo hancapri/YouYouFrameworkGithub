@@ -18,6 +18,7 @@ namespace YouYouFramework
         /// Socket事件，给外界调用
         /// </summary>
         public SocketEvent SocketEvent;
+
         /// <summary>
         /// 通用事件，给外界调用
         /// </summary>

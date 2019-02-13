@@ -40,7 +40,7 @@ namespace YouYouFramework
         private float m_Interval;
 
         /// <summary>
-        /// 循环次数
+        /// 循环次数(-1表示无限循环，0表示循环一次)
         /// </summary>
         private int m_Loop;
 
@@ -81,17 +81,78 @@ namespace YouYouFramework
             return this;
         }
 
+        /// <summary>
+        /// 定时器启动
+        /// </summary>
         public void Run()
         {
             //1.把自己加入时间管理器链表中
-            GameEntry.Time.TimeManager.RegisterTimeAction(this);
+            GameEntry.Time.RegisterTimeAction(this);
             //2.设置当前运行的时间
             m_CurrRunTime = Time.time;
         }
 
+        /// <summary>
+        /// 定时器暂停
+        /// </summary>
+        public void Pause()
+        {
+            IsRunning = false;
+        }
+
+        /// <summary>
+        /// 定时器结束
+        /// </summary>
+        public void Stop()
+        {
+            if (m_OnCompleteAction != null)
+            {
+                m_OnCompleteAction();
+            }
+            IsRunning = false;
+            GameEntry.Time.RemoveTimeAction(this);
+        }
+
+        /// <summary>
+        /// 定时器每帧更新
+        /// </summary>
         public void OnUpdate()
         {
-            
+            //先处理延迟，过了延迟时间，第一次开始执行
+            if (!IsRunning && Time.time > m_CurrRunTime + m_DelayTime)
+            {
+                IsRunning = true;
+
+                m_CurrRunTime = Time.time;
+
+                if (m_OnStartAction != null)
+                {
+                    m_OnStartAction();
+                }
+            }
+
+            if (!IsRunning) return;
+
+            //间隔m_Interval时间循环执行
+            if (Time.time > m_CurrRunTime)
+            {
+                m_CurrRunTime = Time.time + m_Interval;
+
+                if (m_OnUpdateAction != null)
+                {
+                    m_OnUpdateAction(m_Loop - m_CurrLoop);
+                }
+
+                if (m_Loop > -1)
+                {
+                    m_CurrLoop++;
+                    if (m_CurrLoop >= m_Loop)
+                    {
+                        Stop();
+                    }
+                }
+
+            }
         }
     }
 }

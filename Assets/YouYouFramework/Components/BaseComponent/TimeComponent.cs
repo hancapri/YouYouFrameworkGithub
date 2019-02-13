@@ -11,29 +11,55 @@ namespace YouYouFramework
     public class TimeComponent : YouYouBaseComponent, IUpdateComponent
     {
         /// <summary>
-        /// 时间管理器
+        /// 定时器管理器
         /// </summary>
-        public TimeManager TimeManager
+        private TimeManager m_TimeManager;
+
+        #region 定时器管理
+        /// <summary>
+        /// 注册定时器
+        /// </summary>
+        /// <param name="action"></param>
+        internal void RegisterTimeAction(TimeAction action)
         {
-            get;
-            private set;
+            m_TimeManager.RegisterTimeAction(action);
         }
+
+        /// <summary>
+        /// 移除定时器
+        /// </summary>
+        /// <param name="action"></param>
+        internal void RemoveTimeAction(TimeAction action)
+        {
+            m_TimeManager.RemoveTimeAction(action);
+        }
+
+        /// <summary>
+        /// 创建定时器
+        /// </summary>
+        /// <returns></returns>
+        internal TimeAction CreatTimeAction()
+        {
+            return m_TimeManager.CreatTimeAction();
+        }
+        #endregion 
 
         protected override void OnAwake()
         {
             base.OnAwake();
             GameEntry.RegisterUpdateComponent(this);
 
-            TimeManager = new TimeManager();
-        }       
+            m_TimeManager = new TimeManager();
+        }
 
         public void OnUpdate()
         {
-            TimeManager.OnUpdate();
+            m_TimeManager.OnUpdate();
         }
 
         public override void Shutdown()
         {
+            m_TimeManager.Dispose();
             GameEntry.RemoveUpdateComponent(this);
         }
     }

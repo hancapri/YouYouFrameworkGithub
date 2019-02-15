@@ -32,6 +32,7 @@ namespace YouYouFramework
         internal void RemoveTimeAction(TimeAction action)
         {
             m_TimeActionList.Remove(action);
+            GameEntry.Pool.ClassObjectPool.Enqueue(action);
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace YouYouFramework
         /// <returns></returns>
         internal TimeAction CreatTimeAction()
         {
-            return new TimeAction();
+            return GameEntry.Pool.ClassObjectPool.Dequeue<TimeAction>();
         }
         #endregion
 

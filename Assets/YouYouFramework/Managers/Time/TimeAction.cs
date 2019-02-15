@@ -77,7 +77,7 @@ namespace YouYouFramework
             m_OnStartAction = onStartAction;
             m_OnUpdateAction = onUpdateAction;
             m_OnCompleteAction = onCompleteAction;
-
+            m_CurrLoop = 0;
             return this;
         }
 

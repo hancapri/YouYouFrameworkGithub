@@ -15,10 +15,23 @@ namespace YouYouFramework
             get;
             private set;
         }
-
+        public GameObjectPool GameObjectPool
+        {
+            get;
+            private set;
+        }
         public PoolManager()
         {
             ClassObjectPool = new ClassObjectPool();
+            GameObjectPool = new GameObjectPool();
+        }
+
+        /// <summary>
+        /// 释放类对象池
+        /// </summary>
+        public void ClearClassObjectPool()
+        {
+            ClassObjectPool.ClearPool();
         }
 
         public void Dispose()

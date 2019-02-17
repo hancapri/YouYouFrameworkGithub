@@ -12,9 +12,35 @@ namespace YouYouFramework
     {
         private Dictionary<int, Queue<object>> m_ClassObjectPoolDic;
 
+        /// <summary>
+        /// 类对象在池中的常驻数量
+        /// </summary>
+        public Dictionary<int, byte> ClassObjectCountDic
+        {
+            get;
+            private set;
+        }
+
+        //对象池在编辑器面板中显示时，保存池中对象的计数
+#if UNITY_EDITOR
+        public Dictionary<Type, int> InspectorDic = new Dictionary<Type, int>();
+#endif
+
         public ClassObjectPool()
         {
             m_ClassObjectPoolDic = new Dictionary<int, Queue<object>>();
+            ClassObjectCountDic = new Dictionary<int, byte>();
+        }
+
+        /// <summary>
+        /// 设置常驻数量
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="count"></param>
+        public void SetResideCount<T>(byte count) where T : class
+        {
+            int key = typeof(T).GetHashCode();
+            ClassObjectCountDic[key] = count;
         }
 
         #region 类对象池的出池和回池
@@ -25,25 +51,42 @@ namespace YouYouFramework
         /// <returns></returns>
         public T Dequeue<T>() where T : class, new()
         {
-            int key = typeof(T).GetHashCode();
+            lock (m_ClassObjectPoolDic)
+            {
+                int key = typeof(T).GetHashCode();
+                Debug.Log("出池hash：" + key);
+                Queue<object> queue = null;
+                m_ClassObjectPoolDic.TryGetValue(key, out queue);
 
-            Queue<object> queue = null;
-            m_ClassObjectPoolDic.TryGetValue(key, out queue);
+                if (queue == null)
+                {
+                    queue = new Queue<object>();
+                    m_ClassObjectPoolDic[key] = queue;
+                }
+                if (queue.Count > 0)
+                {
+                    Debug.Log("有，取出");
+                    object obj = queue.Dequeue();
+                    //出池计数
+#if UNITY_EDITOR
+                    Type t = obj.GetType();
+                    if (InspectorDic.ContainsKey(t))
+                    {
+                        InspectorDic[t]--;
+                    }
+                    else
+                    {
+                        InspectorDic[t] = 0;
+                    }
+#endif
 
-            if (queue == null)
-            {
-                queue = new Queue<object>();
-                m_ClassObjectPoolDic[key] = queue;
-            }
-            if (queue.Count > 0)
-            {
-                Debug.Log("有，取出");
-                return (T)queue.Dequeue();
-            }
-            else
-            {
-                Debug.Log("无，创建");
-                return new T();
+                    return (T)obj;
+                }
+                else
+                {
+                    Debug.Log("无，创建");
+                    return new T();
+                }
             }
         }
 
@@ -53,22 +96,87 @@ namespace YouYouFramework
         /// <param name="obj"></param>
         public void Enqueue(object obj)
         {
-            int key = obj.GetType().GetHashCode();
-
-            Queue<object> queue = null;
-            m_ClassObjectPoolDic.TryGetValue(key, out queue);
-
-            if (queue != null)
+            lock (m_ClassObjectPoolDic)
             {
-                Debug.Log("回池");
-                queue.Enqueue(obj);
+
+                int key = obj.GetType().GetHashCode();
+                Debug.Log("回池hash:" + key);
+                Queue<object> queue = null;
+                m_ClassObjectPoolDic.TryGetValue(key, out queue);
+
+                //回池计数
+#if UNITY_EDITOR
+                Type t = obj.GetType();
+                if (InspectorDic.ContainsKey(t))
+                {
+                    InspectorDic[t]++;
+                }
+                else
+                {
+                    InspectorDic[t] = 1;
+                }
+#endif
+
+                if (queue != null)
+                {
+                    Debug.Log("回池");
+                    queue.Enqueue(obj);
+                }
+                else
+                {
+                    Debug.LogError("回池的类对象，不是从池中创建的，请检查，回池对象：" + obj.GetType().Name);
+                }
             }
-            else
-            {
-                Debug.LogError("回池的类对象，不是从池中创建的，请检查，回池对象："+ obj.GetType().Name);
-            } 
         }
         #endregion
+
+        /// <summary>
+        /// 从池中释放长久未使用的对象
+        /// </summary>
+        public void ClearPool()
+        {
+            lock (m_ClassObjectPoolDic)
+            {
+                Debug.Log("释放类对象池" + DateTime.Now);
+
+                List<int> poolDicKeys = new List<int>(m_ClassObjectPoolDic.Keys);
+                int keyCount = poolDicKeys.Count;
+                for (int i = 0; i < keyCount; i++)
+                {
+                    int key = poolDicKeys[i];
+                    Queue<object> queue = m_ClassObjectPoolDic[key];
+                    int queueCount = queue.Count;
+
+#if UNITY_EDITOR
+                    Type t = null;
+#endif
+                    byte resideCount = 0;
+                    ClassObjectCountDic.TryGetValue(key, out resideCount);
+
+                    while (queueCount > resideCount)
+                    {
+                        queueCount--;
+                        object obj = queue.Dequeue();
+
+#if UNITY_EDITOR
+                        t = obj.GetType();
+                        InspectorDic[t]--;
+#endif
+                    }
+                    if (queueCount <= 0)
+                    {
+#if UNITY_EDITOR
+                        if (t != null)
+                        {
+                            InspectorDic.Remove(t);
+                        }
+#endif
+                    }
+                }
+                //整个项目有一处GC即可，间隔最好大于60s一次
+                GC.Collect();
+            }
+        }
 
         public void Dispose()
         {

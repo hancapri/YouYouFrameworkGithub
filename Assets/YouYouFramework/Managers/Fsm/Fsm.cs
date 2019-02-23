@@ -74,6 +74,11 @@ namespace YouYouFramework
         /// <param name="newState"></param>
         public void ChangeState(byte newState)
         {
+            //如果新状态就是当前状态，不切换
+            if (CurrStateType == newState)
+            {
+                return;
+            }
             if (m_CurrState != null)
             {
                 m_CurrState.OnLeave();

@@ -24,7 +24,6 @@ namespace YouYouFramework
         public override void Shutdown()
         {
             GameEntry.RemoveUpdateComponent(this);
-            Debug.Log("释放UI组件");
         }
     }
 }

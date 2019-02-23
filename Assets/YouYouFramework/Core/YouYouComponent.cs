@@ -21,6 +21,12 @@ namespace YouYouFramework
             OnAwake();
         }
 
+        private void Start()
+        {
+            OnStart();
+        }
+
         protected virtual void OnAwake() { }
+        protected virtual void OnStart() { }
     }
 }

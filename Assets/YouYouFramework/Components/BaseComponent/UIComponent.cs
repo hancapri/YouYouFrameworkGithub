@@ -23,7 +23,7 @@ namespace YouYouFramework
 
         public override void Shutdown()
         {
-            GameEntry.RemoveUpdateComponent(this);
+            
         }
     }
 }

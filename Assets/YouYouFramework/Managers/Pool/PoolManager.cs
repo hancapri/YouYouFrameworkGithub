@@ -6,7 +6,7 @@ using System;
 namespace YouYouFramework
 {
     /// <summary>
-    /// 流程管理器
+    /// 对象池管理器
     /// </summary>
     public class PoolManager : ManagerBase, IDisposable
     {

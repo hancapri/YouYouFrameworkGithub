@@ -21,6 +21,11 @@ namespace YouYouFramework
         private Dictionary<byte, FsmState<T>> m_StateDic;
 
         /// <summary>
+        /// 参数字典
+        /// </summary>
+        public Dictionary<string, object> m_ParamDic;
+
+        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="fsmId">状态机编号</param>
@@ -29,6 +34,8 @@ namespace YouYouFramework
         public Fsm(int fsmId, T owner, FsmState<T>[] states) : base(fsmId)
         {
             m_StateDic = new Dictionary<byte, FsmState<T>>();
+            m_ParamDic = new Dictionary<string, object>();
+
             //把状态加入字典
             int len = states.Length;
             for (int i = 0; i < len; i++)

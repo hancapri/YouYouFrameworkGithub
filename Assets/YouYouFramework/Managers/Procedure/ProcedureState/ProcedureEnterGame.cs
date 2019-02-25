@@ -9,6 +9,9 @@ namespace YouYouFramework
     /// </summary>
     public class ProcedureEnterGame : ProcedureBase
     {
-        
+        public override void OnEnable()
+        {
+
+        }
     }
 }

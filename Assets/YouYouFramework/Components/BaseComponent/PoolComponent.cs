@@ -33,6 +33,7 @@ namespace YouYouFramework
         {
             base.OnAwake();
             PoolManager = new PoolManager();
+            m_VarObjectLock = new object();
 
             GameEntry.RegisterUpdateComponent(this);
             m_NextClearTime = Time.time;
@@ -99,6 +100,66 @@ namespace YouYouFramework
         public void GameObjectDespawn(byte poolId, Transform instance)
         {
             PoolManager.GameObjectPool.Despawn(poolId, instance);
+        }
+        #endregion
+
+        #region 变量对象池的出池和回池
+        /// <summary>
+        /// 变量对象池锁
+        /// </summary>
+        private object m_VarObjectLock;
+
+        //对象池在编辑器面板中显示时，保存池中对象的计数
+#if UNITY_EDITOR
+        public Dictionary<Type, int> VarObjectInspectorDic = new Dictionary<Type, int>();
+#endif
+        /// <summary>
+        /// 变量对象出池
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T DequeueVarObject<T>() where T : VariableBase, new()
+        {
+            lock (m_VarObjectLock)
+            {
+                T item = DequeueClassObject<T>();
+#if UNITY_EDITOR
+                Type t = item.GetType();
+                if (VarObjectInspectorDic.ContainsKey(t))
+                {
+                    VarObjectInspectorDic[t]++;
+                }
+                else
+                {
+                    VarObjectInspectorDic[t] = 1;
+                }
+#endif
+                return item;
+            }
+        }
+
+        /// <summary>
+        /// 变量对象回池
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        public void EnqueueVarObject<T>(T item) where T : VariableBase
+        {
+            lock (m_VarObjectLock)
+            {
+                EnqueueClassObject(item);
+#if UNITY_EDITOR
+                Type t = item.GetType();
+                if (VarObjectInspectorDic.ContainsKey(t))
+                {
+                    VarObjectInspectorDic[t]--;
+                    if (VarObjectInspectorDic[t] == 0)
+                    {
+                        VarObjectInspectorDic.Remove(t);
+                    }
+                }
+#endif
+            }
         }
         #endregion
 

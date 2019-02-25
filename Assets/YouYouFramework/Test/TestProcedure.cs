@@ -7,9 +7,16 @@ public class TestProcedure : MonoBehaviour {
 
     void Start()
     {
+        VarInt a = VarInt.Alloc(10);
 
+        StartCoroutine(ReleaseVar(a));
     }
 
+    private IEnumerator ReleaseVar(VarInt a)
+    {
+        yield return new WaitForSeconds(5);
+        a.Release();
+    }
 
     // Update is called once per frame
     void Update()
@@ -20,6 +27,8 @@ public class TestProcedure : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
+            GameEntry.Procedure.ParamDic["name"] = "CheckVersion";
+            GameEntry.Procedure.ParamDic["num"] = 12;
             GameEntry.Procedure.ChangeState(ProcedureState.CheckVersion);
         }
         if (Input.GetKeyDown(KeyCode.E))

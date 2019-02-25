@@ -31,6 +31,14 @@ namespace YouYouFramework
             get { return m_ProcedureManager.CurrProcedure; }
         }
 
+        /// <summary>
+        /// 当前流程状态机的字典
+        /// </summary>
+        public Dictionary<string, object> ParamDic
+        {
+            get { return m_ProcedureManager.ParamDic; }
+        }
+
         protected override void OnAwake()
         {
             base.OnAwake();

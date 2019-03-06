@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using XLua;
 
 namespace YouYouFramework
 {
@@ -10,7 +11,7 @@ namespace YouYouFramework
     /// </summary>
     public class CommonEvent : IDisposable
     {
-        //[CSharpCallLua]
+        [CSharpCallLua]
         public delegate void OnActionHandler(object param);
         public Dictionary<ushort, List<OnActionHandler>> dic = new Dictionary<ushort, List<OnActionHandler>>();
 

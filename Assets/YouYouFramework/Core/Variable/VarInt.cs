@@ -13,6 +13,7 @@ namespace YouYouFramework
         {
             //要从对象池获取
             VarInt var = GameEntry.Pool.DequeueVarObject<VarInt>();
+            var.Value = 0;
             var.Retain();
             return var;
         }

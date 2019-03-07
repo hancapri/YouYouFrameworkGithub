@@ -24,7 +24,7 @@ namespace YouYouFramework
         }
 
         /// <summary>
-        /// 对象池分组
+        /// 游戏对象池分组
         /// </summary>
         [SerializeField]
         private GameObjectPoolEntity[] m_GameObjectPoolGroups;
@@ -87,9 +87,9 @@ namespace YouYouFramework
         /// <param name="poolId"></param>
         /// <param name="prefab"></param>
         /// <param name="onComplete"></param>
-        public void GameObjectSpawn(byte poolId, Transform prefab, System.Action<Transform> onComplete)
+        public Transform GameObjectSpawn(byte poolId, Transform prefab, System.Action<Transform> onComplete)
         {
-            PoolManager.GameObjectPool.Spawn(poolId, prefab, onComplete);
+            return PoolManager.GameObjectPool.Spawn(poolId, prefab, onComplete);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace YouYouFramework
         {
             if (Time.time > m_NextClearTime + ClearInterval)
             {
-                //该释放了
+                //类对象池该释放了
                 m_NextClearTime = Time.time;
                 PoolManager.ClearClassObjectPool();
             }

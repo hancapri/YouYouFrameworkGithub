@@ -25,9 +25,10 @@ namespace YouYouFramework
         /// </summary>
         public byte CurrStateType;
 
-        public FsmBase(int fsmId)
+        public FsmBase(int fsmId, Type owner)
         {
             FsmId = fsmId;
+            Owner = owner;
         }
 
         public abstract void ShutDown();

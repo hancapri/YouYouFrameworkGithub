@@ -60,9 +60,16 @@ namespace YouYouFramework
         /// <param name="poolId"></param>
         /// <param name="prefab"></param>
         /// <param name="onComplete"></param>
-        public void Spawn(byte poolId, Transform prefab, System.Action<Transform> onComplete)
+        public Transform Spawn(byte poolId, Transform prefab, System.Action<Transform> onComplete)
         {
-            GameObjectPoolEntity entity = m_SpawnPoolDic[poolId];
+            GameObjectPoolEntity entity = null;
+            m_SpawnPoolDic.TryGetValue(poolId, out entity);
+            if (entity == null)
+            {
+                Debug.LogError(string.Format("游戏对象池不存在，poolId为：{0}", poolId));
+                return null;
+            } 
+
             PathologicalGames.PrefabPool prefabPool = entity.Pool.GetPrefabPool(prefab);
 
             if (prefabPool == null)
@@ -75,11 +82,12 @@ namespace YouYouFramework
 
                 entity.Pool.CreatePrefabPool(prefabPool);
             }
-
+            Transform res = entity.Pool.Spawn(prefab);
             if (onComplete != null)
             {
-                onComplete(entity.Pool.Spawn(prefab));
+                onComplete(res);
             }
+            return res;
         }
 
         /// <summary>
@@ -89,7 +97,13 @@ namespace YouYouFramework
         /// <param name="instance"></param>
         public void Despawn(byte poolId, Transform instance)
         {
-            GameObjectPoolEntity entity = m_SpawnPoolDic[poolId];
+            GameObjectPoolEntity entity = null;
+            m_SpawnPoolDic.TryGetValue(poolId, out entity);
+            if (entity == null)
+            {
+                Debug.LogError(string.Format("游戏对象池不存在，poolId为：{0}", poolId));
+                return;
+            }
             entity.Pool.Despawn(instance);
         }
     }

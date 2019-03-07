@@ -16,7 +16,7 @@ namespace YouYouFramework
         private ProcedureManager m_ProcedureManager;
 
         /// <summary>
-        /// 当前流程状态枚举
+        /// 当前流程状态枚举值
         /// </summary>
         public ProcedureState CurrProcedureState
         {

@@ -31,7 +31,7 @@ namespace YouYouFramework
         /// <param name="fsmId">状态机编号</param>
         /// <param name="owner">拥有者</param>
         /// <param name="states">状态数组</param>
-        public Fsm(int fsmId, T owner, FsmState<T>[] states) : base(fsmId)
+        public Fsm(int fsmId, T owner, FsmState<T>[] states) : base(fsmId, owner.GetType())
         {
             m_StateDic = new Dictionary<byte, FsmState<T>>();
             m_ParamDic = new Dictionary<string, object>();
@@ -48,8 +48,6 @@ namespace YouYouFramework
             //设置默认状态
             CurrStateType = 0;
             m_CurrState = m_StateDic[CurrStateType];
-
-            //Owner = owner; //???
         }
 
         /// <summary>

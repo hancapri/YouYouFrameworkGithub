@@ -23,7 +23,7 @@ namespace YouYouFramework
         /// <summary>
         /// 参数字典
         /// </summary>
-        public Dictionary<string, object> m_ParamDic;
+        private Dictionary<string, VariableBase> m_ParamDic;
 
         /// <summary>
         /// 构造函数
@@ -34,7 +34,7 @@ namespace YouYouFramework
         public Fsm(int fsmId, T owner, FsmState<T>[] states) : base(fsmId, owner.GetType())
         {
             m_StateDic = new Dictionary<byte, FsmState<T>>();
-            m_ParamDic = new Dictionary<string, object>();
+            m_ParamDic = new Dictionary<string, VariableBase>();
 
             //把状态加入字典
             int len = states.Length;
@@ -60,6 +60,46 @@ namespace YouYouFramework
             FsmState<T> state = null;
             m_StateDic.TryGetValue(stateType, out state);
             return state;
+        }
+
+        /// <summary>
+        /// 设置参数字典值
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetData<TData>(string key, TData value)
+        {
+            VariableBase itemBase = null;
+            if (m_ParamDic.TryGetValue(key, out itemBase))
+            {
+                Variable<TData> item = itemBase as Variable<TData>;
+                item.Value = value;
+                m_ParamDic[key] = item;
+            }
+            else
+            {
+                Variable<TData> item = new Variable<TData>();
+                item.Value = value;
+                m_ParamDic[key] = item;
+            }
+        }
+
+        /// <summary>
+        /// 获取参数字典里面的值
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public TData GetData<TData>(string key)
+        {
+            VariableBase itemBase = null;
+            if (m_ParamDic.TryGetValue(key, out itemBase))
+            {
+                Variable<TData> item = itemBase as Variable<TData>;
+                return item.Value;
+            }
+            return default(TData);
         }
 
         /// <summary>
@@ -112,6 +152,7 @@ namespace YouYouFramework
                 state.Value.OnDestroy();
             }
             m_StateDic.Clear();
+            m_ParamDic.Clear();
         }
     }
 }

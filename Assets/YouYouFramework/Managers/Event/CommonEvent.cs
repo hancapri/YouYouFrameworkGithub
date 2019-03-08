@@ -12,7 +12,7 @@ namespace YouYouFramework
     public class CommonEvent : IDisposable
     {
         [CSharpCallLua]
-        public delegate void OnActionHandler(object param);
+        public delegate void OnActionHandler(VariableBase param);
         public Dictionary<ushort, List<OnActionHandler>> dic = new Dictionary<ushort, List<OnActionHandler>>();
 
         #region AddEventListener 添加监听
@@ -61,7 +61,7 @@ namespace YouYouFramework
         /// </summary>
         /// <param name="key"></param>
         /// <param name="p"></param>
-        public void Dispatch(ushort key, object param)
+        public void Dispatch(ushort key, VariableBase param)
         {
             List<OnActionHandler> lstHandler = null;
             dic.TryGetValue(key, out lstHandler);

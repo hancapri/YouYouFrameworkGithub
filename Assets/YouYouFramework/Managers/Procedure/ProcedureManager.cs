@@ -31,6 +31,11 @@ namespace YouYouFramework
         private Fsm<ProcedureManager> m_CurrFsm;
 
         /// <summary>
+        /// 当前流程状态机
+        /// </summary>
+        public Fsm<ProcedureManager> CurrFsm { get { return m_CurrFsm; } }
+
+        /// <summary>
         /// 当前流程状态枚举
         /// </summary>
         public ProcedureState CurrProcedureState
@@ -44,14 +49,6 @@ namespace YouYouFramework
         public FsmState<ProcedureManager> CurrProcedure
         {
             get { return m_CurrFsm.GetState(m_CurrFsm.CurrStateType); }
-        }
-
-        /// <summary>
-        /// 当前流程状态机的字典
-        /// </summary>
-        public Dictionary<string, object> ParamDic
-        {
-            get { return m_CurrFsm.m_ParamDic; }
         }
 
         public ProcedureManager()

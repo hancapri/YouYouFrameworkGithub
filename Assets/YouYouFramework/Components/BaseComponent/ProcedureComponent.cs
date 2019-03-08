@@ -31,13 +31,6 @@ namespace YouYouFramework
             get { return m_ProcedureManager.CurrProcedure; }
         }
 
-        /// <summary>
-        /// 当前流程状态机的字典
-        /// </summary>
-        public Dictionary<string, object> ParamDic
-        {
-            get { return m_ProcedureManager.ParamDic; }
-        }
 
         protected override void OnAwake()
         {
@@ -51,6 +44,28 @@ namespace YouYouFramework
             base.OnStart();
             //要在Start的时候进行初始化
             m_ProcedureManager.Init();
+        }
+
+        /// <summary>
+        /// 设置参数字典值
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetData<TData>(string key, TData value)
+        {
+            m_ProcedureManager.CurrFsm.SetData(key, value);
+        }
+
+        /// <summary>
+        /// 获取参数字典里面的值
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public TData GetData<TData>(string key)
+        {
+            return m_ProcedureManager.CurrFsm.GetData<TData>(key);
         }
 
         /// <summary>

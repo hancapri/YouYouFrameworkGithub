@@ -54,7 +54,6 @@ namespace YouYouFramework
             lock (m_ClassObjectPoolDic)
             {
                 int key = typeof(T).GetHashCode();
-                Debug.Log("出池hash：" + key);
                 Queue<object> queue = null;
                 m_ClassObjectPoolDic.TryGetValue(key, out queue);
 
@@ -65,7 +64,6 @@ namespace YouYouFramework
                 }
                 if (queue.Count > 0)
                 {
-                    Debug.Log("有，取出");
                     object obj = queue.Dequeue();
                     //出池计数
 #if UNITY_EDITOR
@@ -84,7 +82,6 @@ namespace YouYouFramework
                 }
                 else
                 {
-                    Debug.Log("无，创建");
                     return new T();
                 }
             }
@@ -100,7 +97,6 @@ namespace YouYouFramework
             {
 
                 int key = obj.GetType().GetHashCode();
-                Debug.Log("回池hash:" + key);
                 Queue<object> queue = null;
                 m_ClassObjectPoolDic.TryGetValue(key, out queue);
 
@@ -119,7 +115,6 @@ namespace YouYouFramework
 
                 if (queue != null)
                 {
-                    Debug.Log("回池");
                     queue.Enqueue(obj);
                 }
                 else

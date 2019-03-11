@@ -1,64 +1,65 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:31
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
+using YouYou;
 
 /// <summary>
 /// Item实体
 /// </summary>
-public partial class ItemEntity : AbstractEntity
+public partial class ItemEntity : DataTableEntityBase
 {
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name;
 
     /// <summary>
     /// 道具类别
     /// </summary>
-    public int Type { get; set; }
+    public int Type;
 
     /// <summary>
     /// 使用等级
     /// </summary>
-    public int UsedLevel { get; set; }
+    public int UsedLevel;
 
     /// <summary>
     /// 使用方法
     /// </summary>
-    public string UsedMethod { get; set; }
+    public string UsedMethod;
 
     /// <summary>
     /// 售价
     /// </summary>
-    public int SellMoney { get; set; }
+    public int SellMoney;
 
     /// <summary>
     /// 品质
     /// </summary>
-    public int Quality { get; set; }
+    public int Quality;
 
     /// <summary>
     /// 描述
     /// </summary>
-    public string Description { get; set; }
+    public string Description;
 
     /// <summary>
     /// 道具使用后获得的内容
     /// </summary>
-    public string UsedItems { get; set; }
+    public string UsedItems;
 
     /// <summary>
     /// 最大堆叠数量
     /// </summary>
-    public int maxAmount { get; set; }
+    public int maxAmount;
 
     /// <summary>
     /// 背包陈列顺序
     /// </summary>
-    public int packSort { get; set; }
+    public int packSort;
 
 }

@@ -1,64 +1,65 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:31
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
+using YouYou;
 
 /// <summary>
 /// GameLevelMonster实体
 /// </summary>
-public partial class GameLevelMonsterEntity : AbstractEntity
+public partial class GameLevelMonsterEntity : DataTableEntityBase
 {
     /// <summary>
     /// 游戏关卡Id
     /// </summary>
-    public int GameLevelId { get; set; }
+    public int GameLevelId;
 
     /// <summary>
     /// 难度等级
     /// </summary>
-    public int Grade { get; set; }
+    public int Grade;
 
     /// <summary>
     /// 区域Id
     /// </summary>
-    public int RegionId { get; set; }
+    public int RegionId;
 
     /// <summary>
     /// 精灵Id
     /// </summary>
-    public int SpriteId { get; set; }
+    public int SpriteId;
 
     /// <summary>
     /// 精灵数量
     /// </summary>
-    public int SpriteCount { get; set; }
+    public int SpriteCount;
 
     /// <summary>
     /// 掉落经验
     /// </summary>
-    public int Exp { get; set; }
+    public int Exp;
 
     /// <summary>
     /// 掉落金币
     /// </summary>
-    public int Gold { get; set; }
+    public int Gold;
 
     /// <summary>
     /// 掉落装备
     /// </summary>
-    public string DropEquip { get; set; }
+    public string DropEquip;
 
     /// <summary>
     /// 掉落道具
     /// </summary>
-    public string DropItem { get; set; }
+    public string DropItem;
 
     /// <summary>
     /// 掉落材料
     /// </summary>
-    public string DropMaterial { get; set; }
+    public string DropMaterial;
 
 }

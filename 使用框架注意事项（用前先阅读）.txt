@@ -14,11 +14,14 @@ var变量使用：
 	变量，不仅解决装箱拆箱问题，还用到对象池功能，因为派发事件之后，可以直接释放var变量
 4.var变量在作用域中使用也可以达到优化内存的效果
 
-Tools文件夹：
-1.ExcelTool表格生成工具，根据表格生成bytes，c#，lua脚本。Tools\ExcelTool\bin\Debug\config.txt文件，
+Tools压缩包：
+1.ExcelTool表格生成工具，根据表格生成bytes，c#，lua脚本。
+	解压Tools压缩包到当前文件夹
+	Tools\ExcelTool\bin\Debug\config.txt文件，设置里面的四个路径
 	里面的四个路径分别为：表格源数据路径，生成的bytes文件路径，生成的c#文件路径，生成的lua脚本路径。
-	ExcelTool.exe为启动程序
+	ExcelTool.exe为启动程序，直接运行既可以根据配置的路径生成bytes，c#，lua脚本
 	
 Datas文件夹：
 1.本地数据表：包含表格文件，ExcelTool.exe快捷方式，输出文件夹out，使用前先自己设置好上一条提到的四个
 	路径，然后创建ExcelTool.exe的快捷方式到本地数据表文件夹中，然后直接双击快捷方式即可生成bytes，c#，lua脚本
+	表格的格式要.xls后缀的文件，默认打开方式要是office而不能是wps，因为ExcelTool用到了office驱动

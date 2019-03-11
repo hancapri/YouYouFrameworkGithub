@@ -1,42 +1,49 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:31
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// GameLevelMonster数据管理
 /// </summary>
-public partial class GameLevelMonsterDBModel : AbstractDBModel<GameLevelMonsterDBModel, GameLevelMonsterEntity>
+public partial class GameLevelMonsterDBModel : DataTableDBModelBase<GameLevelMonsterDBModel, GameLevelMonsterEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "GameLevelMonster.data"; } }
+    public override string DataTableName { get { return "GameLevelMonster"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override GameLevelMonsterEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        GameLevelMonsterEntity entity = new GameLevelMonsterEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.GameLevelId = parse.GetFieldValue("GameLevelId").ToInt();
-        entity.Grade = parse.GetFieldValue("Grade").ToInt();
-        entity.RegionId = parse.GetFieldValue("RegionId").ToInt();
-        entity.SpriteId = parse.GetFieldValue("SpriteId").ToInt();
-        entity.SpriteCount = parse.GetFieldValue("SpriteCount").ToInt();
-        entity.Exp = parse.GetFieldValue("Exp").ToInt();
-        entity.Gold = parse.GetFieldValue("Gold").ToInt();
-        entity.DropEquip = parse.GetFieldValue("DropEquip");
-        entity.DropItem = parse.GetFieldValue("DropItem");
-        entity.DropMaterial = parse.GetFieldValue("DropMaterial");
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            GameLevelMonsterEntity entity = new GameLevelMonsterEntity();
+            entity.Id = ms.ReadInt();
+            entity.GameLevelId = ms.ReadInt();
+            entity.Grade = ms.ReadInt();
+            entity.RegionId = ms.ReadInt();
+            entity.SpriteId = ms.ReadInt();
+            entity.SpriteCount = ms.ReadInt();
+            entity.Exp = ms.ReadInt();
+            entity.Gold = ms.ReadInt();
+            entity.DropEquip = ms.ReadUTF8String();
+            entity.DropItem = ms.ReadUTF8String();
+            entity.DropMaterial = ms.ReadUTF8String();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

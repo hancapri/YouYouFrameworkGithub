@@ -1,37 +1,44 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:31
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// Chapter数据管理
 /// </summary>
-public partial class ChapterDBModel : AbstractDBModel<ChapterDBModel, ChapterEntity>
+public partial class ChapterDBModel : DataTableDBModelBase<ChapterDBModel, ChapterEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "Chapter.data"; } }
+    public override string DataTableName { get { return "Chapter"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override ChapterEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        ChapterEntity entity = new ChapterEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.ChapterName = parse.GetFieldValue("ChapterName");
-        entity.GameLevelCount = parse.GetFieldValue("GameLevelCount").ToInt();
-        entity.BG_Pic = parse.GetFieldValue("BG_Pic");
-        entity.Uvx = parse.GetFieldValue("Uvx").ToFloat();
-        entity.Uvy = parse.GetFieldValue("Uvy").ToFloat();
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            ChapterEntity entity = new ChapterEntity();
+            entity.Id = ms.ReadInt();
+            entity.ChapterName = ms.ReadUTF8String();
+            entity.GameLevelCount = ms.ReadInt();
+            entity.BG_Pic = ms.ReadUTF8String();
+            entity.Uvx = ms.ReadFloat();
+            entity.Uvy = ms.ReadFloat();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

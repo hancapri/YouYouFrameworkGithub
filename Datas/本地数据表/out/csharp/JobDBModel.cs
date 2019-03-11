@@ -1,45 +1,52 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// Job数据管理
 /// </summary>
-public partial class JobDBModel : AbstractDBModel<JobDBModel, JobEntity>
+public partial class JobDBModel : DataTableDBModelBase<JobDBModel, JobEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "Job.data"; } }
+    public override string DataTableName { get { return "Job"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override JobEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        JobEntity entity = new JobEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.Name = parse.GetFieldValue("Name");
-        entity.HeadPic = parse.GetFieldValue("HeadPic");
-        entity.JobPic = parse.GetFieldValue("JobPic");
-        entity.PrefabName = parse.GetFieldValue("PrefabName");
-        entity.Desc = parse.GetFieldValue("Desc");
-        entity.Attack = parse.GetFieldValue("Attack").ToInt();
-        entity.Defense = parse.GetFieldValue("Defense").ToInt();
-        entity.Hit = parse.GetFieldValue("Hit").ToInt();
-        entity.Dodge = parse.GetFieldValue("Dodge").ToInt();
-        entity.Cri = parse.GetFieldValue("Cri").ToInt();
-        entity.Res = parse.GetFieldValue("Res").ToInt();
-        entity.UsedPhyAttackIds = parse.GetFieldValue("UsedPhyAttackIds");
-        entity.UsedSkillIds = parse.GetFieldValue("UsedSkillIds");
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            JobEntity entity = new JobEntity();
+            entity.Id = ms.ReadInt();
+            entity.Name = ms.ReadUTF8String();
+            entity.HeadPic = ms.ReadUTF8String();
+            entity.JobPic = ms.ReadUTF8String();
+            entity.PrefabName = ms.ReadUTF8String();
+            entity.Desc = ms.ReadUTF8String();
+            entity.Attack = ms.ReadInt();
+            entity.Defense = ms.ReadInt();
+            entity.Hit = ms.ReadInt();
+            entity.Dodge = ms.ReadInt();
+            entity.Cri = ms.ReadInt();
+            entity.Res = ms.ReadInt();
+            entity.UsedPhyAttackIds = ms.ReadUTF8String();
+            entity.UsedSkillIds = ms.ReadUTF8String();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

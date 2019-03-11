@@ -1,39 +1,40 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
+using YouYou;
 
 /// <summary>
 /// NPC实体
 /// </summary>
-public partial class NPCEntity : AbstractEntity
+public partial class NPCEntity : DataTableEntityBase
 {
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name;
 
     /// <summary>
     /// 预设名称
     /// </summary>
-    public string PrefabName { get; set; }
+    public string PrefabName;
 
     /// <summary>
     /// 头像
     /// </summary>
-    public string HeadPic { get; set; }
+    public string HeadPic;
 
     /// <summary>
     /// 半身像
     /// </summary>
-    public string HalfBodyPic { get; set; }
+    public string HalfBodyPic;
 
     /// <summary>
     /// 自言自语
     /// </summary>
-    public string Talk { get; set; }
+    public string Talk;
 
 }

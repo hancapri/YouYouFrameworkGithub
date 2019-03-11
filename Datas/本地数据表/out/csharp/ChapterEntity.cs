@@ -1,39 +1,40 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:31
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
+using YouYou;
 
 /// <summary>
 /// Chapter实体
 /// </summary>
-public partial class ChapterEntity : AbstractEntity
+public partial class ChapterEntity : DataTableEntityBase
 {
     /// <summary>
     /// 章名称
     /// </summary>
-    public string ChapterName { get; set; }
+    public string ChapterName;
 
     /// <summary>
     /// 拥有关卡个数
     /// </summary>
-    public int GameLevelCount { get; set; }
+    public int GameLevelCount;
 
     /// <summary>
     /// 背景图
     /// </summary>
-    public string BG_Pic { get; set; }
+    public string BG_Pic;
 
     /// <summary>
     /// Uvx
     /// </summary>
-    public float Uvx { get; set; }
+    public float Uvx;
 
     /// <summary>
     /// Uvy
     /// </summary>
-    public float Uvy { get; set; }
+    public float Uvy;
 
 }

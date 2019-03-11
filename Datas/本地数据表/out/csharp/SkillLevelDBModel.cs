@@ -1,46 +1,53 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// SkillLevel数据管理
 /// </summary>
-public partial class SkillLevelDBModel : AbstractDBModel<SkillLevelDBModel, SkillLevelEntity>
+public partial class SkillLevelDBModel : DataTableDBModelBase<SkillLevelDBModel, SkillLevelEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "SkillLevel.data"; } }
+    public override string DataTableName { get { return "SkillLevel"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override SkillLevelEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        SkillLevelEntity entity = new SkillLevelEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.SkillId = parse.GetFieldValue("SkillId").ToInt();
-        entity.Level = parse.GetFieldValue("Level").ToInt();
-        entity.HurtValueRate = parse.GetFieldValue("HurtValueRate").ToInt();
-        entity.SpendMP = parse.GetFieldValue("SpendMP").ToInt();
-        entity.StateTime = parse.GetFieldValue("StateTime").ToFloat();
-        entity.AbnormalRatio = parse.GetFieldValue("AbnormalRatio").ToFloat();
-        entity.AStateTimes = parse.GetFieldValue("AStateTimes").ToInt();
-        entity.AStatexiaohao = parse.GetFieldValue("AStatexiaohao").ToInt();
-        entity.SkillCDTime = parse.GetFieldValue("SkillCDTime").ToFloat();
-        entity.BuffChance = parse.GetFieldValue("BuffChance").ToFloat();
-        entity.BuffDuration = parse.GetFieldValue("BuffDuration").ToFloat();
-        entity.BuffValue = parse.GetFieldValue("BuffValue").ToInt();
-        entity.NeedCharacterLevel = parse.GetFieldValue("NeedCharacterLevel").ToInt();
-        entity.SpendGold = parse.GetFieldValue("SpendGold").ToInt();
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            SkillLevelEntity entity = new SkillLevelEntity();
+            entity.Id = ms.ReadInt();
+            entity.SkillId = ms.ReadInt();
+            entity.Level = ms.ReadInt();
+            entity.HurtValueRate = ms.ReadInt();
+            entity.SpendMP = ms.ReadInt();
+            entity.StateTime = ms.ReadFloat();
+            entity.AbnormalRatio = ms.ReadFloat();
+            entity.AStateTimes = ms.ReadInt();
+            entity.AStatexiaohao = ms.ReadInt();
+            entity.SkillCDTime = ms.ReadFloat();
+            entity.BuffChance = ms.ReadFloat();
+            entity.BuffDuration = ms.ReadFloat();
+            entity.BuffValue = ms.ReadInt();
+            entity.NeedCharacterLevel = ms.ReadInt();
+            entity.SpendGold = ms.ReadInt();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

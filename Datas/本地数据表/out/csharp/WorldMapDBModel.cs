@@ -1,45 +1,52 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:15
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// WorldMap数据管理
 /// </summary>
-public partial class WorldMapDBModel : AbstractDBModel<WorldMapDBModel, WorldMapEntity>
+public partial class WorldMapDBModel : DataTableDBModelBase<WorldMapDBModel, WorldMapEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "WorldMap.data"; } }
+    public override string DataTableName { get { return "WorldMap"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override WorldMapEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        WorldMapEntity entity = new WorldMapEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.Name = parse.GetFieldValue("Name");
-        entity.SceneName = parse.GetFieldValue("SceneName");
-        entity.SmallMapImg = parse.GetFieldValue("SmallMapImg");
-        entity.NPCList = parse.GetFieldValue("NPCList");
-        entity.RoleBirthPos = parse.GetFieldValue("RoleBirthPos");
-        entity.CameraRotation = parse.GetFieldValue("CameraRotation");
-        entity.TransPos = parse.GetFieldValue("TransPos");
-        entity.IsCity = parse.GetFieldValue("IsCity").ToInt();
-        entity.IsShowInMap = parse.GetFieldValue("IsShowInMap").ToInt();
-        entity.PosInMap = parse.GetFieldValue("PosInMap");
-        entity.IcoInMap = parse.GetFieldValue("IcoInMap");
-        entity.NearScene = parse.GetFieldValue("NearScene");
-        entity.Audio_BG = parse.GetFieldValue("Audio_BG");
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            WorldMapEntity entity = new WorldMapEntity();
+            entity.Id = ms.ReadInt();
+            entity.Name = ms.ReadUTF8String();
+            entity.SceneName = ms.ReadUTF8String();
+            entity.SmallMapImg = ms.ReadUTF8String();
+            entity.NPCList = ms.ReadUTF8String();
+            entity.RoleBirthPos = ms.ReadUTF8String();
+            entity.CameraRotation = ms.ReadUTF8String();
+            entity.TransPos = ms.ReadUTF8String();
+            entity.IsCity = ms.ReadInt();
+            entity.IsShowInMap = ms.ReadInt();
+            entity.PosInMap = ms.ReadUTF8String();
+            entity.IcoInMap = ms.ReadUTF8String();
+            entity.NearScene = ms.ReadUTF8String();
+            entity.Audio_BG = ms.ReadUTF8String();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

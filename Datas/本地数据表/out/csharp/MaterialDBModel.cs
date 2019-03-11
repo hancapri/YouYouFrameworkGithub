@@ -1,44 +1,51 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// Material数据管理
 /// </summary>
-public partial class MaterialDBModel : AbstractDBModel<MaterialDBModel, MaterialEntity>
+public partial class MaterialDBModel : DataTableDBModelBase<MaterialDBModel, MaterialEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "Material.data"; } }
+    public override string DataTableName { get { return "Material"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override MaterialEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        MaterialEntity entity = new MaterialEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.Name = parse.GetFieldValue("Name");
-        entity.Quality = parse.GetFieldValue("Quality").ToInt();
-        entity.Description = parse.GetFieldValue("Description");
-        entity.Type = parse.GetFieldValue("Type").ToInt();
-        entity.FixedType = parse.GetFieldValue("FixedType").ToInt();
-        entity.FixedAddValue = parse.GetFieldValue("FixedAddValue").ToInt();
-        entity.maxAmount = parse.GetFieldValue("maxAmount").ToInt();
-        entity.packSort = parse.GetFieldValue("packSort").ToInt();
-        entity.CompositionProps = parse.GetFieldValue("CompositionProps");
-        entity.CompositionMaterialID = parse.GetFieldValue("CompositionMaterialID").ToInt();
-        entity.CompositionGold = parse.GetFieldValue("CompositionGold");
-        entity.SellMoney = parse.GetFieldValue("SellMoney").ToInt();
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            MaterialEntity entity = new MaterialEntity();
+            entity.Id = ms.ReadInt();
+            entity.Name = ms.ReadUTF8String();
+            entity.Quality = ms.ReadInt();
+            entity.Description = ms.ReadUTF8String();
+            entity.Type = ms.ReadInt();
+            entity.FixedType = ms.ReadInt();
+            entity.FixedAddValue = ms.ReadInt();
+            entity.maxAmount = ms.ReadInt();
+            entity.packSort = ms.ReadInt();
+            entity.CompositionProps = ms.ReadUTF8String();
+            entity.CompositionMaterialID = ms.ReadInt();
+            entity.CompositionGold = ms.ReadUTF8String();
+            entity.SellMoney = ms.ReadInt();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

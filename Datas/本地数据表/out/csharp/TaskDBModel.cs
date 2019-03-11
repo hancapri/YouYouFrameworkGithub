@@ -1,35 +1,42 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:15
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// Task数据管理
 /// </summary>
-public partial class TaskDBModel : AbstractDBModel<TaskDBModel, TaskEntity>
+public partial class TaskDBModel : DataTableDBModelBase<TaskDBModel, TaskEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "Task.data"; } }
+    public override string DataTableName { get { return "Task"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override TaskEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        TaskEntity entity = new TaskEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.Name = parse.GetFieldValue("Name");
-        entity.Status = parse.GetFieldValue("Status").ToInt();
-        entity.Content = parse.GetFieldValue("Content");
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            TaskEntity entity = new TaskEntity();
+            entity.Id = ms.ReadInt();
+            entity.Name = ms.ReadUTF8String();
+            entity.Status = ms.ReadInt();
+            entity.Content = ms.ReadUTF8String();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

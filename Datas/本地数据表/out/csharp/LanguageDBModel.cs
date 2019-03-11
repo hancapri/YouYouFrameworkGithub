@@ -1,37 +1,44 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// Language数据管理
 /// </summary>
-public partial class LanguageDBModel : AbstractDBModel<LanguageDBModel, LanguageEntity>
+public partial class LanguageDBModel : DataTableDBModelBase<LanguageDBModel, LanguageEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "Language.data"; } }
+    public override string DataTableName { get { return "Language"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override LanguageEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        LanguageEntity entity = new LanguageEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.Module = parse.GetFieldValue("Module");
-        entity.Key = parse.GetFieldValue("Key");
-        entity.Desc = parse.GetFieldValue("Desc");
-        entity.CN = parse.GetFieldValue("CN");
-        entity.EN = parse.GetFieldValue("EN");
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            LanguageEntity entity = new LanguageEntity();
+            entity.Id = ms.ReadInt();
+            entity.Module = ms.ReadUTF8String();
+            entity.Key = ms.ReadUTF8String();
+            entity.Desc = ms.ReadUTF8String();
+            entity.CN = ms.ReadUTF8String();
+            entity.EN = ms.ReadUTF8String();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

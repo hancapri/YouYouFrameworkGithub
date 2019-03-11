@@ -1,43 +1,50 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2018-10-11 13:06:32
+//创建时间：2019-03-11 23:19:14
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using YouYou;
 
 /// <summary>
 /// JobLevel数据管理
 /// </summary>
-public partial class JobLevelDBModel : AbstractDBModel<JobLevelDBModel, JobLevelEntity>
+public partial class JobLevelDBModel : DataTableDBModelBase<JobLevelDBModel, JobLevelEntity>
 {
     /// <summary>
     /// 文件名称
     /// </summary>
-    protected override string FileName { get { return "JobLevel.data"; } }
+    public override string DataTableName { get { return "JobLevel"; } }
 
     /// <summary>
-    /// 创建实体
+    /// 加载列表
     /// </summary>
-    /// <param name="parse"></param>
-    /// <returns></returns>
-    protected override JobLevelEntity MakeEntity(GameDataTableParser parse)
+    protected override void LoadList(MMO_MemoryStream ms)
     {
-        JobLevelEntity entity = new JobLevelEntity();
-        entity.Id = parse.GetFieldValue("Id").ToInt();
-        entity.Level = parse.GetFieldValue("Level").ToInt();
-        entity.NeedExp = parse.GetFieldValue("NeedExp").ToInt();
-        entity.Energy = parse.GetFieldValue("Energy").ToInt();
-        entity.HP = parse.GetFieldValue("HP").ToInt();
-        entity.MP = parse.GetFieldValue("MP").ToInt();
-        entity.Attack = parse.GetFieldValue("Attack").ToInt();
-        entity.Defense = parse.GetFieldValue("Defense").ToInt();
-        entity.Hit = parse.GetFieldValue("Hit").ToInt();
-        entity.Dodge = parse.GetFieldValue("Dodge").ToInt();
-        entity.Cri = parse.GetFieldValue("Cri").ToInt();
-        entity.Res = parse.GetFieldValue("Res").ToInt();
-        return entity;
+        int rows = ms.ReadInt();
+        int columns = ms.ReadInt();
+
+        for (int i = 0; i < rows; i++)
+        {
+            JobLevelEntity entity = new JobLevelEntity();
+            entity.Id = ms.ReadInt();
+            entity.Level = ms.ReadInt();
+            entity.NeedExp = ms.ReadInt();
+            entity.Energy = ms.ReadInt();
+            entity.HP = ms.ReadInt();
+            entity.MP = ms.ReadInt();
+            entity.Attack = ms.ReadInt();
+            entity.Defense = ms.ReadInt();
+            entity.Hit = ms.ReadInt();
+            entity.Dodge = ms.ReadInt();
+            entity.Cri = ms.ReadInt();
+            entity.Res = ms.ReadInt();
+
+            m_List.Add(entity);
+            m_Dic[entity.Id] = entity;
+        }
     }
 }

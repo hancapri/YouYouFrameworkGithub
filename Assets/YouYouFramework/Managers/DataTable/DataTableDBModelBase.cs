@@ -24,7 +24,7 @@ namespace YouYouFramework
         /// <summary>
         /// 数据表名
         /// </summary>
-        protected abstract string DataTableName { get; }
+        public abstract string DataTableName { get; }
 
         /// <summary>
         /// 加载数据列表
@@ -48,6 +48,11 @@ namespace YouYouFramework
             {
                 LoadList(ms);
             }
+
+            //加载完成单个表，发布事件
+            VarString dataName = VarString.Alloc(DataTableName);
+            GameEntry.Event.CommonEvent.Dispatch(SysEventId.LoadOneDataTableComplete, dataName);
+            dataName.Release();
         }
         #endregion
 
@@ -77,5 +82,11 @@ namespace YouYouFramework
             return null;
         }
         #endregion
+
+        public void Clear()
+        {
+            m_List.Clear();
+            m_Dic.Clear();
+        }
     }
 }

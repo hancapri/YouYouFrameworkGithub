@@ -9,6 +9,6 @@ namespace YouYouFramework
     /// </summary>
     public class CommonEventId
     {
-        public const ushort RegComplete = 1001;
+        public const ushort RegComplete = 10001;
     }
 }

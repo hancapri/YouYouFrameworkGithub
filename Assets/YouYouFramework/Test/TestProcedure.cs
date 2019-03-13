@@ -25,18 +25,10 @@ public class TestProcedure : MonoBehaviour {
         {
             Debug.Log("当前的流程 = " + GameEntry.Procedure.CurrProcedure);
         }
-        string[] arr = new string[2] { "---", "+++" };
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            GameEntry.Procedure.SetData("name", arr);
-            GameEntry.Procedure.SetData("age", 20);
 
-            GameEntry.Procedure.ChangeState(ProcedureState.CheckVersion);
-            GameEntry.Procedure.SetData("age", 25);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            GameEntry.Procedure.ChangeState(ProcedureState.EnterGame);
+            GameEntry.Procedure.ChangeState(ProcedureState.Preload);
         }
     }
 

@@ -1,13 +1,13 @@
 
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2019-03-11 23:19:14
+//创建时间：2019-03-12 15:13:51
 //备    注：此代码为工具生成 请勿手工修改
 //===================================================
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using YouYou;
+using YouYouFramework;
 
 /// <summary>
 /// ShopCategory数据管理
@@ -17,7 +17,7 @@ public partial class ShopCategoryDBModel : DataTableDBModelBase<ShopCategoryDBMo
     /// <summary>
     /// 文件名称
     /// </summary>
-    public override string DataTableName { get { return "ShopCategory"; } }
+    protected override string DataTableName { get { return "ShopCategory"; } }
 
     /// <summary>
     /// 加载列表

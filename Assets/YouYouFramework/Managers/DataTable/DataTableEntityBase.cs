@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataTableEntityBase : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+namespace YouYouFramework
+{
+    /// <summary>
+    /// 数据表实体
+    /// </summary>
+    public class DataTableEntityBase
+    {
+        /// <summary>
+        /// 编号
+        /// </summary>
+        public int Id;
+    }
 }

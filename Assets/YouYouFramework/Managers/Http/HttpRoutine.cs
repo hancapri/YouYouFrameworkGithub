@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using LitJson;
 
 namespace YouYouFramework
 {
@@ -68,15 +69,22 @@ namespace YouYouFramework
                     //设备型号
                     dic["deviceModel"] = DeviceUtil.DeviceModel;
 
-                    long t = GameEntry.Data.SysData.CurrServerTime;
-                    //签名
-                    dic["sign"] = EncryptUtil.Md5(string.Format("{0}:{1}", t, DeviceUtil.DeviceIdentifier));
+                    //long t = GameEntry.Data.SysData.CurrServerTime;
+                    ////签名
+                    //dic["sign"] = EncryptUtil.Md5(string.Format("{0}:{1}", t, DeviceUtil.DeviceIdentifier));
 
-                    //时间戳
-                    dic["t"] = t;
+                    ////时间戳
+                    //dic["t"] = t;
                 }
 
-                PostUrl(url, dic == null ? "" : JsonUtility.ToJson(dic));
+                string json = string.Empty;
+                if (dic != null)
+                {
+                    json = JsonMapper.ToJson(dic);
+                    GameEntry.Pool.EnqueueClassObject(dic);
+                }
+
+                PostUrl(url, json);
             }
         }
         #endregion
@@ -120,7 +128,7 @@ namespace YouYouFramework
         /// <returns></returns>
         private IEnumerator Request(UnityWebRequest data)
         {
-            yield return data;
+            yield return data.Send();
 
             IsBusy = false;
             if (data.isHttpError || data.isNetworkError)
@@ -143,6 +151,9 @@ namespace YouYouFramework
             }
             data.Dispose();
             data = null;
+
+            //支持多个HttpRoutine，结束之后回池
+            GameEntry.Pool.EnqueueClassObject(this); 
         }
         #endregion
     }

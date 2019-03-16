@@ -90,7 +90,7 @@ namespace YouYouFramework
 
         public void Dispose()
         {
-            m_CurrFsm.ShutDown();
+
         }
     }
 }

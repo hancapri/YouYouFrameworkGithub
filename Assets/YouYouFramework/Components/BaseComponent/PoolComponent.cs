@@ -41,6 +41,21 @@ namespace YouYouFramework
             InitGameObjectPool();
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+            InitReside();
+        }
+
+        /// <summary>
+        /// 设置常用类的常驻数量
+        /// </summary>
+        private void InitReside()
+        {
+            SetClassObjectResideCount<HttpRoutine>(3);
+            SetClassObjectResideCount<Dictionary<string,object>>(3);
+        }
+
         /// <summary>
         /// 设置类对象的常驻数量
         /// </summary>

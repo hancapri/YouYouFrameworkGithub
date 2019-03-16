@@ -48,6 +48,7 @@ namespace YouYouFramework
             //设置默认状态
             CurrStateType = 0;
             m_CurrState = m_StateDic[CurrStateType];
+            m_CurrState.OnEnable();
         }
 
         /// <summary>

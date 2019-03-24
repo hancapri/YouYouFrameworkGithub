@@ -81,15 +81,18 @@ namespace YouYouFramework
                 if (dic != null)
                 {
                     json = JsonMapper.ToJson(dic);
+#if DEBUG_LOG_PROTO
+                    Debug.Log("Http打印通讯协议");
+#endif
                     GameEntry.Pool.EnqueueClassObject(dic);
                 }
 
                 PostUrl(url, json);
             }
         }
-        #endregion
+#endregion
 
-        #region GetUrl Get请求
+#region GetUrl Get请求
         /// <summary>
         /// Get请求
         /// </summary>
@@ -99,9 +102,9 @@ namespace YouYouFramework
             UnityWebRequest data = UnityWebRequest.Get(url);
             GameEntry.Http.StartCoroutine(Request(data));
         }
-        #endregion
+#endregion
 
-        #region PostUrl Post请求
+#region PostUrl Post请求
         /// <summary>
         /// Post请求
         /// </summary>
@@ -118,9 +121,9 @@ namespace YouYouFramework
             UnityWebRequest data = UnityWebRequest.Post(url, form);
             GameEntry.Http.StartCoroutine(Request(data));
         }
-        #endregion
+#endregion
 
-        #region Request 请求服务器
+#region Request 请求服务器
         /// <summary>
         /// 请求服务器
         /// </summary>
@@ -149,12 +152,15 @@ namespace YouYouFramework
                     m_CallBack(m_CallBackArgs);
                 }
             }
+#if DEBUG_LOG_PROTO
+            Debug.Log("打印Http接收数据");
+#endif
             data.Dispose();
             data = null;
 
             //支持多个HttpRoutine，结束之后回池
             GameEntry.Pool.EnqueueClassObject(this); 
         }
-        #endregion
+#endregion
     }
 }

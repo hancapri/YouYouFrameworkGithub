@@ -95,7 +95,6 @@ namespace YouYouFramework
         {
             lock (m_ClassObjectPoolDic)
             {
-
                 int key = obj.GetType().GetHashCode();
                 Queue<object> queue = null;
                 m_ClassObjectPoolDic.TryGetValue(key, out queue);
@@ -133,18 +132,16 @@ namespace YouYouFramework
             lock (m_ClassObjectPoolDic)
             {
                 Debug.Log("释放类对象池" + DateTime.Now);
-
-                List<int> poolDicKeys = new List<int>(m_ClassObjectPoolDic.Keys);
-                int keyCount = poolDicKeys.Count;
-                for (int i = 0; i < keyCount; i++)
+                int queueCount = 0;
+                var enumerator = m_ClassObjectPoolDic.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    int key = poolDicKeys[i];
+                    int key = enumerator.Current.Key;
                     Queue<object> queue = m_ClassObjectPoolDic[key];
-                    int queueCount = queue.Count;
-
 #if UNITY_EDITOR
                     Type t = null;
 #endif
+                    queueCount = queue.Count;
                     byte resideCount = 0;
                     ClassObjectCountDic.TryGetValue(key, out resideCount);
 

@@ -71,7 +71,7 @@ namespace YouYouFramework
                 for (int i = 0; i < listCount; i++)
                 {
                     OnActionHandler handler = lstHandler[i];
-                    if (handler != null && handler.Target != null)
+                    if (handler != null)
                     {
                         handler(buffer);
                     }

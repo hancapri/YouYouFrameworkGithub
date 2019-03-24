@@ -49,9 +49,10 @@ namespace YouYouFramework
 
         public void Dispose()
         {
-            foreach (var fsm in m_FsmDic)
+            var enumerator = m_FsmDic.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                fsm.Value.ShutDown();
+                enumerator.Current.Value.ShutDown();
             }
             m_FsmDic.Clear();
         }

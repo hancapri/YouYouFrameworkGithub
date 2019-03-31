@@ -1,6 +1,6 @@
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2019-03-24 13:47:02
+//创建时间：2019-03-31 12:57:22
 //备    注：
 //===================================================
 using System.Collections;
@@ -20,21 +20,21 @@ public struct RoleOperation_LogOnGameServerProto : IProto
 
     public byte[] ToArray()
     {
-        using (MMO_MemoryStream ms = new MMO_MemoryStream())
-        {
-            ms.WriteUShort(ProtoCode);
-            ms.WriteInt(AccountId);
-            return ms.ToArray();
-        }
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.WriteUShort(ProtoCode);
+        ms.WriteInt(AccountId);
+        return ms.ToArray();
     }
 
     public static RoleOperation_LogOnGameServerProto GetProto(byte[] buffer)
     {
         RoleOperation_LogOnGameServerProto proto = new RoleOperation_LogOnGameServerProto();
-        using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
-        {
-            proto.AccountId = ms.ReadInt();
-        }
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.Write(buffer, 0, buffer.Length);
+        ms.Position = 0;
+        proto.AccountId = ms.ReadInt();
         return proto;
     }
 }

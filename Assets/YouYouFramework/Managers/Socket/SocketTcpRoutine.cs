@@ -16,9 +16,6 @@ namespace YouYouFramework
         //发送消息队列
         private Queue<byte[]> m_SendQueue = new Queue<byte[]>();
 
-        //检查队列的委托
-        private Action m_CheckSendQuene;
-
         //压缩数组的长度界限
         private const int m_CompressLen = 200000;
         #endregion
@@ -26,7 +23,7 @@ namespace YouYouFramework
         //是否连接成功
         private bool m_IsConnectedOk;
 
-        #region 接收消息所需变量
+        #region 发送、接收消息所需变量
         //接收数据包的字节数组缓冲区
         private byte[] m_ReceiveBuffer = new byte[1024];
 
@@ -37,6 +34,15 @@ namespace YouYouFramework
         private Queue<byte[]> m_ReceiveQueue = new Queue<byte[]>();
 
         private int m_ReceiveCount = 0;
+
+        //这一帧发送了多少
+        private int m_SendCount = 0;
+
+        //是否有未处理的字节数组
+        private bool m_IsHasUnDealBytes = false;
+
+        //存储从列表中取出但未处理的字节
+        private byte[] m_UnDealBytes = null;
         #endregion
 
         /// <summary>
@@ -61,7 +67,7 @@ namespace YouYouFramework
             #region 从队列中获取数据
             while (true)
             {
-                if (m_ReceiveCount <= 5)
+                if (m_ReceiveCount <= GameEntry.Socket.MaxReceiveCount)
                 {
                     m_ReceiveCount++;
                     lock (m_ReceiveQueue)
@@ -71,57 +77,57 @@ namespace YouYouFramework
                             //得到队列中的数据包
                             byte[] buffer = m_ReceiveQueue.Dequeue();
 
-                            ////异或之后的数组
-                            //byte[] bufferNew = new byte[buffer.Length - 3];
+                            //异或之后的数组
+                            byte[] bufferNew = new byte[buffer.Length - 3];
 
-                            //bool isCompress = false;
-                            //ushort crc = 0;
+                            bool isCompress = false;
+                            ushort crc = 0;
 
-                            //using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
-                            //{
-                            //    isCompress = ms.ReadBool();
-                            //    crc = ms.ReadUShort();
-                            //    ms.Read(bufferNew, 0, bufferNew.Length);
-                            //}
-
-                            ////先crc
-                            //int newCrc = Crc16.CalculateCrc16(bufferNew);
-
-                            //if (newCrc == crc)
-                            //{
-                            //    //异或 得到原始数据
-                            //    bufferNew = SecurityUtil.Xor(bufferNew);
-
-                            //    if (isCompress)
-                            //    {
-                            //        bufferNew = ZlibHelper.DeCompressBytes(bufferNew);
-                            //    }
-
-                            //    ushort protoCode = 0;
-                            //    byte[] protoContent = new byte[bufferNew.Length - 2];
-                            //    using (MMO_MemoryStream ms = new MMO_MemoryStream(bufferNew))
-                            //    {
-                            //        //协议编号
-                            //        protoCode = ms.ReadUShort();
-                            //        ms.Read(protoContent, 0, protoContent.Length);
-
-                            //        GameEntry.Event.SocketEvent.Dispatch(protoCode, protoContent);
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    break;
-                            //}
-
-                            //测试，待删除，上述注释代码为加密之后的解读过程，为真正的代码
                             using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
                             {
-                                //协议编号
-                                ushort protoCode = ms.ReadUShort();
-                                byte[] protoContent = new byte[buffer.Length - 2]; ;
-                                ms.Read(protoContent, 0, protoContent.Length);
-                                GameEntry.Event.SocketEvent.Dispatch(protoCode, protoContent);
+                                isCompress = ms.ReadBool();
+                                crc = ms.ReadUShort();
+                                ms.Read(bufferNew, 0, bufferNew.Length);
                             }
+
+                            //先crc
+                            int newCrc = Crc16.CalculateCrc16(bufferNew);
+
+                            if (newCrc == crc)
+                            {
+                                //异或 得到原始数据
+                                bufferNew = SecurityUtil.Xor(bufferNew);
+
+                                if (isCompress)
+                                {
+                                    bufferNew = ZlibHelper.DeCompressBytes(bufferNew);
+                                }
+
+                                ushort protoCode = 0;
+                                byte[] protoContent = new byte[bufferNew.Length - 2];
+                                using (MMO_MemoryStream ms = new MMO_MemoryStream(bufferNew))
+                                {
+                                    //协议编号
+                                    protoCode = ms.ReadUShort();
+                                    ms.Read(protoContent, 0, protoContent.Length);
+
+                                    GameEntry.Event.SocketEvent.Dispatch(protoCode, protoContent);
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+
+                            ////测试，待删除，上述注释代码为加密之后的解读过程，为真正的代码
+                            //using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
+                            //{
+                            //    //协议编号
+                            //    ushort protoCode = ms.ReadUShort();
+                            //    byte[] protoContent = new byte[buffer.Length - 2]; ;
+                            //    ms.Read(protoContent, 0, protoContent.Length);
+                            //    GameEntry.Event.SocketEvent.Dispatch(protoCode, protoContent);
+                            //}
                         }
                         else
                         {
@@ -135,6 +141,8 @@ namespace YouYouFramework
                     break;
                 }
             }
+
+            CheckSendQueue();
             #endregion
         }
 
@@ -168,7 +176,6 @@ namespace YouYouFramework
             {
                 Debug.Log("socket连接成功");
                 GameEntry.Socket.RegisterSocketTcpRoutine(this);
-                m_CheckSendQuene = OnCheckSendQueueCallBack;
 
                 ReceiveMsg();
                 m_IsConnectedOk = true;
@@ -194,19 +201,52 @@ namespace YouYouFramework
             }
         }
 
-        #region OnCheckSendQueueCallBack 检查队列的委托回调
+        #region CheckSendQueue 检查发送队列
         /// <summary>
         /// 检查队列的委托回调
         /// </summary>
-        private void OnCheckSendQueueCallBack()
+        private void CheckSendQueue()
         {
+            if (m_SendCount >= GameEntry.Socket.MaxSendCount)
+            {
+                //等待下一帧发送
+                m_SendCount = 0;
+                return;
+            }
             lock (m_SendQueue)
             {
-                //如果队列中有数据包 则发送数据包
-                if (m_SendQueue.Count > 0)
+                if (m_SendQueue.Count > 0 || m_IsHasUnDealBytes)
                 {
-                    //发送数据包
-                    Send(m_SendQueue.Dequeue());
+                    MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+                    ms.SetLength(0);
+                    //先处理未处理的包
+                    if (m_IsHasUnDealBytes)
+                    {
+                        ms.Write(m_UnDealBytes, 0, m_UnDealBytes.Length);
+                        m_IsHasUnDealBytes = false;
+                    }
+
+                    while (true)
+                    {
+                        if (m_SendQueue.Count == 0)
+                        {
+                            break;
+                        }
+
+                        byte[] buffer = m_SendQueue.Dequeue();
+                        if ((buffer.Length + ms.Length) <= GameEntry.Socket.MaxSendByteCount)
+                        {
+                            ms.Write(buffer, 0, buffer.Length);
+                        }
+                        else
+                        {
+                            m_IsHasUnDealBytes = true;
+                            m_UnDealBytes = buffer;
+                            break;
+                        }
+                    }
+                    m_SendCount++;
+                    Send(ms.ToArray());
                 }
             }
         }
@@ -235,15 +275,13 @@ namespace YouYouFramework
             //3.Crc校验 压缩后的
             ushort crc = Crc16.CalculateCrc16(data);
 
-            using (MMO_MemoryStream ms = new MMO_MemoryStream())
-            {
-                ms.WriteUShort((ushort)(data.Length + 3));
-                ms.WriteBool(isCompress);
-                ms.WriteUShort(crc);
-                ms.Write(data, 0, data.Length);
+            MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+            ms.SetLength(0);
+            ms.WriteBool(isCompress);
+            ms.WriteUShort(crc);
+            ms.Write(data, 0, data.Length);
 
-                retBuffer = ms.ToArray();
-            }
+            retBuffer = ms.ToArray();
             return retBuffer;
         }
         #endregion
@@ -262,10 +300,6 @@ namespace YouYouFramework
             {
                 //把数据包加入队列
                 m_SendQueue.Enqueue(sendBuffer);
-
-                if (m_CheckSendQuene == null) return;
-                //启动委托（执行委托）
-                m_CheckSendQuene.BeginInvoke(null, null);
             }
         }
         #endregion
@@ -289,9 +323,6 @@ namespace YouYouFramework
         private void SendCallBack(IAsyncResult ar)
         {
             m_Client.EndSend(ar);
-
-            //继续检查队列
-            OnCheckSendQueueCallBack();
         }
         #endregion
 
@@ -322,7 +353,7 @@ namespace YouYouFramework
                 if (len > 0)
                 {
                     //已经接收到数据
-                    
+
                     //把接收到数据 写入缓冲数据流的尾部
                     m_ReceiveMS.Position = m_ReceiveMS.Length;
 

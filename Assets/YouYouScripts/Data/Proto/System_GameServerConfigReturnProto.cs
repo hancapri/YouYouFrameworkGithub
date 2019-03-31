@@ -1,6 +1,6 @@
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2019-03-24 13:47:02
+//创建时间：2019-03-31 12:57:22
 //备    注：
 //===================================================
 using System.Collections;
@@ -32,35 +32,35 @@ public struct System_GameServerConfigReturnProto : IProto
 
     public byte[] ToArray()
     {
-        using (MMO_MemoryStream ms = new MMO_MemoryStream())
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.WriteUShort(ProtoCode);
+        ms.WriteInt(ConfigCount);
+        for (int i = 0; i < ConfigCount; i++)
         {
-            ms.WriteUShort(ProtoCode);
-            ms.WriteInt(ConfigCount);
-            for (int i = 0; i < ConfigCount; i++)
-            {
-                ms.WriteUTF8String(ServerConfigList[i].ConfigCode);
-                ms.WriteBool(ServerConfigList[i].IsOpen);
-                ms.WriteUTF8String(ServerConfigList[i].Param);
-            }
-            return ms.ToArray();
+            ms.WriteUTF8String(ServerConfigList[i].ConfigCode);
+            ms.WriteBool(ServerConfigList[i].IsOpen);
+            ms.WriteUTF8String(ServerConfigList[i].Param);
         }
+        return ms.ToArray();
     }
 
     public static System_GameServerConfigReturnProto GetProto(byte[] buffer)
     {
         System_GameServerConfigReturnProto proto = new System_GameServerConfigReturnProto();
-        using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.Write(buffer, 0, buffer.Length);
+        ms.Position = 0;
+        proto.ConfigCount = ms.ReadInt();
+        proto.ServerConfigList = new List<ConfigItem>();
+        for (int i = 0; i < proto.ConfigCount; i++)
         {
-            proto.ConfigCount = ms.ReadInt();
-            proto.ServerConfigList = new List<ConfigItem>();
-            for (int i = 0; i < proto.ConfigCount; i++)
-            {
-                ConfigItem _ServerConfig = new ConfigItem();
-                _ServerConfig.ConfigCode = ms.ReadUTF8String();
-                _ServerConfig.IsOpen = ms.ReadBool();
-                _ServerConfig.Param = ms.ReadUTF8String();
-                proto.ServerConfigList.Add(_ServerConfig);
-            }
+            ConfigItem _ServerConfig = new ConfigItem();
+            _ServerConfig.ConfigCode = ms.ReadUTF8String();
+            _ServerConfig.IsOpen = ms.ReadBool();
+            _ServerConfig.Param = ms.ReadUTF8String();
+            proto.ServerConfigList.Add(_ServerConfig);
         }
         return proto;
     }

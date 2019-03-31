@@ -1,6 +1,6 @@
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2019-03-24 13:47:02
+//创建时间：2019-03-31 12:57:22
 //备    注：
 //===================================================
 using System.Collections;
@@ -58,108 +58,108 @@ public struct RoleOperation_SelectRoleInfoReturnProto : IProto
 
     public byte[] ToArray()
     {
-        using (MMO_MemoryStream ms = new MMO_MemoryStream())
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.WriteUShort(ProtoCode);
+        ms.WriteBool(IsSuccess);
+        if(IsSuccess)
         {
-            ms.WriteUShort(ProtoCode);
-            ms.WriteBool(IsSuccess);
-            if(IsSuccess)
-            {
-                ms.WriteInt(RoldId);
-                ms.WriteUTF8String(RoleNickName);
-                ms.WriteByte(JobId);
-                ms.WriteInt(Level);
-                ms.WriteInt(TotalRechargeMoney);
-                ms.WriteInt(Money);
-                ms.WriteInt(Gold);
-                ms.WriteInt(Exp);
-                ms.WriteInt(MaxHP);
-                ms.WriteInt(MaxMP);
-                ms.WriteInt(CurrHP);
-                ms.WriteInt(CurrMP);
-                ms.WriteInt(Attack);
-                ms.WriteInt(Defense);
-                ms.WriteInt(Hit);
-                ms.WriteInt(Dodge);
-                ms.WriteInt(Cri);
-                ms.WriteInt(Res);
-                ms.WriteInt(Fighting);
-                ms.WriteInt(LastInWorldMapId);
-                ms.WriteUTF8String(LastInWorldMapPos);
-                ms.WriteInt(Equip_Weapon);
-                ms.WriteInt(Equip_Pants);
-                ms.WriteInt(Equip_Clothes);
-                ms.WriteInt(Equip_Belt);
-                ms.WriteInt(Equip_Cuff);
-                ms.WriteInt(Equip_Necklace);
-                ms.WriteInt(Equip_Shoe);
-                ms.WriteInt(Equip_Ring);
-                ms.WriteInt(Equip_WeaponTableId);
-                ms.WriteInt(Equip_PantsTableId);
-                ms.WriteInt(Equip_ClothesTableId);
-                ms.WriteInt(Equip_BeltTableId);
-                ms.WriteInt(Equip_CuffTableId);
-                ms.WriteInt(Equip_NecklaceTableId);
-                ms.WriteInt(Equip_ShoeTableId);
-                ms.WriteInt(Equip_RingTableId);
-            }
-            else
-            {
-                ms.WriteInt(MsgCode);
-            }
-            return ms.ToArray();
+            ms.WriteInt(RoldId);
+            ms.WriteUTF8String(RoleNickName);
+            ms.WriteByte(JobId);
+            ms.WriteInt(Level);
+            ms.WriteInt(TotalRechargeMoney);
+            ms.WriteInt(Money);
+            ms.WriteInt(Gold);
+            ms.WriteInt(Exp);
+            ms.WriteInt(MaxHP);
+            ms.WriteInt(MaxMP);
+            ms.WriteInt(CurrHP);
+            ms.WriteInt(CurrMP);
+            ms.WriteInt(Attack);
+            ms.WriteInt(Defense);
+            ms.WriteInt(Hit);
+            ms.WriteInt(Dodge);
+            ms.WriteInt(Cri);
+            ms.WriteInt(Res);
+            ms.WriteInt(Fighting);
+            ms.WriteInt(LastInWorldMapId);
+            ms.WriteUTF8String(LastInWorldMapPos);
+            ms.WriteInt(Equip_Weapon);
+            ms.WriteInt(Equip_Pants);
+            ms.WriteInt(Equip_Clothes);
+            ms.WriteInt(Equip_Belt);
+            ms.WriteInt(Equip_Cuff);
+            ms.WriteInt(Equip_Necklace);
+            ms.WriteInt(Equip_Shoe);
+            ms.WriteInt(Equip_Ring);
+            ms.WriteInt(Equip_WeaponTableId);
+            ms.WriteInt(Equip_PantsTableId);
+            ms.WriteInt(Equip_ClothesTableId);
+            ms.WriteInt(Equip_BeltTableId);
+            ms.WriteInt(Equip_CuffTableId);
+            ms.WriteInt(Equip_NecklaceTableId);
+            ms.WriteInt(Equip_ShoeTableId);
+            ms.WriteInt(Equip_RingTableId);
         }
+        else
+        {
+            ms.WriteInt(MsgCode);
+        }
+        return ms.ToArray();
     }
 
     public static RoleOperation_SelectRoleInfoReturnProto GetProto(byte[] buffer)
     {
         RoleOperation_SelectRoleInfoReturnProto proto = new RoleOperation_SelectRoleInfoReturnProto();
-        using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.Write(buffer, 0, buffer.Length);
+        ms.Position = 0;
+        proto.IsSuccess = ms.ReadBool();
+        if(proto.IsSuccess)
         {
-            proto.IsSuccess = ms.ReadBool();
-            if(proto.IsSuccess)
-            {
-                proto.RoldId = ms.ReadInt();
-                proto.RoleNickName = ms.ReadUTF8String();
-                proto.JobId = (byte)ms.ReadByte();
-                proto.Level = ms.ReadInt();
-                proto.TotalRechargeMoney = ms.ReadInt();
-                proto.Money = ms.ReadInt();
-                proto.Gold = ms.ReadInt();
-                proto.Exp = ms.ReadInt();
-                proto.MaxHP = ms.ReadInt();
-                proto.MaxMP = ms.ReadInt();
-                proto.CurrHP = ms.ReadInt();
-                proto.CurrMP = ms.ReadInt();
-                proto.Attack = ms.ReadInt();
-                proto.Defense = ms.ReadInt();
-                proto.Hit = ms.ReadInt();
-                proto.Dodge = ms.ReadInt();
-                proto.Cri = ms.ReadInt();
-                proto.Res = ms.ReadInt();
-                proto.Fighting = ms.ReadInt();
-                proto.LastInWorldMapId = ms.ReadInt();
-                proto.LastInWorldMapPos = ms.ReadUTF8String();
-                proto.Equip_Weapon = ms.ReadInt();
-                proto.Equip_Pants = ms.ReadInt();
-                proto.Equip_Clothes = ms.ReadInt();
-                proto.Equip_Belt = ms.ReadInt();
-                proto.Equip_Cuff = ms.ReadInt();
-                proto.Equip_Necklace = ms.ReadInt();
-                proto.Equip_Shoe = ms.ReadInt();
-                proto.Equip_Ring = ms.ReadInt();
-                proto.Equip_WeaponTableId = ms.ReadInt();
-                proto.Equip_PantsTableId = ms.ReadInt();
-                proto.Equip_ClothesTableId = ms.ReadInt();
-                proto.Equip_BeltTableId = ms.ReadInt();
-                proto.Equip_CuffTableId = ms.ReadInt();
-                proto.Equip_NecklaceTableId = ms.ReadInt();
-                proto.Equip_ShoeTableId = ms.ReadInt();
-                proto.Equip_RingTableId = ms.ReadInt();
-            }
-            else
-            {
-                proto.MsgCode = ms.ReadInt();
-            }
+            proto.RoldId = ms.ReadInt();
+            proto.RoleNickName = ms.ReadUTF8String();
+            proto.JobId = (byte)ms.ReadByte();
+            proto.Level = ms.ReadInt();
+            proto.TotalRechargeMoney = ms.ReadInt();
+            proto.Money = ms.ReadInt();
+            proto.Gold = ms.ReadInt();
+            proto.Exp = ms.ReadInt();
+            proto.MaxHP = ms.ReadInt();
+            proto.MaxMP = ms.ReadInt();
+            proto.CurrHP = ms.ReadInt();
+            proto.CurrMP = ms.ReadInt();
+            proto.Attack = ms.ReadInt();
+            proto.Defense = ms.ReadInt();
+            proto.Hit = ms.ReadInt();
+            proto.Dodge = ms.ReadInt();
+            proto.Cri = ms.ReadInt();
+            proto.Res = ms.ReadInt();
+            proto.Fighting = ms.ReadInt();
+            proto.LastInWorldMapId = ms.ReadInt();
+            proto.LastInWorldMapPos = ms.ReadUTF8String();
+            proto.Equip_Weapon = ms.ReadInt();
+            proto.Equip_Pants = ms.ReadInt();
+            proto.Equip_Clothes = ms.ReadInt();
+            proto.Equip_Belt = ms.ReadInt();
+            proto.Equip_Cuff = ms.ReadInt();
+            proto.Equip_Necklace = ms.ReadInt();
+            proto.Equip_Shoe = ms.ReadInt();
+            proto.Equip_Ring = ms.ReadInt();
+            proto.Equip_WeaponTableId = ms.ReadInt();
+            proto.Equip_PantsTableId = ms.ReadInt();
+            proto.Equip_ClothesTableId = ms.ReadInt();
+            proto.Equip_BeltTableId = ms.ReadInt();
+            proto.Equip_CuffTableId = ms.ReadInt();
+            proto.Equip_NecklaceTableId = ms.ReadInt();
+            proto.Equip_ShoeTableId = ms.ReadInt();
+            proto.Equip_RingTableId = ms.ReadInt();
+        }
+        else
+        {
+            proto.MsgCode = ms.ReadInt();
         }
         return proto;
     }

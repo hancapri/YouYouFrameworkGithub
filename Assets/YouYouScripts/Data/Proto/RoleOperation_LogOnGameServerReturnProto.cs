@@ -1,6 +1,6 @@
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2019-03-24 13:47:02
+//创建时间：2019-03-31 12:57:22
 //备    注：
 //===================================================
 using System.Collections;
@@ -33,37 +33,37 @@ public struct RoleOperation_LogOnGameServerReturnProto : IProto
 
     public byte[] ToArray()
     {
-        using (MMO_MemoryStream ms = new MMO_MemoryStream())
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.WriteUShort(ProtoCode);
+        ms.WriteInt(RoleCount);
+        for (int i = 0; i < RoleCount; i++)
         {
-            ms.WriteUShort(ProtoCode);
-            ms.WriteInt(RoleCount);
-            for (int i = 0; i < RoleCount; i++)
-            {
-                ms.WriteInt(RoleList[i].RoleId);
-                ms.WriteUTF8String(RoleList[i].RoleNickName);
-                ms.WriteByte(RoleList[i].RoleJob);
-                ms.WriteInt(RoleList[i].RoleLevel);
-            }
-            return ms.ToArray();
+            ms.WriteInt(RoleList[i].RoleId);
+            ms.WriteUTF8String(RoleList[i].RoleNickName);
+            ms.WriteByte(RoleList[i].RoleJob);
+            ms.WriteInt(RoleList[i].RoleLevel);
         }
+        return ms.ToArray();
     }
 
     public static RoleOperation_LogOnGameServerReturnProto GetProto(byte[] buffer)
     {
         RoleOperation_LogOnGameServerReturnProto proto = new RoleOperation_LogOnGameServerReturnProto();
-        using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.Write(buffer, 0, buffer.Length);
+        ms.Position = 0;
+        proto.RoleCount = ms.ReadInt();
+        proto.RoleList = new List<RoleItem>();
+        for (int i = 0; i < proto.RoleCount; i++)
         {
-            proto.RoleCount = ms.ReadInt();
-            proto.RoleList = new List<RoleItem>();
-            for (int i = 0; i < proto.RoleCount; i++)
-            {
-                RoleItem _Role = new RoleItem();
-                _Role.RoleId = ms.ReadInt();
-                _Role.RoleNickName = ms.ReadUTF8String();
-                _Role.RoleJob = (byte)ms.ReadByte();
-                _Role.RoleLevel = ms.ReadInt();
-                proto.RoleList.Add(_Role);
-            }
+            RoleItem _Role = new RoleItem();
+            _Role.RoleId = ms.ReadInt();
+            _Role.RoleNickName = ms.ReadUTF8String();
+            _Role.RoleJob = (byte)ms.ReadByte();
+            _Role.RoleLevel = ms.ReadInt();
+            proto.RoleList.Add(_Role);
         }
         return proto;
     }

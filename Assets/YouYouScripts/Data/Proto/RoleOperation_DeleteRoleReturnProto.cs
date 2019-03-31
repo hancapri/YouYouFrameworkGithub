@@ -1,6 +1,6 @@
 //===================================================
 //作    者：边涯  http://www.u3dol.com
-//创建时间：2019-03-24 13:47:02
+//创建时间：2019-03-31 12:57:22
 //备    注：
 //===================================================
 using System.Collections;
@@ -21,28 +21,28 @@ public struct RoleOperation_DeleteRoleReturnProto : IProto
 
     public byte[] ToArray()
     {
-        using (MMO_MemoryStream ms = new MMO_MemoryStream())
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.WriteUShort(ProtoCode);
+        ms.WriteBool(IsSuccess);
+        if(!IsSuccess)
         {
-            ms.WriteUShort(ProtoCode);
-            ms.WriteBool(IsSuccess);
-            if(!IsSuccess)
-            {
-                ms.WriteInt(MsgCode);
-            }
-            return ms.ToArray();
+            ms.WriteInt(MsgCode);
         }
+        return ms.ToArray();
     }
 
     public static RoleOperation_DeleteRoleReturnProto GetProto(byte[] buffer)
     {
         RoleOperation_DeleteRoleReturnProto proto = new RoleOperation_DeleteRoleReturnProto();
-        using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
+        MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+        ms.SetLength(0);
+        ms.Write(buffer, 0, buffer.Length);
+        ms.Position = 0;
+        proto.IsSuccess = ms.ReadBool();
+        if(!proto.IsSuccess)
         {
-            proto.IsSuccess = ms.ReadBool();
-            if(!proto.IsSuccess)
-            {
-                proto.MsgCode = ms.ReadInt();
-            }
+            proto.MsgCode = ms.ReadInt();
         }
         return proto;
     }

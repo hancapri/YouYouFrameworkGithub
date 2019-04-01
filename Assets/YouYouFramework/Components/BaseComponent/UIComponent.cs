@@ -38,6 +38,8 @@ namespace YouYouFramework
 
         private float m_Standard = 0;
         private float m_Curr = 0;
+
+        private UIManager m_UIManager;
         protected override void OnAwake()
         {
             base.OnAwake();
@@ -54,6 +56,7 @@ namespace YouYouFramework
                 UIGroup group = m_Groups[i];
                 m_UIGroupDic[group.Id] = group;
             }
+            m_UIManager = new UIManager();
         }
 
         #region UI适配
@@ -106,6 +109,25 @@ namespace YouYouFramework
             UIGroup group = null;
             m_UIGroupDic.TryGetValue(id,out group);
             return group;
+        }
+
+        /// <summary>
+        /// 打开UI窗体
+        /// </summary>
+        /// <param name="uiFormId"></param>
+        /// <param name="userData"></param>
+        public void OpenUIForm(int uiFormId, object userData = null)
+        {
+            m_UIManager.OpenUIForm(uiFormId, userData);
+        }
+
+        /// <summary>
+        /// 关闭UI窗体
+        /// </summary>
+        /// <param name="formBase"></param>
+        public void CloseUIForm(UIFormBase formBase)
+        {
+            m_UIManager.CloseUIForm(formBase);
         }
 
         public void OnUpdate()

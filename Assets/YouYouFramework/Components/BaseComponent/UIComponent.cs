@@ -22,38 +22,90 @@ namespace YouYouFramework
         [Header("UI摄像机")]
         public Camera UICamera;
 
+        [Header("根画布")]
+        [SerializeField]
+        private Canvas m_UIRootCanvas;
+
         [Header("根画布的缩放")]
         [SerializeField]
         private CanvasScaler m_UIRootCanvasScaler;
+
+        [Header("UI分组")]
+        [SerializeField]
+        private UIGroup[] m_Groups;
+
+        private Dictionary<byte, UIGroup> m_UIGroupDic;
+
+        private float m_Standard = 0;
+        private float m_Curr = 0;
         protected override void OnAwake()
         {
             base.OnAwake();
+            m_UIGroupDic = new Dictionary<byte, UIGroup>();
             GameEntry.RegisterUpdateComponent(this);
+            m_Standard = m_StandardWidth / (float)m_StandardHeight;
+            m_Curr = Screen.width / (float)Screen.height;
+
+            NormalFormCanvasScaler();
+
+            int len = m_Groups.Length;
+            for (int i = 0; i < len; i++)
+            {
+                UIGroup group = m_Groups[i];
+                m_UIGroupDic[group.Id] = group;
+            }
         }
 
+        #region UI适配
         /// <summary>
-        /// 自动缩放
+        /// LoadingForm适配缩放
         /// </summary>
-        public void AutoCanvasScaler()
+        public void LoadingFormCanvasScaler()
         {
-            float standard = m_StandardWidth / (float)m_StandardHeight;
-            float currScreen = Screen.width / (float)Screen.height;
-            if (currScreen > standard)
+            if (m_Curr > m_Standard)
             {
                 m_UIRootCanvasScaler.matchWidthOrHeight = 0;
             }
             else
             {
-                m_UIRootCanvasScaler.matchWidthOrHeight = standard - currScreen;
+                m_UIRootCanvasScaler.matchWidthOrHeight = m_Standard - m_Curr;
             }
         }
 
         /// <summary>
-        /// 设置缩放为1
+        /// FullForm适配缩放
         /// </summary>
-        public void SetCanvasScaler()
+        public void FullFormCanvasScaler()
         {
             m_UIRootCanvasScaler.matchWidthOrHeight = 1;
+        }
+
+        /// <summary>
+        /// NormalForm适配缩放
+        /// </summary>
+        public void NormalFormCanvasScaler()
+        {
+            if (m_Curr >= m_Standard)
+            {
+                m_UIRootCanvasScaler.matchWidthOrHeight = 1;
+            }
+            else
+            {
+                m_UIRootCanvasScaler.matchWidthOrHeight = 0;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 根据UI分组编号获取UI分组
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public UIGroup GetUIGroup(byte id)
+        {
+            UIGroup group = null;
+            m_UIGroupDic.TryGetValue(id,out group);
+            return group;
         }
 
         public void OnUpdate()

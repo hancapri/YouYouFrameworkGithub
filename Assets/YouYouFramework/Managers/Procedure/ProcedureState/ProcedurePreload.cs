@@ -40,10 +40,11 @@ namespace YouYouFramework
         private void OnLoadDataTableComplete(VariableBase param)
         {
             Debug.Log("加载所有表完毕");
-            List<ChapterEntity> lst = GameEntry.DataTable.DataTableManager.ChapterDBModel.GetList();
+            List<Sys_UIFormEntity> lst = GameEntry.DataTable.DataTableManager.Sys_UIFormDBModel.GetList();
             foreach (var item in lst)
             {
-                Debug.Log(item.ChapterName);
+                Debug.Log(item.Desc);
+                Debug.Log(item.AssetPath_Chinese);
             }
         }
     }

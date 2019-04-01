@@ -13,7 +13,7 @@ namespace YouYouFramework
         public override void OnEnable()
         {
             base.OnEnable();
-            //Debug.Log("启动流程");
+            Debug.Log("OnEnable ProcedureLaunch");
 
             //string url = GameEntry.Http.RealWebUrl + "/api/accountlaunch";
             //GameEntry.Http.SendData(url, WebGetCallBack);
@@ -27,11 +27,10 @@ namespace YouYouFramework
         public override void OnUpdate()
         {
             base.OnUpdate();
-            //if (Input.GetKeyDown(KeyCode.H))
-            //{
-            //    string url = GameEntry.Http.RealWebUrl + "/api/accountlaunch";
-            //    GameEntry.Http.SendData(url, WebGetCallBack);
-            //}
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                GameEntry.Procedure.ChangeState(ProcedureState.CheckVersion);
+            }
         }
 
         private void WebGetCallBack(HttpCallBackArgs args)
@@ -42,9 +41,7 @@ namespace YouYouFramework
 
         private void WebPostCallBack(HttpCallBackArgs args)
         {
-            Debug.Log("=======================");
-            Debug.Log("haserror = " + args.HasError);
-            Debug.Log("value = " + args.Value);
+            GameEntry.Procedure.ChangeState(ProcedureState.CheckVersion);
         }
     }
 }

@@ -9,6 +9,11 @@ namespace YouYouFramework
     /// </summary>
     public class ProcedureCheckVersion : ProcedureBase
     {
-        
+        public override void OnEnable()
+        {
+            base.OnEnable();
+            Debug.Log("OnEnable ProcedureCheckVersion");
+            GameEntry.Procedure.ChangeState(ProcedureState.Preload);
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace YouYouFramework
             #region 从队列中获取数据
             while (true)
             {
-                if (m_ReceiveCount <= GameEntry.Socket.MaxReceiveCount)
+                if (m_ReceiveCount < GameEntry.Socket.MaxReceiveCount)
                 {
                     lock (m_ReceiveQueue)
                     {

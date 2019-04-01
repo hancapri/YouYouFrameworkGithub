@@ -17,7 +17,7 @@ namespace YouYouFramework
         private Queue<byte[]> m_SendQueue = new Queue<byte[]>();
 
         //压缩数组的长度界限
-        private const int m_CompressLen = 200000;
+        private const int m_CompressLen = 200;
         #endregion
 
         //是否连接成功
@@ -69,11 +69,11 @@ namespace YouYouFramework
             {
                 if (m_ReceiveCount <= GameEntry.Socket.MaxReceiveCount)
                 {
-                    m_ReceiveCount++;
                     lock (m_ReceiveQueue)
                     {
                         if (m_ReceiveQueue.Count > 0)
                         {
+                            m_ReceiveCount++;
                             //得到队列中的数据包
                             byte[] buffer = m_ReceiveQueue.Dequeue();
 
@@ -188,6 +188,7 @@ namespace YouYouFramework
         }
         #endregion
 
+        #region DisConnect 断开连接socket服务器
         /// <summary>
         /// 断开连接
         /// </summary>
@@ -200,6 +201,7 @@ namespace YouYouFramework
                 GameEntry.Socket.RemoveSocketTcpRoutine(this);
             }
         }
+        #endregion
 
         #region CheckSendQueue 检查发送队列
         /// <summary>
@@ -277,6 +279,7 @@ namespace YouYouFramework
 
             MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
             ms.SetLength(0);
+            ms.WriteUShort((ushort)(data.Length + 3));
             ms.WriteBool(isCompress);
             ms.WriteUShort(crc);
             ms.Write(data, 0, data.Length);

@@ -5,14 +5,15 @@ using UnityEngine;
 using YouYouFramework;
 
 public class TestSocket : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
+    private SocketTcpRoutine sc;
+    // Use this for initialization
+    void Start () {
+        sc = new SocketTcpRoutine();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        //sc.OnUpdate();
         if (Input.GetKeyDown(KeyCode.S))
         {
             GameEntry.Socket.ConnectToMainSocket("192.168.0.106", 1010);

@@ -9,10 +9,15 @@ namespace YouYouFramework
     /// </summary>
     public class LocalizationManager : ManagerBase
     {
+        private Dictionary<string, string> m_LocalizationDic;
+        public LocalizationManager()
+        {
+            m_LocalizationDic = GameEntry.DataTable.DataTableManager.LocalizationDBModel.LocalizationDic;
+        }
         public string GetString(string key, params object[] args)
         {
             string value = null;
-            if (GameEntry.DataTable.DataTableManager.LocalizationDBModel.LocalizationDic.TryGetValue(key,out value))
+            if (m_LocalizationDic.TryGetValue(key,out value))
             {
                 return string.Format(value,args);
             }

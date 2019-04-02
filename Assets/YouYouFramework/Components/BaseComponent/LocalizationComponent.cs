@@ -32,6 +32,11 @@ namespace YouYouFramework
 #if !UNITY_EDITOR
             Init();
 #endif
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
             m_LocalizationManager = new LocalizationManager();
         }
 

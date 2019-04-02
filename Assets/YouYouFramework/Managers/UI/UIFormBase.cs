@@ -53,17 +53,25 @@ namespace YouYouFramework
             DisableUILayer = disableUILayer;
             IsLook = isLook;
             UserData = userData;
-
-            OnInit(UserData);
         }
 
-        internal void Open(object userData)
+        private void Start()
         {
-            UserData = userData;
+            OnInit(UserData);
+            Open(UserData, true);
+        }
+
+        internal void Open(object userData, bool isFormInit = false)
+        {
+            if (!isFormInit)
+            {
+                UserData = userData;
+            }
 
             if (!DisableUILayer)
             {
                 //进行层级管理,增加层级
+                GameEntry.UI.SetSortingOrder(this,true);
             }
 
             OnOpen(userData);
@@ -82,11 +90,13 @@ namespace YouYouFramework
             if (!DisableUILayer)
             {
                 //进行层级管理,减少层级
+                GameEntry.UI.SetSortingOrder(this, false);
             }
             OnClose();
 
+            CloseTime = Time.time;
             //先销毁，以后改成对象池
-            Destroy(gameObject);
+            GameEntry.UI.Enqueue(this);
         }
 
         private void OnDestroy()

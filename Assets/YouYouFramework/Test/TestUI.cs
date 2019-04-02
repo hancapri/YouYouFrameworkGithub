@@ -16,5 +16,10 @@ public class TestUI : MonoBehaviour {
         {
             GameEntry.UI.OpenUIForm(UIFormId.UI_GameLevelMap);
         }
-	}
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            GameEntry.UI.CloseUIForm(UIFormId.UI_GameLevelMap);
+        }
+    }
 }

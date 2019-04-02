@@ -156,4 +156,14 @@ public class GameUtil
         }
         return go;
     }
+
+    /// <summary>
+    /// 获取UI资源路径（待定）
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string GetUIPath(string path)
+    {
+        return string.Format("Assets/Download/Source/UISource/{0}.png", path);
+    }
 }

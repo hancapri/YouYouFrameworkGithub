@@ -16,6 +16,7 @@ namespace YouYouFramework
         public Sys_SoundDBModel Sys_SoundDBModel { get; private set; }
         public Sys_StorySoundDBModel Sys_StorySoundDBModel { get; private set; }
         public Sys_UIFormDBModel Sys_UIFormDBModel { get; private set; }
+        public LocalizationDBModel LocalizationDBModel { get; private set; }
 
         /// <summary>
         /// 章节表
@@ -46,6 +47,7 @@ namespace YouYouFramework
             Sys_SoundDBModel = new Sys_SoundDBModel();
             Sys_StorySoundDBModel = new Sys_StorySoundDBModel();
             Sys_UIFormDBModel = new Sys_UIFormDBModel();
+            LocalizationDBModel = new LocalizationDBModel();
             //load完毕
         }
 
@@ -69,6 +71,7 @@ namespace YouYouFramework
             Sys_SoundDBModel.LoadData();
             Sys_StorySoundDBModel.LoadData();
             Sys_UIFormDBModel.LoadData();
+            LocalizationDBModel.LoadData();
 
             //所有表加载完毕
             GameEntry.Event.CommonEvent.Dispatch(SysEventId.LoadDataTableComplete);

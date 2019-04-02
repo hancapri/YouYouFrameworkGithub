@@ -40,7 +40,17 @@ namespace YouYouFramework
 
             if (formBase == null)
             {
-                string path = string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", entity.AssetPath_Chinese);
+                string assetPath = string.Empty;
+                switch (GameEntry.Localization.CurrLanguage)
+                {
+                    case LocalizationComponent.LanguageEnum.Chinese:
+                        assetPath = entity.AssetPath_Chinese;
+                        break;
+                    case LocalizationComponent.LanguageEnum.English:
+                        assetPath = entity.AssetPath_English;
+                        break;
+                }
+                string path = string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath);
                 //加载镜像
                 Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
                 GameObject UIObj = Object.Instantiate(obj) as GameObject;

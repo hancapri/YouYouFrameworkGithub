@@ -21,5 +21,9 @@ public class TestUI : MonoBehaviour {
         {
             GameEntry.UI.CloseUIForm(UIFormId.UI_GameLevelMap);
         }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log(GameEntry.Localization.GetString("Button.Receive"));
+        }
     }
 }

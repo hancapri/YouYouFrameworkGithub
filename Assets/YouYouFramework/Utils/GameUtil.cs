@@ -164,6 +164,6 @@ public class GameUtil
     /// <returns></returns>
     public static string GetUIPath(string path)
     {
-        return string.Format("Assets/Download/Source/UISource/{0}.png", path);
+        return string.Format("Assets/Download/UI/UIRes/{0}.png", path);
     }
 }

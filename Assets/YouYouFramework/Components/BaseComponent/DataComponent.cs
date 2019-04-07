@@ -13,37 +13,37 @@ namespace YouYouFramework
         /// <summary>
         /// 临时缓存数据
         /// </summary>
-        public CacheData CacheData { get; private set; }
+        public CacheDataManager CacheDataManager { get; private set; }
 
         /// <summary>
         /// 系统相关数据
         /// </summary>
-        public SysData SysData { get; private set; }
+        public SysDataManager SysDataManager { get; private set; }
 
         /// <summary>
         /// 用户数据
         /// </summary>
-        public UserData UserData { get; private set; }
+        public UserDataManager UserDataManager { get; private set; }
 
         /// <summary>
         /// PVE地图数据
         /// </summary>
-        public PVEMapData PVEMapData { get; private set; }
+        public PVEMapDataManager PVEMapDataManager { get; private set; }
 
         protected override void OnAwake()
         {
-            CacheData = new CacheData();
-            SysData  = new SysData();
-            UserData = new UserData();
-            PVEMapData = new PVEMapData();
+            CacheDataManager = new CacheDataManager();
+            SysDataManager  = new SysDataManager();
+            UserDataManager = new UserDataManager();
+            PVEMapDataManager = new PVEMapDataManager();
         }
 
         public override void Shutdown()
         {
-            CacheData.Dispose();
-            SysData.Dispose();
-            UserData.Dispose();
-            PVEMapData.Dispose();
+            CacheDataManager.Dispose();
+            SysDataManager.Dispose();
+            UserDataManager.Dispose();
+            PVEMapDataManager.Dispose();
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using YouYouFramework;
 
 public class UITaskForm : UIFormBase {
+    private List<ServerTaskEntity> m_ServerTaskList;
 
     protected override void OnInit(object userData)
     {
@@ -24,5 +25,10 @@ public class UITaskForm : UIFormBase {
     {
         base.OnBeforeDestroy();
         Debug.Log("OnBeforeDestroy");
+    }
+
+    private void LoadTaskList()
+    {
+        m_ServerTaskList = GameEntry.Data.UserDataManager.ServerTaskList;
     }
 }

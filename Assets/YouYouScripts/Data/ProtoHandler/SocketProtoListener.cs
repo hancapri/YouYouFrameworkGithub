@@ -22,6 +22,7 @@ public sealed class SocketProtoListener
         GameEntry.Event.SocketEvent.AddEventListener(ProtoCodeDef.RoleOperation_DeleteRoleReturn, RoleOperation_DeleteRoleReturnHandler.OnRoleOperation_DeleteRoleReturn);
         GameEntry.Event.SocketEvent.AddEventListener(ProtoCodeDef.RoleOperation_EnterGameReturn, RoleOperation_EnterGameReturnHandler.OnRoleOperation_EnterGameReturn);
         GameEntry.Event.SocketEvent.AddEventListener(ProtoCodeDef.RoleOperation_SelectRoleInfoReturn, RoleOperation_SelectRoleInfoReturnHandler.OnRoleOperation_SelectRoleInfoReturn);
+        GameEntry.Event.SocketEvent.AddEventListener(ProtoCodeDef.Task_SearchTaskReturn, Task_SearchTaskReturnHandler.OnTask_SearchTaskReturn);
     }
 
     /// <summary>
@@ -36,5 +37,6 @@ public sealed class SocketProtoListener
         GameEntry.Event.SocketEvent.RemoveEventListener(ProtoCodeDef.RoleOperation_DeleteRoleReturn, RoleOperation_DeleteRoleReturnHandler.OnRoleOperation_DeleteRoleReturn);
         GameEntry.Event.SocketEvent.RemoveEventListener(ProtoCodeDef.RoleOperation_EnterGameReturn, RoleOperation_EnterGameReturnHandler.OnRoleOperation_EnterGameReturn);
         GameEntry.Event.SocketEvent.RemoveEventListener(ProtoCodeDef.RoleOperation_SelectRoleInfoReturn, RoleOperation_SelectRoleInfoReturnHandler.OnRoleOperation_SelectRoleInfoReturn);
+        GameEntry.Event.SocketEvent.RemoveEventListener(ProtoCodeDef.Task_SearchTaskReturn, Task_SearchTaskReturnHandler.OnTask_SearchTaskReturn);
     }
 }

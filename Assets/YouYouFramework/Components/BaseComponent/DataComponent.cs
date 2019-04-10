@@ -32,6 +32,7 @@ namespace YouYouFramework
 
         protected override void OnAwake()
         {
+            base.OnAwake();
             CacheDataManager = new CacheDataManager();
             SysDataManager  = new SysDataManager();
             UserDataManager = new UserDataManager();

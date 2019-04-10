@@ -30,7 +30,7 @@ namespace YouYouFramework
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+
         }
     }
 }

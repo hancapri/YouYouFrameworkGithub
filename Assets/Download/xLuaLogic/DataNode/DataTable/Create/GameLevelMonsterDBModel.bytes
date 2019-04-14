@@ -1,0 +1,44 @@
+--数据访问
+GameLevelMonsterDBModel = { }
+
+local this = GameLevelMonsterDBModel;
+
+local gamelevelmonsterTable = { }; --定义表格
+
+function GameLevelMonsterDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("GameLevelMonster");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        gamelevelmonsterTable[#gamelevelmonsterTable + 1] = GameLevelMonsterEntity.New(
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String()
+        );
+    end
+
+end
+
+function GameLevelMonsterDBModel.GetList()
+    return gamelevelmonsterTable;
+end
+
+function GameLevelMonsterDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #gamelevelmonsterTable, 1 do
+        if (gamelevelmonsterTable[i].Id == id) then
+            ret = gamelevelmonsterTable[i];
+            break;
+        end
+    end
+    return ret;
+end

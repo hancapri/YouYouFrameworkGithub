@@ -1,0 +1,46 @@
+--数据访问
+MaterialDBModel = { }
+
+local this = MaterialDBModel;
+
+local materialTable = { }; --定义表格
+
+function MaterialDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Material");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        materialTable[#materialTable + 1] = MaterialEntity.New(
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt()
+        );
+    end
+
+end
+
+function MaterialDBModel.GetList()
+    return materialTable;
+end
+
+function MaterialDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #materialTable, 1 do
+        if (materialTable[i].Id == id) then
+            ret = materialTable[i];
+            break;
+        end
+    end
+    return ret;
+end

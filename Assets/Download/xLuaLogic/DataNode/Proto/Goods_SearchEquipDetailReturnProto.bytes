@@ -1,0 +1,75 @@
+--服务器返回查询装备详情消息
+Goods_SearchEquipDetailReturnProto = { ProtoCode = 16007, EnchantLevel = 0, BaseAttr1Type = 0, BaseAttr1Value = 0, BaseAttr2Type = 0, BaseAttr2Value = 0, HP = 0, MP = 0, Attack = 0, Defense = 0, Hit = 0, Dodge = 0, Cri = 0, Res = 0, IsPutOn = 0 }
+local this = Goods_SearchEquipDetailReturnProto;
+
+Goods_SearchEquipDetailReturnProto.__index = Goods_SearchEquipDetailReturnProto;
+
+function Goods_SearchEquipDetailReturnProto.New()
+    local self = { };
+    setmetatable(self, Goods_SearchEquipDetailReturnProto);
+    return self;
+end
+
+function Goods_SearchEquipDetailReturnProto.GetProtoName()
+    return "Goods_SearchEquipDetailReturn";
+end
+
+
+--发送协议
+function Goods_SearchEquipDetailReturnProto.SendProto(proto)
+
+    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;
+    ms:SetLength(0);
+    ms:WriteUShort(proto.ProtoCode);
+
+    ms:WriteInt(proto.EnchantLevel);
+    ms:WriteByte(proto.BaseAttr1Type);
+    ms:WriteInt(proto.BaseAttr1Value);
+    ms:WriteByte(proto.BaseAttr2Type);
+    ms:WriteInt(proto.BaseAttr2Value);
+    ms:WriteInt(proto.HP);
+    ms:WriteInt(proto.MP);
+    ms:WriteInt(proto.Attack);
+    ms:WriteInt(proto.Defense);
+    ms:WriteInt(proto.Hit);
+    ms:WriteInt(proto.Dodge);
+    ms:WriteInt(proto.Cri);
+    ms:WriteInt(proto.Res);
+    ms:WriteByte(proto.IsPutOn);
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#ffdeb3>==>>%s</color>", json.encode(proto)));
+    end
+
+    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());
+end
+
+
+--解析协议
+function Goods_SearchEquipDetailReturnProto.GetProto(buffer)
+
+    local proto = Goods_SearchEquipDetailReturnProto.New(); --实例化一个协议对象
+    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);
+
+    proto.EnchantLevel = ms:ReadInt();
+    proto.BaseAttr1Type = ms:ReadByte();
+    proto.BaseAttr1Value = ms:ReadInt();
+    proto.BaseAttr2Type = ms:ReadByte();
+    proto.BaseAttr2Value = ms:ReadInt();
+    proto.HP = ms:ReadInt();
+    proto.MP = ms:ReadInt();
+    proto.Attack = ms:ReadInt();
+    proto.Defense = ms:ReadInt();
+    proto.Hit = ms:ReadInt();
+    proto.Dodge = ms:ReadInt();
+    proto.Cri = ms:ReadInt();
+    proto.Res = ms:ReadInt();
+    proto.IsPutOn = ms:ReadByte();
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#c5e1dc>==>>%s</color>", json.encode(proto)));
+    end
+    return proto;
+end

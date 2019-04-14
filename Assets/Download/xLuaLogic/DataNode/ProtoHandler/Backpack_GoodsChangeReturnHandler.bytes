@@ -1,0 +1,8 @@
+--服务器返回背包物品更新消息（工具只生成一次）
+Backpack_GoodsChangeReturnHandler = { };
+
+local this = Backpack_GoodsChangeReturnHandler;
+
+function Backpack_GoodsChangeReturnHandler.OnBackpack_GoodsChangeReturn(buffer)
+    local proto = Backpack_GoodsChangeReturnProto.GetProto(buffer);
+end

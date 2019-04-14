@@ -1,0 +1,62 @@
+--数据访问
+SpriteDBModel = { }
+
+local this = SpriteDBModel;
+
+local spriteTable = { }; --定义表格
+
+function SpriteDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Sprite");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        spriteTable[#spriteTable + 1] = SpriteEntity.New(
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadFloat(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadFloat(),
+                ms:ReadInt(),
+                ms:ReadFloat(),
+                ms:ReadInt()
+        );
+    end
+
+end
+
+function SpriteDBModel.GetList()
+    return spriteTable;
+end
+
+function SpriteDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #spriteTable, 1 do
+        if (spriteTable[i].Id == id) then
+            ret = spriteTable[i];
+            break;
+        end
+    end
+    return ret;
+end

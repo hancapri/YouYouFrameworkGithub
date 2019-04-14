@@ -1,0 +1,16 @@
+Sys_SoundEntity = { Id = 0, Desc = "", AssetPath = "", Is3D = 0, Volume = 0 }
+
+Sys_SoundEntity.__index = Sys_SoundEntity;
+
+function Sys_SoundEntity.New(Id, Desc, AssetPath, Is3D, Volume)
+    local self = { };
+    setmetatable(self, Sys_SoundEntity);
+
+    self.Id = Id;
+    self.Desc = Desc;
+    self.AssetPath = AssetPath;
+    self.Is3D = Is3D;
+    self.Volume = Volume;
+
+    return self;
+end

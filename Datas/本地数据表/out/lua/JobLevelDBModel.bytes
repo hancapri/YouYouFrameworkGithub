@@ -1,0 +1,45 @@
+--数据访问
+JobLevelDBModel = { }
+
+local this = JobLevelDBModel;
+
+local joblevelTable = { }; --定义表格
+
+function JobLevelDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("JobLevel");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        joblevelTable[#joblevelTable + 1] = JobLevelEntity.New(
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt()
+        );
+    end
+
+end
+
+function JobLevelDBModel.GetList()
+    return joblevelTable;
+end
+
+function JobLevelDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #joblevelTable, 1 do
+        if (joblevelTable[i].Id == id) then
+            ret = joblevelTable[i];
+            break;
+        end
+    end
+    return ret;
+end

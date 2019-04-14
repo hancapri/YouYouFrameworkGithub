@@ -12,10 +12,8 @@ namespace YouYouFramework
     {
         private SocketManager m_SocketManager;
 
-        /// <summary>
-        /// 通用MemoryStream
-        /// </summary>
-        public MMO_MemoryStream CommonMemoryStream { get; private set; }
+        public MMO_MemoryStream SocketSendMS { get; private set; }
+        public MMO_MemoryStream SocketReceiveMS { get; private set; }
 
         [Header("每帧最大发送包的数量")]
         /// <summary>
@@ -40,7 +38,9 @@ namespace YouYouFramework
             base.OnAwake();
             GameEntry.RegisterUpdateComponent(this);
             m_SocketManager = new SocketManager();
-            CommonMemoryStream = new MMO_MemoryStream();
+
+            SocketSendMS = new MMO_MemoryStream();
+            SocketReceiveMS = new MMO_MemoryStream();
         }
 
         protected override void OnStart()
@@ -87,8 +87,11 @@ namespace YouYouFramework
             m_SocketManager.Dispose();
             GameEntry.Pool.EnqueueClassObject(m_MainSocket);
             SocketProtoListener.RemoveProtoListener();
-            CommonMemoryStream.Dispose();
-            CommonMemoryStream.Close();
+
+            SocketSendMS.Dispose();
+            SocketSendMS.Close();
+            SocketReceiveMS.Close();
+            SocketReceiveMS.Dispose();
         }
 
         //======================

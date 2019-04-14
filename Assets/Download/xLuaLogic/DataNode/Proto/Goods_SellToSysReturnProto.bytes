@@ -1,0 +1,55 @@
+--服务器返回出售物品给系统消息
+Goods_SellToSysReturnProto = { ProtoCode = 16009, IsSuccess = false, MsgCode = 0 }
+local this = Goods_SellToSysReturnProto;
+
+Goods_SellToSysReturnProto.__index = Goods_SellToSysReturnProto;
+
+function Goods_SellToSysReturnProto.New()
+    local self = { };
+    setmetatable(self, Goods_SellToSysReturnProto);
+    return self;
+end
+
+function Goods_SellToSysReturnProto.GetProtoName()
+    return "Goods_SellToSysReturn";
+end
+
+
+--发送协议
+function Goods_SellToSysReturnProto.SendProto(proto)
+
+    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;
+    ms:SetLength(0);
+    ms:WriteUShort(proto.ProtoCode);
+
+    ms:WriteBool(proto.IsSuccess);
+    if(not proto.IsSuccess) then
+    end
+    ms:WriteInt(proto.MsgCode);
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#ffdeb3>==>>%s</color>", json.encode(proto)));
+    end
+
+    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());
+end
+
+
+--解析协议
+function Goods_SellToSysReturnProto.GetProto(buffer)
+
+    local proto = Goods_SellToSysReturnProto.New(); --实例化一个协议对象
+    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);
+
+    proto.IsSuccess = ms:ReadBool();
+    if(not proto.IsSuccess) then
+    end
+    proto.MsgCode = ms:ReadInt();
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#c5e1dc>==>>%s</color>", json.encode(proto)));
+    end
+    return proto;
+end

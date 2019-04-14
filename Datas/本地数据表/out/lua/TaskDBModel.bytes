@@ -1,0 +1,37 @@
+--数据访问
+TaskDBModel = { }
+
+local this = TaskDBModel;
+
+local taskTable = { }; --定义表格
+
+function TaskDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Task");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        taskTable[#taskTable + 1] = TaskEntity.New(
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadUTF8String()
+        );
+    end
+
+end
+
+function TaskDBModel.GetList()
+    return taskTable;
+end
+
+function TaskDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #taskTable, 1 do
+        if (taskTable[i].Id == id) then
+            ret = taskTable[i];
+            break;
+        end
+    end
+    return ret;
+end

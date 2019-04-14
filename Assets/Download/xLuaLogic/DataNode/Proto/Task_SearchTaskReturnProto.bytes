@@ -1,0 +1,74 @@
+--服务器返回任务列表消息
+Task_SearchTaskReturnProto = { ProtoCode = 15002, TaskCount = 0, CurrTaskItemTable = { } }
+local this = Task_SearchTaskReturnProto;
+
+Task_SearchTaskReturnProto.__index = Task_SearchTaskReturnProto;
+
+function Task_SearchTaskReturnProto.New()
+    local self = { };
+    setmetatable(self, Task_SearchTaskReturnProto);
+    return self;
+end
+
+function Task_SearchTaskReturnProto.GetProtoName()
+    return "Task_SearchTaskReturn";
+end
+
+
+--定义任务项
+CurrTaskItem = { Id = 0, Name = "", Status = 0, Content = "" }
+CurrTaskItem.__index = CurrTaskItem;
+function CurrTaskItem.New()
+    local self = { };
+    setmetatable(self, CurrTaskItem);
+    return self;
+end
+
+
+--发送协议
+function Task_SearchTaskReturnProto.SendProto(proto)
+
+    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;
+    ms:SetLength(0);
+    ms:WriteUShort(proto.ProtoCode);
+
+    ms:WriteInt(proto.TaskCount);
+    for i = 1, proto.TaskCount, 1 do
+        ms:WriteInt(proto.CurrTaskItemTable[i].Id);
+        ms:WriteUTF8String(proto.CurrTaskItemTable[i].Name);
+        ms:WriteInt(proto.CurrTaskItemTable[i].Status);
+        ms:WriteUTF8String(proto.CurrTaskItemTable[i].Content);
+    end
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#ffdeb3>==>>%s</color>", json.encode(proto)));
+    end
+
+    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());
+end
+
+
+--解析协议
+function Task_SearchTaskReturnProto.GetProto(buffer)
+
+    local proto = Task_SearchTaskReturnProto.New(); --实例化一个协议对象
+    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);
+
+    proto.TaskCount = ms:ReadInt();
+	proto.CurrTaskItemTable = {};
+    for i = 1, proto.TaskCount, 1 do
+        local _CurrTaskItem = CurrTaskItem.New();
+        _CurrTaskItem.Id = ms:ReadInt();
+        _CurrTaskItem.Name = ms:ReadUTF8String();
+        _CurrTaskItem.Status = ms:ReadInt();
+        _CurrTaskItem.Content = ms:ReadUTF8String();
+        proto.CurrTaskItemTable[#proto.CurrTaskItemTable+1] = _CurrTaskItem;
+    end
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#c5e1dc>==>>%s</color>", json.encode(proto)));
+    end
+    return proto;
+end

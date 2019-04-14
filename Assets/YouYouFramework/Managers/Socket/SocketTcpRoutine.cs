@@ -27,8 +27,12 @@ namespace YouYouFramework
         //接收数据包的字节数组缓冲区
         private byte[] m_ReceiveBuffer = new byte[1024];
 
-        //接收数据包的缓冲数据流
+        //接收服务端下发的数据包的缓冲数据流
         private MMO_MemoryStream m_ReceiveMS = new MMO_MemoryStream();
+
+        //解析数据包与byte[]互相转换的数据流
+        public MMO_MemoryStream m_SocketSendMS = new MMO_MemoryStream();
+        public MMO_MemoryStream m_SocketReceiveMS = new MMO_MemoryStream();
 
         //接收消息的队列
         private Queue<byte[]> m_ReceiveQueue = new Queue<byte[]>();
@@ -83,12 +87,20 @@ namespace YouYouFramework
                             bool isCompress = false;
                             ushort crc = 0;
 
-                            using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
-                            {
-                                isCompress = ms.ReadBool();
-                                crc = ms.ReadUShort();
-                                ms.Read(bufferNew, 0, bufferNew.Length);
-                            }
+                            MMO_MemoryStream ms1 = m_SocketReceiveMS;
+                            ms1.SetLength(0);
+                            ms1.Write(buffer, 0, buffer.Length);
+                            ms1.Position = 0;
+
+                            isCompress = ms1.ReadBool();
+                            crc = ms1.ReadUShort();
+                            ms1.Read(bufferNew, 0, bufferNew.Length);
+                            //using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
+                            //{
+                            //    isCompress = ms.ReadBool();
+                            //    crc = ms.ReadUShort();
+                            //    ms.Read(bufferNew, 0, bufferNew.Length);
+                            //}
 
                             //先crc
                             int newCrc = Crc16.CalculateCrc16(bufferNew);
@@ -105,14 +117,24 @@ namespace YouYouFramework
 
                                 ushort protoCode = 0;
                                 byte[] protoContent = new byte[bufferNew.Length - 2];
-                                using (MMO_MemoryStream ms = new MMO_MemoryStream(bufferNew))
-                                {
-                                    //协议编号
-                                    protoCode = ms.ReadUShort();
-                                    ms.Read(protoContent, 0, protoContent.Length);
 
-                                    GameEntry.Event.SocketEvent.Dispatch(protoCode, protoContent);
-                                }
+                                MMO_MemoryStream ms2 = m_SocketReceiveMS;
+                                ms2.SetLength(0);
+                                ms2.Write(bufferNew, 0, bufferNew.Length);
+                                ms2.Position = 0;
+
+                                protoCode = ms2.ReadUShort();
+                                ms2.Read(protoContent, 0, protoContent.Length);
+
+                                GameEntry.Event.SocketEvent.Dispatch(protoCode, protoContent);
+                                //using (MMO_MemoryStream ms = new MMO_MemoryStream(bufferNew))
+                                //{
+                                //    //协议编号
+                                //    protoCode = ms.ReadUShort();
+                                //    ms.Read(protoContent, 0, protoContent.Length);
+
+                                //    GameEntry.Event.SocketEvent.Dispatch(protoCode, protoContent);
+                                //}
                             }
                             else
                             {
@@ -219,7 +241,7 @@ namespace YouYouFramework
             {
                 if (m_SendQueue.Count > 0 || m_IsHasUnDealBytes)
                 {
-                    MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+                    MMO_MemoryStream ms = m_SocketSendMS;
                     ms.SetLength(0);
                     //先处理未处理的包
                     if (m_IsHasUnDealBytes)
@@ -277,7 +299,7 @@ namespace YouYouFramework
             //3.Crc校验 压缩后的
             ushort crc = Crc16.CalculateCrc16(data);
 
-            MMO_MemoryStream ms = GameEntry.Socket.CommonMemoryStream;
+            MMO_MemoryStream ms = m_SocketSendMS;
             ms.SetLength(0);
             ms.WriteUShort((ushort)(data.Length + 3));
             ms.WriteBool(isCompress);

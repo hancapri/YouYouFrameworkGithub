@@ -1,0 +1,8 @@
+--服务器返回查询背包项消息（工具只生成一次）
+Backpack_SearchReturnHandler = { };
+
+local this = Backpack_SearchReturnHandler;
+
+function Backpack_SearchReturnHandler.OnBackpack_SearchReturn(buffer)
+    local proto = Backpack_SearchReturnProto.GetProto(buffer);
+end

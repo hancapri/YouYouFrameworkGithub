@@ -1,0 +1,13 @@
+ShopCategoryEntity = { Id = 0, Name = "" }
+
+ShopCategoryEntity.__index = ShopCategoryEntity;
+
+function ShopCategoryEntity.New(Id, Name)
+    local self = { };
+    setmetatable(self, ShopCategoryEntity);
+
+    self.Id = Id;
+    self.Name = Name;
+
+    return self;
+end

@@ -1,0 +1,8 @@
+--服务器返回使用道具消息（工具只生成一次）
+Goods_UseItemReturnHandler = { };
+
+local this = Goods_UseItemReturnHandler;
+
+function Goods_UseItemReturnHandler.OnGoods_UseItemReturn(buffer)
+    local proto = Goods_UseItemReturnProto.GetProto(buffer);
+end

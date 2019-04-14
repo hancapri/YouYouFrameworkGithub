@@ -1,0 +1,49 @@
+--数据访问
+GameLevelGradeDBModel = { }
+
+local this = GameLevelGradeDBModel;
+
+local gamelevelgradeTable = { }; --定义表格
+
+function GameLevelGradeDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("GameLevelGrade");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        gamelevelgradeTable[#gamelevelgradeTable + 1] = GameLevelGradeEntity.New(
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadFloat(),
+                ms:ReadFloat(),
+                ms:ReadFloat(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String()
+        );
+    end
+
+end
+
+function GameLevelGradeDBModel.GetList()
+    return gamelevelgradeTable;
+end
+
+function GameLevelGradeDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #gamelevelgradeTable, 1 do
+        if (gamelevelgradeTable[i].Id == id) then
+            ret = gamelevelgradeTable[i];
+            break;
+        end
+    end
+    return ret;
+end

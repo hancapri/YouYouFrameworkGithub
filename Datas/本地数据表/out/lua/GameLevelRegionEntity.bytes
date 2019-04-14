@@ -1,0 +1,15 @@
+GameLevelRegionEntity = { Id = 0, GameLevelId = 0, RegionId = 0, InitSprite = "" }
+
+GameLevelRegionEntity.__index = GameLevelRegionEntity;
+
+function GameLevelRegionEntity.New(Id, GameLevelId, RegionId, InitSprite)
+    local self = { };
+    setmetatable(self, GameLevelRegionEntity);
+
+    self.Id = Id;
+    self.GameLevelId = GameLevelId;
+    self.RegionId = RegionId;
+    self.InitSprite = InitSprite;
+
+    return self;
+end

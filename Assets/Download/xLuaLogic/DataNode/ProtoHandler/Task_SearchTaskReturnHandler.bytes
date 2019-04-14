@@ -1,0 +1,8 @@
+--服务器返回任务列表消息（工具只生成一次）
+Task_SearchTaskReturnHandler = { };
+
+local this = Task_SearchTaskReturnHandler;
+
+function Task_SearchTaskReturnHandler.OnTask_SearchTaskReturn(buffer)
+    local proto = Task_SearchTaskReturnProto.GetProto(buffer);
+end

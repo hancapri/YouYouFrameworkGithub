@@ -1,0 +1,40 @@
+--数据访问
+ShopDBModel = { }
+
+local this = ShopDBModel;
+
+local shopTable = { }; --定义表格
+
+function ShopDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Shop");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        shopTable[#shopTable + 1] = ShopEntity.New(
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt()
+        );
+    end
+
+end
+
+function ShopDBModel.GetList()
+    return shopTable;
+end
+
+function ShopDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #shopTable, 1 do
+        if (shopTable[i].Id == id) then
+            ret = shopTable[i];
+            break;
+        end
+    end
+    return ret;
+end

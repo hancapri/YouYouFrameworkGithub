@@ -1,0 +1,38 @@
+--数据访问
+Sys_SoundDBModel = { }
+
+local this = Sys_SoundDBModel;
+
+local sys_soundTable = { }; --定义表格
+
+function Sys_SoundDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Sys_Sound");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        sys_soundTable[#sys_soundTable + 1] = Sys_SoundEntity.New(
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadFloat()
+        );
+    end
+
+end
+
+function Sys_SoundDBModel.GetList()
+    return sys_soundTable;
+end
+
+function Sys_SoundDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #sys_soundTable, 1 do
+        if (sys_soundTable[i].Id == id) then
+            ret = sys_soundTable[i];
+            break;
+        end
+    end
+    return ret;
+end

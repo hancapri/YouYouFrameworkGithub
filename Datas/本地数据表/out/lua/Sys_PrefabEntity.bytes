@@ -1,0 +1,15 @@
+Sys_PrefabEntity = { Id = 0, Desc = "", AssetPath = "", PoolId = 0 }
+
+Sys_PrefabEntity.__index = Sys_PrefabEntity;
+
+function Sys_PrefabEntity.New(Id, Desc, AssetPath, PoolId)
+    local self = { };
+    setmetatable(self, Sys_PrefabEntity);
+
+    self.Id = Id;
+    self.Desc = Desc;
+    self.AssetPath = AssetPath;
+    self.PoolId = PoolId;
+
+    return self;
+end

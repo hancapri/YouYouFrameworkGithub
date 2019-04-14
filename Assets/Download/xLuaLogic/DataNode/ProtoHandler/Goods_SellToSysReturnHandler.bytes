@@ -1,0 +1,8 @@
+--服务器返回出售物品给系统消息（工具只生成一次）
+Goods_SellToSysReturnHandler = { };
+
+local this = Goods_SellToSysReturnHandler;
+
+function Goods_SellToSysReturnHandler.OnGoods_SellToSysReturn(buffer)
+    local proto = Goods_SellToSysReturnProto.GetProto(buffer);
+end

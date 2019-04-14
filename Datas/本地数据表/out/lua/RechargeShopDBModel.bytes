@@ -1,0 +1,41 @@
+--数据访问
+RechargeShopDBModel = { }
+
+local this = RechargeShopDBModel;
+
+local rechargeshopTable = { }; --定义表格
+
+function RechargeShopDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("RechargeShop");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        rechargeshopTable[#rechargeshopTable + 1] = RechargeShopEntity.New(
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadUTF8String()
+        );
+    end
+
+end
+
+function RechargeShopDBModel.GetList()
+    return rechargeshopTable;
+end
+
+function RechargeShopDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #rechargeshopTable, 1 do
+        if (rechargeshopTable[i].Id == id) then
+            ret = rechargeshopTable[i];
+            break;
+        end
+    end
+    return ret;
+end

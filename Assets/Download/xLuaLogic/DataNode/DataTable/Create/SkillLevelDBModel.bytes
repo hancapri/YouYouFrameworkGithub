@@ -1,0 +1,48 @@
+--数据访问
+SkillLevelDBModel = { }
+
+local this = SkillLevelDBModel;
+
+local skilllevelTable = { }; --定义表格
+
+function SkillLevelDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("SkillLevel");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        skilllevelTable[#skilllevelTable + 1] = SkillLevelEntity.New(
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadFloat(),
+                ms:ReadFloat(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadFloat(),
+                ms:ReadFloat(),
+                ms:ReadFloat(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt()
+        );
+    end
+
+end
+
+function SkillLevelDBModel.GetList()
+    return skilllevelTable;
+end
+
+function SkillLevelDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #skilllevelTable, 1 do
+        if (skilllevelTable[i].Id == id) then
+            ret = skilllevelTable[i];
+            break;
+        end
+    end
+    return ret;
+end

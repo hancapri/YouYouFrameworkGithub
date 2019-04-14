@@ -1,0 +1,17 @@
+LanguageEntity = { Id = 0, Module = "", Key = "", Desc = "", CN = "", EN = "" }
+
+LanguageEntity.__index = LanguageEntity;
+
+function LanguageEntity.New(Id, Module, Key, Desc, CN, EN)
+    local self = { };
+    setmetatable(self, LanguageEntity);
+
+    self.Id = Id;
+    self.Module = Module;
+    self.Key = Key;
+    self.Desc = Desc;
+    self.CN = CN;
+    self.EN = EN;
+
+    return self;
+end

@@ -1,0 +1,39 @@
+--数据访问
+NPCDBModel = { }
+
+local this = NPCDBModel;
+
+local npcTable = { }; --定义表格
+
+function NPCDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("NPC");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        npcTable[#npcTable + 1] = NPCEntity.New(
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String()
+        );
+    end
+
+end
+
+function NPCDBModel.GetList()
+    return npcTable;
+end
+
+function NPCDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #npcTable, 1 do
+        if (npcTable[i].Id == id) then
+            ret = npcTable[i];
+            break;
+        end
+    end
+    return ret;
+end

@@ -1,0 +1,44 @@
+--数据访问
+ItemDBModel = { }
+
+local this = ItemDBModel;
+
+local itemTable = { }; --定义表格
+
+function ItemDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Item");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        itemTable[#itemTable + 1] = ItemEntity.New(
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt()
+        );
+    end
+
+end
+
+function ItemDBModel.GetList()
+    return itemTable;
+end
+
+function ItemDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #itemTable, 1 do
+        if (itemTable[i].Id == id) then
+            ret = itemTable[i];
+            break;
+        end
+    end
+    return ret;
+end

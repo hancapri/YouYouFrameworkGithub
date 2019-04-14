@@ -1,0 +1,18 @@
+ShopEntity = { Id = 0, ShopCategoryId = 0, GoodsType = 0, GoodsId = 0, OldPrice = 0, Price = 0, SellStatus = 0 }
+
+ShopEntity.__index = ShopEntity;
+
+function ShopEntity.New(Id, ShopCategoryId, GoodsType, GoodsId, OldPrice, Price, SellStatus)
+    local self = { };
+    setmetatable(self, ShopEntity);
+
+    self.Id = Id;
+    self.ShopCategoryId = ShopCategoryId;
+    self.GoodsType = GoodsType;
+    self.GoodsId = GoodsId;
+    self.OldPrice = OldPrice;
+    self.Price = Price;
+    self.SellStatus = SellStatus;
+
+    return self;
+end

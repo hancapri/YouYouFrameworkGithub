@@ -1,0 +1,15 @@
+MessageEntity = { Id = 0, Msg = "", Module = "", Description = "" }
+
+MessageEntity.__index = MessageEntity;
+
+function MessageEntity.New(Id, Msg, Module, Description)
+    local self = { };
+    setmetatable(self, MessageEntity);
+
+    self.Id = Id;
+    self.Msg = Msg;
+    self.Module = Module;
+    self.Description = Description;
+
+    return self;
+end

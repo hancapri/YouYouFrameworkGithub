@@ -1,0 +1,17 @@
+NPCEntity = { Id = 0, Name = "", PrefabName = "", HeadPic = "", HalfBodyPic = "", Talk = "" }
+
+NPCEntity.__index = NPCEntity;
+
+function NPCEntity.New(Id, Name, PrefabName, HeadPic, HalfBodyPic, Talk)
+    local self = { };
+    setmetatable(self, NPCEntity);
+
+    self.Id = Id;
+    self.Name = Name;
+    self.PrefabName = PrefabName;
+    self.HeadPic = HeadPic;
+    self.HalfBodyPic = HalfBodyPic;
+    self.Talk = Talk;
+
+    return self;
+end

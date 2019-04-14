@@ -1,0 +1,8 @@
+--服务器返回查询装备详情消息（工具只生成一次）
+Goods_SearchEquipDetailReturnHandler = { };
+
+local this = Goods_SearchEquipDetailReturnHandler;
+
+function Goods_SearchEquipDetailReturnHandler.OnGoods_SearchEquipDetailReturn(buffer)
+    local proto = Goods_SearchEquipDetailReturnProto.GetProto(buffer);
+end

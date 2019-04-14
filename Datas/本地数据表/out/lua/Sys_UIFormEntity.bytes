@@ -1,0 +1,19 @@
+Sys_UIFormEntity = { Id = 0, Desc = "", Name = "", UIGroupId = 0, DisableUILayer = 0, IsLock = 0, AssetPath_Chinese = "", AssetPath_English = "" }
+
+Sys_UIFormEntity.__index = Sys_UIFormEntity;
+
+function Sys_UIFormEntity.New(Id, Desc, Name, UIGroupId, DisableUILayer, IsLock, AssetPath_Chinese, AssetPath_English)
+    local self = { };
+    setmetatable(self, Sys_UIFormEntity);
+
+    self.Id = Id;
+    self.Desc = Desc;
+    self.Name = Name;
+    self.UIGroupId = UIGroupId;
+    self.DisableUILayer = DisableUILayer;
+    self.IsLock = IsLock;
+    self.AssetPath_Chinese = AssetPath_Chinese;
+    self.AssetPath_English = AssetPath_English;
+
+    return self;
+end

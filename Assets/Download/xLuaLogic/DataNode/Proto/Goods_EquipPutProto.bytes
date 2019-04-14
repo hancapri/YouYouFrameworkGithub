@@ -1,0 +1,53 @@
+--客户端发送穿戴消息
+Goods_EquipPutProto = { ProtoCode = 16012, Type = 0, GoodsId = 0, GoodsServerId = 0 }
+local this = Goods_EquipPutProto;
+
+Goods_EquipPutProto.__index = Goods_EquipPutProto;
+
+function Goods_EquipPutProto.New()
+    local self = { };
+    setmetatable(self, Goods_EquipPutProto);
+    return self;
+end
+
+function Goods_EquipPutProto.GetProtoName()
+    return "Goods_EquipPut";
+end
+
+
+--发送协议
+function Goods_EquipPutProto.SendProto(proto)
+
+    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;
+    ms:SetLength(0);
+    ms:WriteUShort(proto.ProtoCode);
+
+    ms:WriteByte(proto.Type);
+    ms:WriteInt(proto.GoodsId);
+    ms:WriteInt(proto.GoodsServerId);
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#ffdeb3>==>>%s</color>", json.encode(proto)));
+    end
+
+    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());
+end
+
+
+--解析协议
+function Goods_EquipPutProto.GetProto(buffer)
+
+    local proto = Goods_EquipPutProto.New(); --实例化一个协议对象
+    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);
+
+    proto.Type = ms:ReadByte();
+    proto.GoodsId = ms:ReadInt();
+    proto.GoodsServerId = ms:ReadInt();
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#c5e1dc>==>>%s</color>", json.encode(proto)));
+    end
+    return proto;
+end

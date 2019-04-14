@@ -1,0 +1,8 @@
+--服务器返回穿戴消息（工具只生成一次）
+Goods_EquipPutReturnHandler = { };
+
+local this = Goods_EquipPutReturnHandler;
+
+function Goods_EquipPutReturnHandler.OnGoods_EquipPutReturn(buffer)
+    local proto = Goods_EquipPutReturnProto.GetProto(buffer);
+end

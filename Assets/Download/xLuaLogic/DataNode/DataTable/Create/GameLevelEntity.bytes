@@ -1,0 +1,22 @@
+GameLevelEntity = { Id = 0, ChapterID = 0, Name = "", SceneName = "", SmallMapImg = "", isBoss = 0, Ico = "", PosInMap = "", DlgPic = "", CameraRotation = "", Audio_BG = "" }
+
+GameLevelEntity.__index = GameLevelEntity;
+
+function GameLevelEntity.New(Id, ChapterID, Name, SceneName, SmallMapImg, isBoss, Ico, PosInMap, DlgPic, CameraRotation, Audio_BG)
+    local self = { };
+    setmetatable(self, GameLevelEntity);
+
+    self.Id = Id;
+    self.ChapterID = ChapterID;
+    self.Name = Name;
+    self.SceneName = SceneName;
+    self.SmallMapImg = SmallMapImg;
+    self.isBoss = isBoss;
+    self.Ico = Ico;
+    self.PosInMap = PosInMap;
+    self.DlgPic = DlgPic;
+    self.CameraRotation = CameraRotation;
+    self.Audio_BG = Audio_BG;
+
+    return self;
+end

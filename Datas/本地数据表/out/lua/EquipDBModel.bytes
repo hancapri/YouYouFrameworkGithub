@@ -1,0 +1,61 @@
+--数据访问
+EquipDBModel = { }
+
+local this = EquipDBModel;
+
+local equipTable = { }; --定义表格
+
+function EquipDBModel.LoadList()
+    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Equip");
+    local rows = ms:ReadInt();
+    ms:ReadInt();
+
+    for i = 0, rows, 1 do
+        equipTable[#equipTable + 1] = EquipEntity.New(
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadInt(),
+                ms:ReadInt(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String(),
+                ms:ReadUTF8String()
+        );
+    end
+
+end
+
+function EquipDBModel.GetList()
+    return equipTable;
+end
+
+function EquipDBModel.GetEntity(id)
+    local ret = nil;
+    for i = 1, #equipTable, 1 do
+        if (equipTable[i].Id == id) then
+            ret = equipTable[i];
+            break;
+        end
+    end
+    return ret;
+end

@@ -1,0 +1,8 @@
+--服务器返回购买商城物品消息（工具只生成一次）
+Shop_BuyProductReturnHandler = { };
+
+local this = Shop_BuyProductReturnHandler;
+
+function Shop_BuyProductReturnHandler.OnShop_BuyProductReturn(buffer)
+    local proto = Shop_BuyProductReturnProto.GetProto(buffer);
+end

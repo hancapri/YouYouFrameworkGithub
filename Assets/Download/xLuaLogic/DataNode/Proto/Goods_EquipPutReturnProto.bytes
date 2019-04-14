@@ -1,0 +1,63 @@
+--服务器返回穿戴消息
+Goods_EquipPutReturnProto = { ProtoCode = 16013, IsSuccess = false, MsgCode = 0, Type = 0, GoodsId = 0, GoodsServerId = 0 }
+local this = Goods_EquipPutReturnProto;
+
+Goods_EquipPutReturnProto.__index = Goods_EquipPutReturnProto;
+
+function Goods_EquipPutReturnProto.New()
+    local self = { };
+    setmetatable(self, Goods_EquipPutReturnProto);
+    return self;
+end
+
+function Goods_EquipPutReturnProto.GetProtoName()
+    return "Goods_EquipPutReturn";
+end
+
+
+--发送协议
+function Goods_EquipPutReturnProto.SendProto(proto)
+
+    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;
+    ms:SetLength(0);
+    ms:WriteUShort(proto.ProtoCode);
+
+    ms:WriteBool(proto.IsSuccess);
+    if(proto.IsSuccess) then
+        ms:WriteByte(Type);
+        ms:WriteInt(GoodsId);
+        ms:WriteInt(GoodsServerId);
+        else
+    end
+    ms:WriteInt(proto.MsgCode);
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#ffdeb3>==>>%s</color>", json.encode(proto)));
+    end
+
+    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());
+end
+
+
+--解析协议
+function Goods_EquipPutReturnProto.GetProto(buffer)
+
+    local proto = Goods_EquipPutReturnProto.New(); --实例化一个协议对象
+    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);
+
+    proto.IsSuccess = ms:ReadBool();
+    if(proto.IsSuccess) then
+        proto.Type = ms:ReadByte();
+        proto.GoodsId = ms:ReadInt();
+        proto.GoodsServerId = ms:ReadInt();
+        else
+    end
+    proto.MsgCode = ms:ReadInt();
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#c5e1dc>==>>%s</color>", json.encode(proto)));
+    end
+    return proto;
+end

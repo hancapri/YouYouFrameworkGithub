@@ -1,0 +1,49 @@
+--客户端发送购买商城物品消息
+Shop_BuyProductProto = { ProtoCode = 16001, ProductId = 0 }
+local this = Shop_BuyProductProto;
+
+Shop_BuyProductProto.__index = Shop_BuyProductProto;
+
+function Shop_BuyProductProto.New()
+    local self = { };
+    setmetatable(self, Shop_BuyProductProto);
+    return self;
+end
+
+function Shop_BuyProductProto.GetProtoName()
+    return "Shop_BuyProduct";
+end
+
+
+--发送协议
+function Shop_BuyProductProto.SendProto(proto)
+
+    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;
+    ms:SetLength(0);
+    ms:WriteUShort(proto.ProtoCode);
+
+    ms:WriteInt(proto.ProductId);
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#ffdeb3>==>>%s</color>", json.encode(proto)));
+    end
+
+    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());
+end
+
+
+--解析协议
+function Shop_BuyProductProto.GetProto(buffer)
+
+    local proto = Shop_BuyProductProto.New(); --实例化一个协议对象
+    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);
+
+    proto.ProductId = ms:ReadInt();
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#c5e1dc>==>>%s</color>", json.encode(proto)));
+    end
+    return proto;
+end

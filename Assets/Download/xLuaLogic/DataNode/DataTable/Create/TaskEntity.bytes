@@ -1,0 +1,15 @@
+TaskEntity = { Id = 0, Name = "", Status = 0, Content = "" }
+
+TaskEntity.__index = TaskEntity;
+
+function TaskEntity.New(Id, Name, Status, Content)
+    local self = { };
+    setmetatable(self, TaskEntity);
+
+    self.Id = Id;
+    self.Name = Name;
+    self.Status = Status;
+    self.Content = Content;
+
+    return self;
+end

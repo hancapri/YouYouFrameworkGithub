@@ -1,0 +1,47 @@
+--客户端发送查询背包项消息
+Backpack_SearchProto = { ProtoCode = 16004 }
+local this = Backpack_SearchProto;
+
+Backpack_SearchProto.__index = Backpack_SearchProto;
+
+function Backpack_SearchProto.New()
+    local self = { };
+    setmetatable(self, Backpack_SearchProto);
+    return self;
+end
+
+function Backpack_SearchProto.GetProtoName()
+    return "Backpack_Search";
+end
+
+
+--发送协议
+function Backpack_SearchProto.SendProto(proto)
+
+    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;
+    ms:SetLength(0);
+    ms:WriteUShort(proto.ProtoCode);
+
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#ffdeb3>==>>%s</color>", json.encode(proto)));
+    end
+
+    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());
+end
+
+
+--解析协议
+function Backpack_SearchProto.GetProto(buffer)
+
+    local proto = Backpack_SearchProto.New(); --实例化一个协议对象
+    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);
+
+
+    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then
+        print(string.format("<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>", this.GetProtoName(), proto.ProtoCode));
+        print(string.format("<color=#c5e1dc>==>>%s</color>", json.encode(proto)));
+    end
+    return proto;
+end

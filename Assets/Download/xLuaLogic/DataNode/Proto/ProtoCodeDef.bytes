@@ -1,0 +1,41 @@
+ProtoCode =
+{
+    Task_SearchTask = 15001,
+    Task_SearchTaskReturn = 15002,
+    Shop_BuyProduct = 16001,
+    Shop_BuyProductReturn = 16002,
+    Backpack_GoodsChangeReturn = 16003,
+    Backpack_Search = 16004,
+    Backpack_SearchReturn = 16005,
+    Goods_SearchEquipDetail = 16006,
+    Goods_SearchEquipDetailReturn = 16007,
+    Goods_SellToSys = 16008,
+    Goods_SellToSysReturn = 16009,
+    Goods_UseItem = 16010,
+    Goods_UseItemReturn = 16011,
+    Goods_EquipPut = 16012,
+    Goods_EquipPutReturn = 16013
+}
+require "DataNode/Proto/Task_SearchTaskProto";
+require "DataNode/Proto/Task_SearchTaskReturnProto";
+require "DataNode/ProtoHandler/Task_SearchTaskReturnHandler";
+require "DataNode/Proto/Shop_BuyProductProto";
+require "DataNode/Proto/Shop_BuyProductReturnProto";
+require "DataNode/ProtoHandler/Shop_BuyProductReturnHandler";
+require "DataNode/Proto/Backpack_GoodsChangeReturnProto";
+require "DataNode/ProtoHandler/Backpack_GoodsChangeReturnHandler";
+require "DataNode/Proto/Backpack_SearchProto";
+require "DataNode/Proto/Backpack_SearchReturnProto";
+require "DataNode/ProtoHandler/Backpack_SearchReturnHandler";
+require "DataNode/Proto/Goods_SearchEquipDetailProto";
+require "DataNode/Proto/Goods_SearchEquipDetailReturnProto";
+require "DataNode/ProtoHandler/Goods_SearchEquipDetailReturnHandler";
+require "DataNode/Proto/Goods_SellToSysProto";
+require "DataNode/Proto/Goods_SellToSysReturnProto";
+require "DataNode/ProtoHandler/Goods_SellToSysReturnHandler";
+require "DataNode/Proto/Goods_UseItemProto";
+require "DataNode/Proto/Goods_UseItemReturnProto";
+require "DataNode/ProtoHandler/Goods_UseItemReturnHandler";
+require "DataNode/Proto/Goods_EquipPutProto";
+require "DataNode/Proto/Goods_EquipPutReturnProto";
+require "DataNode/ProtoHandler/Goods_EquipPutReturnHandler";

@@ -1,0 +1,27 @@
+SkillEntity = { Id = 0, SkillName = "", SkillDesc = "", SkillPic = "", LevelLimit = 0, IsPhyAttack = 0, AttackTargetCount = 0, AttackRange = 0, AreaAttackRadius = 0, ShowHurtEffectDelaySecond = 0, RedScreen = 0, AttackState = 0, AbnormalState = 0, BuffInfoID = 0, BuffTargetFilter = 0, BuffIsPercentage = 0 }
+
+SkillEntity.__index = SkillEntity;
+
+function SkillEntity.New(Id, SkillName, SkillDesc, SkillPic, LevelLimit, IsPhyAttack, AttackTargetCount, AttackRange, AreaAttackRadius, ShowHurtEffectDelaySecond, RedScreen, AttackState, AbnormalState, BuffInfoID, BuffTargetFilter, BuffIsPercentage)
+    local self = { };
+    setmetatable(self, SkillEntity);
+
+    self.Id = Id;
+    self.SkillName = SkillName;
+    self.SkillDesc = SkillDesc;
+    self.SkillPic = SkillPic;
+    self.LevelLimit = LevelLimit;
+    self.IsPhyAttack = IsPhyAttack;
+    self.AttackTargetCount = AttackTargetCount;
+    self.AttackRange = AttackRange;
+    self.AreaAttackRadius = AreaAttackRadius;
+    self.ShowHurtEffectDelaySecond = ShowHurtEffectDelaySecond;
+    self.RedScreen = RedScreen;
+    self.AttackState = AttackState;
+    self.AbnormalState = AbnormalState;
+    self.BuffInfoID = BuffInfoID;
+    self.BuffTargetFilter = BuffTargetFilter;
+    self.BuffIsPercentage = BuffIsPercentage;
+
+    return self;
+end

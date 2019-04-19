@@ -31,3 +31,16 @@ Tool_Proto
 	协议对应的Handler路径（主要负责监听协议的代码）
 
 Http和Socket：测试Http和Socket都需要有服务端的Http和Socket工程才能互相通讯，仅仅有Unity客户端工程是无法通讯的
+
+UI框架使用：
+1.制作UI预制体添加Canvas组件，用以设置层级sortorder参数
+2.流程：向服务器发送请求，获取UI数据，将数据存入GameEntry.Data.UserDataManager用户数据中，
+		使用UI框架实例化打开UI（通过id查找UIFrom表，获取UI预制体的位置及分组等信息，实例化），
+		UI逻辑组件继承UIFormBase，打开时调用OnOpen方法从GameEntry.Data.UserDataManager中
+		获取UI数据，赋值UI窗体的内容，赋值内容时配置多语言（服务器返回的数据包含任务表中的id，用于
+		取多语言对应值）
+		
+		页面监听接收到服务器返回任务数据的事件，页面点击按钮，发送请求数据协议，接受服务器返回数据，
+		将数据存储入GameEntry.Data中，派发接收到服务器返回任务数据的事件，页面监听事件之后调用方法
+		实例化UI窗体，窗体的UIFormBase方法自动调用OnOpen从GameEntry.Data获取数据赋值UI内容
+

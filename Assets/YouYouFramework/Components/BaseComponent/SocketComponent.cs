@@ -33,6 +33,40 @@ namespace YouYouFramework
         /// </summary>
         public int MaxReceiveCount = 5;
 
+        [Header("心跳间隔")]
+        /// <summary>
+        /// 心跳间隔
+        /// </summary>
+        public int HeartbeatInterval = 10;
+
+        /// <summary>
+        /// 上次心跳时间
+        /// </summary>
+        private float m_PrevHeartbeatTime = 0;
+
+        /// <summary>
+        /// PING值（毫秒）
+        /// </summary>
+        [HideInInspector]
+        public int PingValue;
+
+        /// <summary>
+        /// 游戏服务器时间
+        /// </summary>
+        [HideInInspector]
+        public long GameServerTime;
+
+        /// <summary>
+        /// 和服务器对表时刻
+        /// </summary>
+        [HideInInspector]
+        public float CheckServerTime;
+
+        /// <summary>
+        /// 是否已经连接到主服务器
+        /// </summary>
+        private bool m_IsConnectToMainSocket = false;
+
         protected override void OnAwake()
         {
             base.OnAwake();
@@ -47,6 +81,11 @@ namespace YouYouFramework
         {
             base.OnStart();
             m_MainSocket = CreatSocketTcpRoutine();
+            m_MainSocket.OnConnectOK = () =>
+            {
+                //已经建立了连接
+                m_IsConnectToMainSocket = true;
+            };
             SocketProtoListener.AddProtoListener();
         }
 
@@ -80,10 +119,24 @@ namespace YouYouFramework
         public void OnUpdate()
         {
             m_SocketManager.OnUpdate();
+
+            if (m_IsConnectToMainSocket)
+            {
+                if (Time.realtimeSinceStartup > m_PrevHeartbeatTime + HeartbeatInterval)
+                {
+                    //发送心跳
+                    m_PrevHeartbeatTime = Time.realtimeSinceStartup;
+                    System_HeartbeatProto proto = new System_HeartbeatProto();
+                    proto.LocalTime = Time.realtimeSinceStartup * 1000;
+                    CheckServerTime = Time.realtimeSinceStartup;
+                    SendMsg(proto);
+                }
+            }
         }
 
         public override void Shutdown()
         {
+            m_IsConnectToMainSocket = false;
             m_SocketManager.Dispose();
             GameEntry.Pool.EnqueueClassObject(m_MainSocket);
             SocketProtoListener.RemoveProtoListener();

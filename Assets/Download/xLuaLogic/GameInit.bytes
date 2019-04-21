@@ -1,0 +1,39 @@
+﻿print('启动GameInit')
+
+GameInit = {};
+local this = GameInit;
+
+
+
+function GameInit.Init()
+--[[	this.InitCtrlAndViews();
+	this.LoadDataTables();
+	this.InitProto();]]
+	print("GameInit.Init")
+end
+
+function GameInit.InitCtrlAndViews()
+
+	require('Modules/Task/UI_TaskCtrl');
+	require('Modules/Task/UI_TaskView');
+end
+
+function GameInit.LoadDataTables()
+	--章表
+	require('DataNode/DataTable/Create/ChapterEntity');
+	require('DataNode/DataTable/Create/ChapterDBModel');
+	ChapterDBModel.LoadList();
+
+	--任务表
+	require('DataNode/DataTable/Create/TaskEntity');
+	require('DataNode/DataTable/Create/TaskDBModel');
+	TaskDBModel.LoadList();
+end
+
+--初始化通讯协议
+function GameInit.InitProto()
+	require("Common/json");
+	require('DataNode/Proto/ProtoCodeDef');
+	require('DataNode/ProtoHandler/SocketProtoListenerForLua');
+	SocketProtoListenerForLua.AddProtoListener();
+end

@@ -1458,7 +1458,7 @@ namespace ReadExcel
             sbrLua.Append("--发送协议\r\n");
             sbrLua.AppendFormat("function {0}Proto.SendProto(proto)\r\n", proto.ProtoEnName);
             sbrLua.Append("\r\n");
-            sbrLua.Append("    local ms = CS.YouYou.GameEntry.Socket.SocketSendMS;\r\n");
+            sbrLua.Append("    local ms = CS.YouYouFramework.GameEntry.Socket.SocketSendMS;\r\n");
             sbrLua.Append("    ms:SetLength(0);\r\n");
             sbrLua.Append("    ms:WriteUShort(proto.ProtoCode);\r\n");
             sbrLua.Append("\r\n");
@@ -1605,12 +1605,12 @@ namespace ReadExcel
 
             //======================lua协议代码开始
             sbrLua.Append("\r\n");
-            sbrLua.Append("    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then\r\n");
+            sbrLua.Append("    if(CS.YouYouFramework.GameEntry.Lua.DebugLogProto == true) then\r\n");
             sbrLua.Append("        print(string.format(\"<color=#ffa200>发送消息:</color><color=#FFFB80>%s %s</color>\", this.GetProtoName(), proto.ProtoCode));\r\n");
             sbrLua.Append("        print(string.format(\"<color=#ffdeb3>==>>%s</color>\", json.encode(proto)));\r\n");
             sbrLua.Append("    end\r\n");
             sbrLua.Append("\r\n");
-            sbrLua.Append("    CS.YouYou.GameEntry.Socket:SendMsg(ms:ToArray());\r\n");
+            sbrLua.Append("    CS.YouYouFramework.GameEntry.Socket:SendMsg(ms:ToArray());\r\n");
             sbrLua.Append("end\r\n");
             //======================lua协议代码结束
 
@@ -1633,7 +1633,7 @@ namespace ReadExcel
             sbrLua.AppendFormat("function {0}Proto.GetProto(buffer)\r\n", proto.ProtoEnName);
             sbrLua.Append("\r\n");
             sbrLua.AppendFormat("    local proto = {0}Proto.New(); --实例化一个协议对象\r\n", proto.ProtoEnName);
-            sbrLua.Append("    local ms = CS.YouYou.GameEntry.Lua:LoadSocketReceiveMS(buffer);\r\n");
+            sbrLua.Append("    local ms = CS.YouYouFramework.GameEntry.Lua:LoadSocketReceiveMS(buffer);\r\n");
             sbrLua.Append("\r\n");
             //======================lua协议代码结束
 
@@ -1839,7 +1839,7 @@ namespace ReadExcel
             sbr.AppendFormat("    }}\r\n");
 
             sbrLua.Append("\r\n");
-            sbrLua.AppendFormat("    if(CS.YouYou.GameEntry.Lua.DebugLogProto == true) then\r\n");
+            sbrLua.AppendFormat("    if(CS.YouYouFramework.GameEntry.Lua.DebugLogProto == true) then\r\n");
             sbrLua.AppendFormat("        print(string.format(\"<color=#00eaff>接收消息:</color><color=#00ff9c>%s %s</color>\", this.GetProtoName(), proto.ProtoCode));\r\n");
             sbrLua.AppendFormat("        print(string.format(\"<color=#c5e1dc>==>>%s</color>\", json.encode(proto)));\r\n");
             sbrLua.AppendFormat("    end\r\n");
@@ -2095,7 +2095,7 @@ namespace ReadExcel
                 {
                     if (proto.IsLua && (proto.ProtoCategory.Equals("MS2C") || proto.ProtoCategory.Equals("SS2C")))
                     {
-                        sbrLua.AppendFormat("    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.{0}, {0}Handler.On{0});\r\n", proto.ProtoEnName);
+                        sbrLua.AppendFormat("    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.{0}, {0}Handler.On{0});\r\n", proto.ProtoEnName);
                     }
                 }
             }

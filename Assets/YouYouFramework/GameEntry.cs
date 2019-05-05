@@ -155,6 +155,15 @@ namespace YouYouFramework
             get;
             private set;
         }
+
+        /// <summary>
+        /// Lua组件
+        /// </summary>
+        public static LuaComponent Lua
+        {
+            get;
+            private set;
+        }
         #endregion
 
         #region 基础组件管理
@@ -271,6 +280,7 @@ namespace YouYouFramework
             Resource = GetBaseComponent<ResourceComponent>();
             Download = GetBaseComponent<DownloadComponent>();
             UI = GetBaseComponent<UIComponent>();
+            Lua = GetBaseComponent<LuaComponent>();
         }
 
         void Update()

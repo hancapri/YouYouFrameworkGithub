@@ -29,7 +29,7 @@ namespace YouYouFramework
 
         [Header("每帧最大收包的数量")]
         /// <summary>
-        /// 每帧最大发送包的数量
+        /// 每帧最大接收包的数量
         /// </summary>
         public int MaxReceiveCount = 5;
 

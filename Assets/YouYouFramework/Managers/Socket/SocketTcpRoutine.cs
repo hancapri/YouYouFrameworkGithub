@@ -231,25 +231,37 @@ namespace YouYouFramework
         /// </summary>
         private void CheckSendQueue()
         {
-            if (m_SendCount >= GameEntry.Socket.MaxSendCount)
+            m_SendCount = 0;
+            while (true)
             {
-                //等待下一帧发送
-                m_SendCount = 0;
-                return;
-            }
-            lock (m_SendQueue)
-            {
-                if (m_SendQueue.Count > 0 || m_IsHasUnDealBytes)
+                //如果已经没有任何需要发送的数据则跳出
+                if (m_SendQueue.Count <= 0 && m_IsHasUnDealBytes == false)
+                {
+                    //Debug.LogError("这一帧总共发的大包个数2：" + m_SendCount);
+                    break;
+                }
+
+                //如果这一帧发送的包的个数已经超过最大限制则跳出
+                if (m_SendCount >= GameEntry.Socket.MaxSendCount)
+                {
+                    //Debug.LogError("这一帧总共发的大包个数1：" + m_SendCount);
+                    break;
+                }
+                lock (m_SendQueue)
                 {
                     MMO_MemoryStream ms = m_SocketSendMS;
                     ms.SetLength(0);
+
+                    //int bagNum = 0;
                     //先处理未处理的包
                     if (m_IsHasUnDealBytes)
                     {
                         ms.Write(m_UnDealBytes, 0, m_UnDealBytes.Length);
                         m_IsHasUnDealBytes = false;
+                        //bagNum++;
                     }
 
+                    //对小包进行合并成大包
                     while (true)
                     {
                         if (m_SendQueue.Count == 0)
@@ -261,6 +273,7 @@ namespace YouYouFramework
                         if ((buffer.Length + ms.Length) <= GameEntry.Socket.MaxSendByteCount)
                         {
                             ms.Write(buffer, 0, buffer.Length);
+                            //bagNum++;
                         }
                         else
                         {
@@ -269,10 +282,54 @@ namespace YouYouFramework
                             break;
                         }
                     }
+                    //Debug.LogError("合并的小包个数：" + bagNum);
                     m_SendCount++;
                     Send(ms.ToArray());
                 }
             }
+
+            //if (m_SendCount >= GameEntry.Socket.MaxSendCount)
+            //{
+            //    //等待下一帧发送
+            //    m_SendCount = 0;
+            //    return;
+            //}
+            //lock (m_SendQueue)
+            //{
+            //    if (m_SendQueue.Count > 0 || m_IsHasUnDealBytes)
+            //    {
+            //        MMO_MemoryStream ms = m_SocketSendMS;
+            //        ms.SetLength(0);
+            //        //先处理未处理的包
+            //        if (m_IsHasUnDealBytes)
+            //        {
+            //            ms.Write(m_UnDealBytes, 0, m_UnDealBytes.Length);
+            //            m_IsHasUnDealBytes = false;
+            //        }
+
+            //        while (true)
+            //        {
+            //            if (m_SendQueue.Count == 0)
+            //            {
+            //                break;
+            //            }
+
+            //            byte[] buffer = m_SendQueue.Dequeue();
+            //            if ((buffer.Length + ms.Length) <= GameEntry.Socket.MaxSendByteCount)
+            //            {
+            //                ms.Write(buffer, 0, buffer.Length);
+            //            }
+            //            else
+            //            {
+            //                m_IsHasUnDealBytes = true;
+            //                m_UnDealBytes = buffer;
+            //                break;
+            //            }
+            //        }
+            //        m_SendCount++;
+            //        Send(ms.ToArray());
+            //    }
+            //}
         }
         #endregion
 

@@ -44,20 +44,27 @@ public class TestTime : MonoBehaviour {
             //    Debug.Log("结束执行");
             //}).Run();
 
-            TimeAction action1 = GameEntry.Time.CreatTimeAction();
-            Debug.Log("创建第三个定时器");
-            action1.Init(3, 0.5f, 1, () =>
+            //TimeAction action1 = GameEntry.Time.CreatTimeAction();
+            //Debug.Log("创建第三个定时器");
+            //action1.Init(0, 3f, 2, () =>
+            //{
+            //    Debug.Log("开始执行");
+            //},
+            //(int loop) =>
+            //{
+            //    Debug.Log("执行中，剩余次数：" + loop);
+            //},
+            //() =>
+            //{
+            //    Debug.Log("结束执行");
+            //}).Run();
+
+            Debug.Log(Time.time);
+            GameEntry.Time.CreatTimeAction().Add(3, () =>
             {
-                Debug.Log("开始执行");
-            },
-            (int loop) =>
-            {
-                Debug.Log("执行中，剩余次数：" + loop);
-            },
-            () =>
-            {
-                Debug.Log("结束执行");
-            }).Run();
+                Debug.Log(Time.time);
+                Debug.Log("创建简易定时器");
+            });
         }
 	}
 }

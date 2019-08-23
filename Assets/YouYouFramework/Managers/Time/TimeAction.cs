@@ -82,6 +82,19 @@ namespace YouYouFramework
         }
 
         /// <summary>
+        /// 简易添加定时器
+        /// </summary>
+        /// <param name="delayTime">延迟时间</param>
+        /// <param name="callBack">结束回调</param>
+        /// <returns></returns>
+        public TimeAction Add(float delayTime,Action callBack)
+        {
+            Init(delayTime, 0, 1, null, null, callBack);
+            Run();
+            return this; 
+        }
+
+        /// <summary>
         /// 定时器启动
         /// </summary>
         public void Run()
@@ -134,7 +147,7 @@ namespace YouYouFramework
             if (!IsRunning) return;
 
             //间隔m_Interval时间循环执行
-            if (Time.time > m_CurrRunTime)
+            if (Time.time >= m_CurrRunTime)
             {
                 m_CurrRunTime = Time.time + m_Interval;
 

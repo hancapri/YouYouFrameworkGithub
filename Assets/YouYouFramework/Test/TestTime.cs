@@ -60,7 +60,7 @@ public class TestTime : MonoBehaviour {
             //}).Run();
 
             Debug.Log(Time.time);
-            GameEntry.Time.CreatTimeAction().Add(3, () =>
+            GameEntry.Time.Add(3, () =>
             {
                 Debug.Log(Time.time);
                 Debug.Log("创建简易定时器");

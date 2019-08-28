@@ -42,6 +42,17 @@ namespace YouYouFramework
         {
             return m_TimeManager.CreatTimeAction();
         }
+
+        /// <summary>
+        /// 添加简易定时器
+        /// </summary>
+        /// <param name="delayTime">延迟时间</param>
+        /// <param name="callBack">结束回调</param>
+        /// <returns></returns>
+        public TimeAction Add(float delayTime, Action callBack)
+        {
+            return CreatTimeAction().Add(delayTime, callBack);
+        }
         #endregion 
 
         protected override void OnAwake()

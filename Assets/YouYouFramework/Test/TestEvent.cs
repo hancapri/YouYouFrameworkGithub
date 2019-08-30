@@ -9,17 +9,23 @@ public class TestEvent : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GameEntry.Event.CommonEvent.AddEventListener(CommonEventId.RegComplete, ResComplete);
+        GameEntry.Event.CommonEvent.AddEventListener(CommonEventId.RegComplete, ResComplete2);
         GameEntry.Event.CommonEvent.AddEventListener(1002, ResCompleteInt);
     }
 
-    private void ResComplete(VariableBase param)
+    private void ResComplete2(object param)
+    {
+        Debug.Log("第二个监听方法");
+    }
+
+    private void ResComplete(object param)
     {
         Variable<int[]> a = param as Variable<int[]>;
         Debug.Log(a.Value[0]);
         Debug.Log(a.ReferenceCount);
     }
 
-    private void ResCompleteInt(VariableBase param)
+    private void ResCompleteInt(object param)
     {
         VarInt a = param as VarInt;
         Debug.Log(a.Value);

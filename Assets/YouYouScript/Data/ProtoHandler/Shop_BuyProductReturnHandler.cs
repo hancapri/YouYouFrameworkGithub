@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YouYouFramework;
 
 /// <summary>
 /// 服务器返回购买商城物品消息（工具只生成一次）
@@ -19,5 +20,6 @@ public sealed class Shop_BuyProductReturnHandler
         Debug.Log("<color=#00eaff>接收消息:</color><color=#00ff9c>" + proto.ProtoEnName + " " + proto.ProtoCode + "</color>");
         Debug.Log("<color=#c5e1dc>==>>" + JsonUtility.ToJson(proto) + "</color>");
 #endif
+        GameEntry.Event.CommonEvent.Dispatch(111,proto);
     }
 }

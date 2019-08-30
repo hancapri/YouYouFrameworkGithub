@@ -31,13 +31,13 @@ namespace YouYouFramework
             GameEntry.Event.CommonEvent.RemoveEventListener(SysEventId.LoadDataTableComplete, OnLoadDataTableComplete);
         }
 
-        private void OnLoadOneDataTableComplete(VariableBase param)
+        private void OnLoadOneDataTableComplete(object param)
         {
             string name = ((VarString)param).Value;
             Debug.Log("加载单一表完毕："+ name);
         }
 
-        private void OnLoadDataTableComplete(VariableBase param)
+        private void OnLoadDataTableComplete(object param)
         {
             Debug.Log("加载所有表完毕");
             List<Sys_UIFormEntity> lst = GameEntry.DataTable.DataTableManager.Sys_UIFormDBModel.GetList();

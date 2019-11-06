@@ -5,12 +5,12 @@ SocketProtoListenerForLua = { };
 local this = SocketProtoListenerForLua;
 
 function SocketProtoListenerForLua.AddProtoListener()
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Task_SearchTaskReturn, Task_SearchTaskReturnHandler.OnTask_SearchTaskReturn);
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Shop_BuyProductReturn, Shop_BuyProductReturnHandler.OnShop_BuyProductReturn);
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Backpack_GoodsChangeReturn, Backpack_GoodsChangeReturnHandler.OnBackpack_GoodsChangeReturn);
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Backpack_SearchReturn, Backpack_SearchReturnHandler.OnBackpack_SearchReturn);
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_SearchEquipDetailReturn, Goods_SearchEquipDetailReturnHandler.OnGoods_SearchEquipDetailReturn);
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_SellToSysReturn, Goods_SellToSysReturnHandler.OnGoods_SellToSysReturn);
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_UseItemReturn, Goods_UseItemReturnHandler.OnGoods_UseItemReturn);
-    CS.YouYou.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_EquipPutReturn, Goods_EquipPutReturnHandler.OnGoods_EquipPutReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Task_SearchTaskReturn, Task_SearchTaskReturnHandler.OnTask_SearchTaskReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Shop_BuyProductReturn, Shop_BuyProductReturnHandler.OnShop_BuyProductReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Backpack_GoodsChangeReturn, Backpack_GoodsChangeReturnHandler.OnBackpack_GoodsChangeReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Backpack_SearchReturn, Backpack_SearchReturnHandler.OnBackpack_SearchReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_SearchEquipDetailReturn, Goods_SearchEquipDetailReturnHandler.OnGoods_SearchEquipDetailReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_SellToSysReturn, Goods_SellToSysReturnHandler.OnGoods_SellToSysReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_UseItemReturn, Goods_UseItemReturnHandler.OnGoods_UseItemReturn);
+    CS.YouYouFramework.GameEntry.Event.SocketEvent:AddEventListener(ProtoCode.Goods_EquipPutReturn, Goods_EquipPutReturnHandler.OnGoods_EquipPutReturn);
 end

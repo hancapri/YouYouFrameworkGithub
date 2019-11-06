@@ -16,7 +16,7 @@ public class TestSocket : MonoBehaviour {
         //sc.OnUpdate();
         if (Input.GetKeyDown(KeyCode.S))
         {
-            GameEntry.Socket.ConnectToMainSocket("192.168.0.106", 1039);
+            GameEntry.Socket.ConnectToMainSocket("192.168.0.108", 1039);
         }
 
         if (Input.GetKeyDown(KeyCode.T))

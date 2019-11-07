@@ -10,7 +10,7 @@ function Sys_StorySoundDBModel.LoadList()
     local rows = ms:ReadInt();
     ms:ReadInt();
 
-    for i = 0, rows, 1 do
+    for i = 1, rows, 1 do
         sys_storysoundTable[#sys_storysoundTable + 1] = Sys_StorySoundEntity.New(
                 ms:ReadInt(),
                 ms:ReadUTF8String(),

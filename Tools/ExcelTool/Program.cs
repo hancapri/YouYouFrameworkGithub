@@ -488,7 +488,7 @@ namespace ExcelTool
             sbr.Append("    local rows = ms:ReadInt();\r\n");
             sbr.Append("    ms:ReadInt();\r\n");
             sbr.Append("\r\n");
-            sbr.Append("    for i = 0, rows, 1 do\r\n");
+            sbr.Append("    for i = 1, rows, 1 do\r\n");
             sbr.AppendFormat("        {0}Table[#{0}Table + 1] = {1}Entity.New(\r\n", fileName.ToLower(), fileName);
 
             string str = "";

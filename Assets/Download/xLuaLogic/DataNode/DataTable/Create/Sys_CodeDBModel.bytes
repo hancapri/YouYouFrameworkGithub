@@ -10,7 +10,7 @@ function Sys_CodeDBModel.LoadList()
     local rows = ms:ReadInt();
     ms:ReadInt();
 
-    for i = 0, rows, 1 do
+    for i = 1, rows, 1 do
         sys_codeTable[#sys_codeTable + 1] = Sys_CodeEntity.New(
                 ms:ReadInt(),
                 ms:ReadUTF8String(),

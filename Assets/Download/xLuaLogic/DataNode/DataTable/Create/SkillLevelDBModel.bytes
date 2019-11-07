@@ -10,7 +10,7 @@ function SkillLevelDBModel.LoadList()
     local rows = ms:ReadInt();
     ms:ReadInt();
 
-    for i = 0, rows, 1 do
+    for i = 1, rows, 1 do
         skilllevelTable[#skilllevelTable + 1] = SkillLevelEntity.New(
                 ms:ReadInt(),
                 ms:ReadInt(),

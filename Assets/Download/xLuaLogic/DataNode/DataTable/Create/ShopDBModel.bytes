@@ -10,7 +10,7 @@ function ShopDBModel.LoadList()
     local rows = ms:ReadInt();
     ms:ReadInt();
 
-    for i = 0, rows, 1 do
+    for i = 1, rows, 1 do
         shopTable[#shopTable + 1] = ShopEntity.New(
                 ms:ReadInt(),
                 ms:ReadInt(),

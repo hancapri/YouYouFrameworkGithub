@@ -10,7 +10,7 @@ function RechargeShopDBModel.LoadList()
     local rows = ms:ReadInt();
     ms:ReadInt();
 
-    for i = 0, rows, 1 do
+    for i = 1, rows, 1 do
         rechargeshopTable[#rechargeshopTable + 1] = RechargeShopEntity.New(
                 ms:ReadInt(),
                 ms:ReadInt(),

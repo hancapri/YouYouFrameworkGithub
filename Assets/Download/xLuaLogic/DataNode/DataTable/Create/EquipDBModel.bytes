@@ -10,7 +10,7 @@ function EquipDBModel.LoadList()
     local rows = ms:ReadInt();
     ms:ReadInt();
 
-    for i = 0, rows, 1 do
+    for i = 1, rows, 1 do
         equipTable[#equipTable + 1] = EquipEntity.New(
                 ms:ReadInt(),
                 ms:ReadUTF8String(),

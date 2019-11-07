@@ -10,7 +10,7 @@ function GameLevelDBModel.LoadList()
     local rows = ms:ReadInt();
     ms:ReadInt();
 
-    for i = 0, rows, 1 do
+    for i = 1, rows, 1 do
         gamelevelTable[#gamelevelTable + 1] = GameLevelEntity.New(
                 ms:ReadInt(),
                 ms:ReadInt(),

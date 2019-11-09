@@ -1,0 +1,24 @@
+UI_TaskView = {}
+
+local this = UI_TaskView
+
+function UI_TaskView.OnInit(userData)
+    this.initView()
+    UI_TaskCtrl.OnInit(userData)
+end
+
+function UI_TaskView.initView()
+
+end
+
+function UI_TaskView.OnOpen(userData)
+    UI_TaskCtrl.OnOpen(userData)
+end
+
+function UI_TaskView.OnClose()
+    UI_TaskCtrl.OnClose()
+end
+
+function UI_TaskView.OnBeforeDestroy()
+    UI_TaskCtrl.OnBeforeDestroy()
+end

@@ -3,13 +3,12 @@
 GameInit = {};
 local this = GameInit;
 
-
-
 function GameInit.Init()
 --[[	this.InitCtrlAndViews();
 	this.LoadDataTables();
 	this.InitProto();]]
 	print("GameInit.Init")
+	this.InitCtrlAndViews()
 end
 
 function GameInit.InitCtrlAndViews()

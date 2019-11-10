@@ -1,24 +1,32 @@
-UI_TaskView = {}
+UI_TaskView = { };
+local this = UI_TaskView;
 
-local this = UI_TaskView
+local txtTaskNameIndex = 0;
+local txtTaskDescIndex = 1;
+local imgMoneyIndex = 2;
+local btnReceiveImgIndex = 3;
 
-function UI_TaskView.OnInit(userData)
-    this.initView()
-    UI_TaskCtrl.OnInit(userData)
+function UI_TaskView.OnInit(transform, userData)
+    this.InitView(transform);
+    UI_TaskCtrl.OnInit(userData);
 end
 
-function UI_TaskView.initView()
-
+function UI_TaskView.InitView(transform)
+    this.LuaForm = transform:GetComponent(typeof(CS.YouYouFramework.LuaForm));
+    this.txtTaskName = this.LuaForm:GetLuaComs(txtTaskNameIndex);
+    this.txtTaskDesc = this.LuaForm:GetLuaComs(txtTaskDescIndex);
+    this.imgMoney = this.LuaForm:GetLuaComs(imgMoneyIndex);
+    this.btnReceiveImg = this.LuaForm:GetLuaComs(btnReceiveImgIndex);
 end
 
 function UI_TaskView.OnOpen(userData)
-    UI_TaskCtrl.OnOpen(userData)
+    UI_TaskCtrl.OnOpen(userData);
 end
 
 function UI_TaskView.OnClose()
-    UI_TaskCtrl.OnClose()
+    UI_TaskCtrl.OnClose();
 end
 
-function UI_TaskView.OnBeforeDestroy()
-    UI_TaskCtrl.OnBeforeDestroy()
+function UI_TaskView.OnBeforDestroy()
+    UI_TaskCtrl.OnBeforDestroy();
 end

@@ -166,4 +166,14 @@ public class GameUtil
     {
         return string.Format("Assets/Download/UI/UIRes/{0}.png", path);
     }
+
+    /// <summary>
+    /// 获取UI资源路径
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string GetUIResPath(string path)
+    {
+        return string.Format("Assets/Download/UI/UIRes/{0}.png", path);
+    }
 }

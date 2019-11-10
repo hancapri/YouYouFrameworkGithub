@@ -8,6 +8,7 @@ end
 
 function UI_TaskCtrl.OnOpen(userData)
     print("UI_TaskCtrl.OnOpen")
+    UI_TaskView.txtTaskName.text = "111111"
 end
 
 function UI_TaskCtrl.OnClose()

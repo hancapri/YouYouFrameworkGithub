@@ -6,7 +6,7 @@ local this = Sys_PrefabDBModel;
 local sys_prefabTable = { }; --定义表格
 
 function Sys_PrefabDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Sys_Prefab");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Sys_Prefab");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

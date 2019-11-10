@@ -6,7 +6,7 @@ local this = SpriteDBModel;
 local spriteTable = { }; --定义表格
 
 function SpriteDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Sprite");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Sprite");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

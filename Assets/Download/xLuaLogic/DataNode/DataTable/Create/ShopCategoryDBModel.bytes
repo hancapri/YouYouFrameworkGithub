@@ -6,7 +6,7 @@ local this = ShopCategoryDBModel;
 local shopcategoryTable = { }; --定义表格
 
 function ShopCategoryDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("ShopCategory");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("ShopCategory");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

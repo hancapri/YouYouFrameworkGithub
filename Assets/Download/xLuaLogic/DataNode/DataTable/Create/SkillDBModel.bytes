@@ -6,7 +6,7 @@ local this = SkillDBModel;
 local skillTable = { }; --定义表格
 
 function SkillDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Skill");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Skill");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

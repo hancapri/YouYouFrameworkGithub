@@ -6,7 +6,7 @@ local this = GameLevelGradeDBModel;
 local gamelevelgradeTable = { }; --定义表格
 
 function GameLevelGradeDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("GameLevelGrade");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("GameLevelGrade");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

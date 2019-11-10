@@ -6,7 +6,7 @@ local this = MaterialDBModel;
 local materialTable = { }; --定义表格
 
 function MaterialDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Material");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Material");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

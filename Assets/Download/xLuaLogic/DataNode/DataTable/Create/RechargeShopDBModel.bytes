@@ -6,7 +6,7 @@ local this = RechargeShopDBModel;
 local rechargeshopTable = { }; --定义表格
 
 function RechargeShopDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("RechargeShop");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("RechargeShop");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

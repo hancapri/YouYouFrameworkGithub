@@ -6,7 +6,7 @@ local this = JobLevelDBModel;
 local joblevelTable = { }; --定义表格
 
 function JobLevelDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("JobLevel");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("JobLevel");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

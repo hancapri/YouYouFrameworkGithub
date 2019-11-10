@@ -6,7 +6,7 @@ local this = GameLevelMonsterDBModel;
 local gamelevelmonsterTable = { }; --定义表格
 
 function GameLevelMonsterDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("GameLevelMonster");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("GameLevelMonster");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

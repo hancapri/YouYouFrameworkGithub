@@ -6,7 +6,7 @@ local this = LanguageDBModel;
 local languageTable = { }; --定义表格
 
 function LanguageDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Language");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Language");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

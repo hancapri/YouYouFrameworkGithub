@@ -6,7 +6,7 @@ local this = ItemDBModel;
 local itemTable = { }; --定义表格
 
 function ItemDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Item");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Item");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

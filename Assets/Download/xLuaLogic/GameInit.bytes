@@ -23,7 +23,7 @@ function GameInit.LoadDataTables()
 	require('DataNode/DataTable/Create/ChapterEntity');
 	require('DataNode/DataTable/Create/ChapterDBModel');
 	ChapterDBModel.LoadList();
-	print(ChapterDBModel.GetEntity(2).ChapterName)
+
 	--任务表
 	require('DataNode/DataTable/Create/TaskEntity');
 	require('DataNode/DataTable/Create/TaskDBModel');

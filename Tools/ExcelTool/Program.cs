@@ -484,7 +484,7 @@ namespace ExcelTool
             sbr.AppendFormat("local {0}Table = {{ }}; --定义表格\r\n", fileName.ToLower());
             sbr.Append("\r\n");
             sbr.AppendFormat("function {0}DBModel.LoadList()\r\n", fileName);
-            sbr.AppendFormat("    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable(\"{0}\");\r\n", fileName);
+            sbr.AppendFormat("    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable(\"{0}\");\r\n", fileName);
             sbr.Append("    local rows = ms:ReadInt();\r\n");
             sbr.Append("    ms:ReadInt();\r\n");
             sbr.Append("\r\n");

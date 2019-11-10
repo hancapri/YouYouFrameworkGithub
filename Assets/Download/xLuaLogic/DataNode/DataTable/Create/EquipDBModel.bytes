@@ -6,7 +6,7 @@ local this = EquipDBModel;
 local equipTable = { }; --定义表格
 
 function EquipDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Equip");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Equip");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

@@ -6,7 +6,7 @@ local this = MessageDBModel;
 local messageTable = { }; --定义表格
 
 function MessageDBModel.LoadList()
-    local ms = CS.YouYou.GameEntry.Lua:LoadDataTable("Message");
+    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Message");
     local rows = ms:ReadInt();
     ms:ReadInt();
 

@@ -167,10 +167,19 @@ namespace YouYouFramework
         /// <summary>
         /// 向主服务器发送数据
         /// </summary>
-        /// <param name="buffer"></param>
+        /// <param name="proto"></param>
         public void SendMsg(IProto proto)
         {
             m_MainSocket.SendMsg(proto.ToArray());
+        }
+
+        /// <summary>
+        /// 向主服务器发送数据
+        /// </summary>
+        /// <param name="buffer"></param>
+        public void SendMsg(byte[] buffer)
+        {
+            m_MainSocket.SendMsg(buffer);
         }
     }
 }

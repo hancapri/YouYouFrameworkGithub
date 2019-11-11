@@ -9,6 +9,9 @@ end
 function UI_TaskCtrl.OnOpen(userData)
     print("UI_TaskCtrl.OnOpen")
     UI_TaskView.txtTaskName.text = "111111"
+
+    local proto = Task_SearchTaskProto.New()
+    Task_SearchTaskProto.SendProto(proto)
 end
 
 function UI_TaskCtrl.OnClose()

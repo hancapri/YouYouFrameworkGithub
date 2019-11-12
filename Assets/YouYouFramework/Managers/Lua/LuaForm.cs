@@ -71,31 +71,31 @@ namespace YouYouFramework
             switch (com.Type)
             {
                 case LuaComponentType.GameObject:
-                    return com.trans.gameObject;
+                    return com.Trans.gameObject;
                 case LuaComponentType.Transform:
-                    return com.trans;
+                    return com.Trans;
                 case LuaComponentType.Button:
-                    return com.trans.GetComponent<Button>();
+                    return com.Trans.GetComponent<Button>();
                 case LuaComponentType.Image:
-                    return com.trans.GetComponent<Image>();
+                    return com.Trans.GetComponent<Image>();
                 case LuaComponentType.YouYouImage:
-                    return com.trans.GetComponent<YouYouImage>();
+                    return com.Trans.GetComponent<YouYouImage>();
                 case LuaComponentType.Text:
-                    return com.trans.GetComponent<Text>();
+                    return com.Trans.GetComponent<Text>();
                 case LuaComponentType.YouYouText:
-                    return com.trans.GetComponent<YouYouText>();
+                    return com.Trans.GetComponent<YouYouText>();
                 case LuaComponentType.RawImage:
-                    return com.trans.GetComponent<RawImage>();
+                    return com.Trans.GetComponent<RawImage>();
                 case LuaComponentType.InputField:
-                    return com.trans.GetComponent<InputField>();
+                    return com.Trans.GetComponent<InputField>();
                 case LuaComponentType.Scrollbar:
-                    return com.trans.GetComponent<Scrollbar>();
+                    return com.Trans.GetComponent<Scrollbar>();
                 case LuaComponentType.ScrollView:
-                    return com.trans.GetComponent<ScrollRect>();
+                    return com.Trans.GetComponent<ScrollRect>();
                 case LuaComponentType.MultiScroller:
-                    return com.trans.GetComponent<UIMultiScroller>();
+                    return com.Trans.GetComponent<UIMultiScroller>();
             }
-            return com.trans;
+            return com.Trans;
         }
 
         protected override void OnInit(object userData)
@@ -158,6 +158,34 @@ namespace YouYouFramework
             onOpen = null;
             onClose = null;
             onBeforeDestroy = null;
+
+            //卸载图片资源
+            int len = m_LuaComs.Length;
+            for (int i = 0; i < len; i++)
+            {
+                LuaCom com = m_LuaComs[i];
+
+                switch (com.Type)
+                {
+                    case LuaComponentType.Button:
+                    case LuaComponentType.Image:
+                    case LuaComponentType.YouYouImage:
+                        {
+                            Image ima = com.Trans.GetComponent<Image>();
+                            ima.sprite = null;
+                        }
+                        break;
+                    case LuaComponentType.RawImage:
+                        {
+                            RawImage ima = com.Trans.GetComponent<RawImage>();
+                            ima.texture = null;
+                        }
+                        break;
+                }
+                com.Trans = null;
+                com = null;
+
+            }
         }
     }
 
@@ -180,6 +208,6 @@ namespace YouYouFramework
         /// <summary>
         /// 引用
         /// </summary>
-        public Transform trans;
+        public Transform Trans;
     }
 }

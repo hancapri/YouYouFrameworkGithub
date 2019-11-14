@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+  <AssetBundle>
+    <Item Name="声音" Tag="Audio" IsFolder="True" IsFirstData="False">
+      <Path Value="Download\Audio" />
+    </Item>
+    <Item Name="Player预设" Tag="Role" IsFolder="True" IsFirstData="True">
+      <Path Value="Download\Prefab\RolePrefab\Player" />
+    </Item>
+
+    <Item Name="NPC预设" Tag="Role" IsFolder="True" IsFirstData="True">
+      <Path Value="Download\Prefab\RolePrefab\NPC" />
+    </Item>
+
+    <Item Name="Monster预设" Tag="Role" IsFolder="True" IsFirstData="False">
+      <Path Value="Download\Prefab\RolePrefab\Monster" />
+    </Item>
+
+    <Item Name="通用特效" Tag="Effect" IsFolder="True" IsFirstData="True">
+      <Path Value="Download\Prefab\Effect\Common" />
+    </Item>
+
+    <Item Name="角色技能特效" Tag="Effect" IsFolder="True" IsFirstData="False">
+      <Path Value="Download\Prefab\Effect\Role" />
+    </Item>
+
+    <Item Name="初始场景" Tag="Scene" IsFolder="False" IsFirstData="True">
+      <Path Value="Download\Scene\Scene_SelectRole.unity" />
+      <Path Value="Download\Scene\GameScene_HuPaoCun.unity" />
+    </Item>
+    <Item Name="其他场景" Tag="Scene" IsFolder="False" IsFirstData="False">
+      <Path Value="Download\Scene\GameScene_ShanGu.unity" />
+      <Path Value="Download\Scene\GameScene_ChangAn.unity" />
+      <Path Value="Download\Scene\GameScene_DiGong1.unity" />
+      <Path Value="Download\Scene\GameScene_DiGong2.unity" />
+      <Path Value="Download\Scene\GameScene_HangZhou.unity" />
+      <Path Value="Download\Scene\GameScene_PingYuan1.unity" />
+      <Path Value="Download\Scene\GameScene_RongYan1.unity" />
+      <Path Value="Download\Scene\GameScene_RongYan2.unity" />
+      <Path Value="Download\Scene\GameScene_RongYan3.unity" />
+      <Path Value="Download\Scene\GameScene_ShaMo1.unity" />
+      <Path Value="Download\Scene\GameScene_ShanGu2.unity" />
+      <Path Value="Download\Scene\GameScene_ShanGu3.unity" />
+      <Path Value="Download\Scene\GameScene_XueDi1.unity" />
+      <Path Value="Download\Scene\GameScene_XueDi2.unity" />
+    </Item>
+    <Item Name="UI预设" Tag="UI" IsFolder="True" IsFirstData="False">
+      <Path Value="Download\Prefab\UIPrefab" />
+      <Path Value="Download\Prefab\xLuaUIPrefab" />
+    </Item>
+    <Item Name="UI资源" Tag="UI" IsFolder="True" IsFirstData="False">
+      <Path Value="Download\Source\UISource\BackGround" />
+      <Path Value="Download\Source\UISource\FrameImg" />
+      <Path Value="Download\Source\UISource\SmallMap" />
+      <Path Value="Download\Source\UISource\UIFont" />
+      <Path Value="Download\Source\UISource\UIWorldMap" />
+    </Item>
+    <Item Name="UI图集" Tag="UI" IsFolder="False" IsFirstData="False">
+      <Path Value="Download\Source\UISource\EquipIco" />
+      <Path Value="Download\Source\UISource\EquipIco" />
+      <Path Value="Download\Source\UISource\GameLevel" />
+      <Path Value="Download\Source\UISource\HeadImg" />
+      <Path Value="Download\Source\UISource\ItemIco" />
+      <Path Value="Download\Source\UISource\MaterialIco" />
+      <Path Value="Download\Source\UISource\Recharge" />
+      <Path Value="Download\Source\UISource\SkillIco" />
+      <Path Value="Download\Source\UISource\UICommon" />
+      <Path Value="Download\Source\UISource\UICommonBG" />
+      <Path Value="Download\Source\UISource\UICommonSilder" />
+      <Path Value="Download\Source\UISource\UIMainCity" />
+      <Path Value="Download\Source\UISource\UIRole" />
+      <Path Value="Download\Source\UISource\WorldMap" />
+    </Item>
+  </AssetBundle>
+</Root>

@@ -21,6 +21,14 @@ public class Menu
         win.Show();
     }
 
+    [MenuItem("悠游工具/资源管理/资源打包管理")]
+    public static void AssetBundleCreate()
+    {
+        AssetBundleWindow win = EditorWindow.GetWindow<AssetBundleWindow>();
+        win.titleContent = new GUIContent("资源打包");
+        win.Show();
+    }
+
     [MenuItem("悠游工具/生成LuaView脚本")]
     public static void CreateLuaView()
     {

@@ -20,7 +20,7 @@ public class AssetBundleWindow : EditorWindow
     private List<AssetBundleEntity> m_List;
     private Dictionary<string, bool> m_Dic;
 
-    private string[] arrTag = { "All", "Scene", "Scene", "Audio", "Effect", "Audio", "UI", "Lua", "None" };
+    private string[] arrTag = { "All", "Audio", "Role", "Effect","Scene" ,"UI", "Lua", "None" };
     private int tagIndex = 0; //标记的索引
     private int selectTagIndex = -1; //选择的标记的索引
 
@@ -295,10 +295,10 @@ public class AssetBundleWindow : EditorWindow
                     m_Dic[entity.Key] = true;
                 }
                 break;
-            case 1: //Scene
+            case 1: //Audio
                 foreach (AssetBundleEntity entity in m_List)
                 {
-                    m_Dic[entity.Key] = entity.Tag.Equals("Scene", StringComparison.CurrentCultureIgnoreCase);
+                    m_Dic[entity.Key] = entity.Tag.Equals("Audio", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
             case 2: //Role
@@ -313,10 +313,10 @@ public class AssetBundleWindow : EditorWindow
                     m_Dic[entity.Key] = entity.Tag.Equals("Effect", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
-            case 4: //Audio
+            case 4: //Scene
                 foreach (AssetBundleEntity entity in m_List)
                 {
-                    m_Dic[entity.Key] = entity.Tag.Equals("Audio", StringComparison.CurrentCultureIgnoreCase);
+                    m_Dic[entity.Key] = entity.Tag.Equals("Scene", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
             case 5: //UI
@@ -325,7 +325,13 @@ public class AssetBundleWindow : EditorWindow
                     m_Dic[entity.Key] = entity.Tag.Equals("UI", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
-            case 6: //None
+            case 6: //Lua
+                foreach (AssetBundleEntity entity in m_List)
+                {
+                    m_Dic[entity.Key] = entity.Tag.Equals("Lua", StringComparison.CurrentCultureIgnoreCase);
+                }
+                break;
+            case 7: //None
                 foreach (AssetBundleEntity entity in m_List)
                 {
                     m_Dic[entity.Key] = false;

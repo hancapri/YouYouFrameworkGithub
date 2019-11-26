@@ -20,7 +20,7 @@ public class AssetBundleWindow : EditorWindow
     private List<AssetBundleEntity> m_List;
     private Dictionary<string, bool> m_Dic;
 
-    private string[] arrTag = { "All", "Audio", "Role", "Effect","Scene" ,"UI", "Lua", "None" };
+    private string[] arrTag = { "All", "Scene", "Role", "Effect", "Audio", "UI", "None" };
     private int tagIndex = 0; //标记的索引
     private int selectTagIndex = -1; //选择的标记的索引
 
@@ -91,12 +91,7 @@ public class AssetBundleWindow : EditorWindow
 
         if (GUILayout.Button("保存设置", GUILayout.Width(200)))
         {
-            EditorApplication.delayCall = OnSaveSettingCallBack;
-        }
-
-        if (GUILayout.Button("清空设置", GUILayout.Width(200)))
-        {
-            EditorApplication.delayCall = OnClearSettingCallBack;
+            EditorApplication.delayCall = OnSaveAssetBundleCallBack; ;
         }
 
         if (GUILayout.Button("清空AssetBundle包", GUILayout.Width(200)))
@@ -108,18 +103,10 @@ public class AssetBundleWindow : EditorWindow
         {
             EditorApplication.delayCall = OnAssetBundleCallBack;
         }
-        EditorGUILayout.Space();
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal("box");
 
         if (GUILayout.Button("拷贝数据表", GUILayout.Width(200)))
         {
             EditorApplication.delayCall = OnCopyDataTableCallBack;
-        }
-
-        if (GUILayout.Button("转换Lua脚本", GUILayout.Width(200)))
-        {
-            EditorApplication.delayCall = OnChangeLuaScriptCallBack;
         }
 
         if (GUILayout.Button("生成版本文件", GUILayout.Width(200)))
@@ -171,118 +158,6 @@ public class AssetBundleWindow : EditorWindow
     }
 
     /// <summary>
-    /// 资源包加密
-    /// </summary>
-    /// <param name="path"></param>
-    private void AssetBundleEncrypt(string path)
-    {
-
-        string[] files = Directory.GetFiles(path);
-        foreach (string file in files)
-        {
-            FileInfo fileInfo = new FileInfo(file);
-
-            if (!fileInfo.Extension.Equals(".assetbundle", StringComparison.CurrentCultureIgnoreCase) &&
-                !fileInfo.Extension.Equals(".unity3d", StringComparison.CurrentCultureIgnoreCase)
-                )
-            {
-                continue;
-            }
-
-            byte[] buffer = null;
-
-            using (FileStream fs = new FileStream(file, FileMode.Open))
-            {
-                buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-            }
-
-            buffer = SecurityUtil.Xor(buffer);
-
-            using (FileStream fs = new FileStream(file, FileMode.Create))
-            {
-                fs.Write(buffer, 0, buffer.Length);
-                fs.Flush();
-            }
-        }
-
-        string[] dirs = Directory.GetDirectories(path);
-        foreach (string dir in dirs)
-        {
-            AssetBundleEncrypt(dir);
-        }
-    }
-
-    private void OnChangeLuaScriptCallBack()
-    {
-        string src = Application.dataPath + "/Download/xLuaLogic";
-        string dest = Application.dataPath + "/../AssetBundles/" + arrBuildTarget[buildTargetIndex] + "/Download/xLuaLogic";
-
-        CopyLuaDirectory(src, dest);
-
-        AssetDatabase.Refresh();
-        Debug.Log("转换Lua脚本完毕");
-    }
-
-    #region CopyLuaDirectory
-    public void CopyLuaDirectory(string sourceDirName, string destDirName)
-    {
-        try
-        {
-            if (Directory.Exists(destDirName))
-            {
-                Directory.Delete(destDirName, true);
-            }
-
-            Directory.CreateDirectory(destDirName);
-            File.SetAttributes(destDirName, File.GetAttributes(sourceDirName));
-
-            if (destDirName[destDirName.Length - 1] != Path.DirectorySeparatorChar)
-                destDirName = destDirName + Path.DirectorySeparatorChar;
-
-            string[] files = Directory.GetFiles(sourceDirName);
-            foreach (string file in files)
-            {
-                if (File.Exists(destDirName + Path.GetFileName(file)))
-                    continue;
-                FileInfo fileInfo = new FileInfo(file);
-                if (!fileInfo.Extension.Equals(".lua", StringComparison.CurrentCultureIgnoreCase))
-                    continue;
-
-                string newPath = destDirName + Path.GetFileName(file);
-                File.Copy(file, newPath, true);
-                File.SetAttributes(newPath, FileAttributes.Normal);
-
-                byte[] buffer = null;
-
-                using (FileStream fs = new FileStream(newPath, FileMode.Open))
-                {
-                    buffer = new byte[fs.Length];
-                    fs.Read(buffer, 0, buffer.Length);
-                }
-
-                buffer = SecurityUtil.Xor(buffer);
-                using (FileStream fs = new FileStream(newPath, FileMode.Create))
-                {
-                    fs.Write(buffer, 0, buffer.Length);
-                    fs.Flush();
-                }
-            }
-
-            string[] dirs = Directory.GetDirectories(sourceDirName);
-            foreach (string dir in dirs)
-            {
-                CopyLuaDirectory(dir, destDirName + Path.GetFileName(dir));
-            }
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-    #endregion
-
-    /// <summary>
     /// 选定Tag回调
     /// </summary>
     private void OnSelectTagCallBack()
@@ -295,10 +170,10 @@ public class AssetBundleWindow : EditorWindow
                     m_Dic[entity.Key] = true;
                 }
                 break;
-            case 1: //Audio
+            case 1: //Scene
                 foreach (AssetBundleEntity entity in m_List)
                 {
-                    m_Dic[entity.Key] = entity.Tag.Equals("Audio", StringComparison.CurrentCultureIgnoreCase);
+                    m_Dic[entity.Key] = entity.Tag.Equals("Scene", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
             case 2: //Role
@@ -313,10 +188,10 @@ public class AssetBundleWindow : EditorWindow
                     m_Dic[entity.Key] = entity.Tag.Equals("Effect", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
-            case 4: //Scene
+            case 4: //Audio
                 foreach (AssetBundleEntity entity in m_List)
                 {
-                    m_Dic[entity.Key] = entity.Tag.Equals("Scene", StringComparison.CurrentCultureIgnoreCase);
+                    m_Dic[entity.Key] = entity.Tag.Equals("Audio", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
             case 5: //UI
@@ -325,13 +200,7 @@ public class AssetBundleWindow : EditorWindow
                     m_Dic[entity.Key] = entity.Tag.Equals("UI", StringComparison.CurrentCultureIgnoreCase);
                 }
                 break;
-            case 6: //Lua
-                foreach (AssetBundleEntity entity in m_List)
-                {
-                    m_Dic[entity.Key] = entity.Tag.Equals("Lua", StringComparison.CurrentCultureIgnoreCase);
-                }
-                break;
-            case 7: //None
+            case 6: //None
                 foreach (AssetBundleEntity entity in m_List)
                 {
                     m_Dic[entity.Key] = false;
@@ -362,19 +231,9 @@ public class AssetBundleWindow : EditorWindow
     }
 
     /// <summary>
-    /// 清空设置
-    /// </summary>
-    private void OnClearSettingCallBack()
-    {
-        string path = Application.dataPath + "/Download";
-
-        SaveFolderSettings(new string[] { path }, true);
-    }
-
-    /// <summary>
     /// 保存设置
     /// </summary>
-    private void OnSaveSettingCallBack()
+    private void OnSaveAssetBundleCallBack()
     {
         //需要打包的对象
         List<AssetBundleEntity> lst = new List<AssetBundleEntity>();
@@ -429,33 +288,6 @@ public class AssetBundleWindow : EditorWindow
     {
         foreach (string folderPath in folderArr)
         {
-            //0.对文件夹进行设置
-
-            if (isSetNull)
-            {
-                //Debug.Log("filePath=" + filePath);
-                int index = folderPath.IndexOf("Assets/", StringComparison.CurrentCultureIgnoreCase);
-
-                //路径
-                string newPath = folderPath.Substring(index);
-                Debug.Log("newfolderPath=" + newPath);
-
-                //文件名
-                string fileName = newPath.Replace("Assets/", "");
-
-                //后缀
-                string variant = "assetbundle";
-
-                AssetImporter import = AssetImporter.GetAtPath(newPath);
-                import.SetAssetBundleNameAndVariant(fileName, variant);
-
-                if (isSetNull)
-                {
-                    import.SetAssetBundleNameAndVariant(null, null);
-                }
-                import.SaveAndReimport();
-            }
-
             //1.先看这个文件夹下的文件
             string[] arrFile = Directory.GetFiles(folderPath); //文件夹下的文件
 
@@ -475,40 +307,9 @@ public class AssetBundleWindow : EditorWindow
 
     private void SaveFileSetting(string filePath, bool isSetNull)
     {
-        if (filePath.IndexOf(".") != -1)
+        FileInfo file = new FileInfo(filePath);
+        if (!file.Extension.Equals(".meta", StringComparison.CurrentCultureIgnoreCase))
         {
-            #region 判断如果包含.则 说明是文件
-            FileInfo file = new FileInfo(filePath);
-            if (!file.Extension.Equals(".meta", StringComparison.CurrentCultureIgnoreCase))
-            {
-                //Debug.Log("filePath=" + filePath);
-                int index = filePath.IndexOf("Assets/", StringComparison.CurrentCultureIgnoreCase);
-
-                //路径
-                string newPath = filePath.Substring(index);
-                Debug.Log("newPath=" + newPath);
-
-                //文件名
-                string fileName = newPath.Replace("Assets/", "").Replace(file.Extension, "");
-
-                //后缀
-                string variant = file.Extension.Equals(".unity", StringComparison.CurrentCultureIgnoreCase) ? "unity3d" : "assetbundle";
-
-                AssetImporter import = AssetImporter.GetAtPath(newPath);
-                import.SetAssetBundleNameAndVariant(fileName, variant);
-
-                if (isSetNull)
-                {
-                    import.SetAssetBundleNameAndVariant(null, null);
-                }
-                import.SaveAndReimport();
-            }
-            #endregion
-        }
-        else
-        {
-            //说明是把文件夹 当成一个资源来打
-
             //Debug.Log("filePath=" + filePath);
             int index = filePath.IndexOf("Assets/", StringComparison.CurrentCultureIgnoreCase);
 
@@ -517,10 +318,10 @@ public class AssetBundleWindow : EditorWindow
             Debug.Log("newPath=" + newPath);
 
             //文件名
-            string fileName = newPath.Replace("Assets/", "");
+            string fileName = newPath.Replace("Assets/", "").Replace(file.Extension, "");
 
             //后缀
-            string variant = "assetbundle";
+            string variant = file.Extension.Equals(".unity", StringComparison.CurrentCultureIgnoreCase) ? "unity3d" : "assetbundle";
 
             AssetImporter import = AssetImporter.GetAtPath(newPath);
             import.SetAssetBundleNameAndVariant(fileName, variant);
@@ -544,19 +345,9 @@ public class AssetBundleWindow : EditorWindow
             Directory.CreateDirectory(toPath);
         }
 
-        //BuildAssetBundleOptions.None --构建AssetBundle没有任何特殊的选项
-        //BuildAssetBundleOptions.UncompressedAssetBundle --不进行数据压缩。如果使用该项，因为没有压缩\解压缩的过程， AssetBundle的发布和加载会很快，但是AssetBundle也会更大，下载变慢
-        //BuildAssetBundleOptions.ChunkBasedCompression --Assetbundle的压缩格式为lz4。默认的是lzma格式，下载Assetbundle后立即解压。而lz4格式的Assetbundle会在加载资源的时候才进行解压，只是解压资源的时机不一样
-
         //打包方法就是一句话
-        BuildPipeline.BuildAssetBundles(toPath, BuildAssetBundleOptions.ChunkBasedCompression, target);
+        BuildPipeline.BuildAssetBundles(toPath, BuildAssetBundleOptions.None, target);
         Debug.Log("打包完毕");
-
-#if ASSETBUNDLE_ENCRYPT
-        string path = Application.dataPath + "/../AssetBundles/" + arrBuildTarget[buildTargetIndex] + "/Download";
-        AssetBundleEncrypt(path);
-        Debug.Log("资源包加密完毕");
-#endif
     }
 
     /// <summary>
@@ -641,8 +432,7 @@ public class AssetBundleWindow : EditorWindow
                 if (isBreak) break;
             }
 
-            //本地数据表 和 lua脚本 是初始数据
-            if (name.IndexOf("DataTable") != -1 || name.IndexOf("xLuaLogic") != -1)
+            if (name.IndexOf("DataTable") != -1)
             {
                 isFirstData = true;
             }

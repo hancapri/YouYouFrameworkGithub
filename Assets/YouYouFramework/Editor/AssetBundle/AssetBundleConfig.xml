@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <AssetBundle ResourceVersion="1.0.7">
+    <Item Name="声音" Tag="Audio" IsFolder="True" IsFirstData="False" IsEncrypt="False">
+      <Path Value="Download/Audio" />
+    </Item>
+    <Item Name="CusShaders" Tag="Shader" IsFolder="False" IsFirstData="True" IsEncrypt="True">
+      <Path Value="Download/CusShaders" />
+    </Item>
+    <Item Name="DataTable" Tag="DataTable" IsFolder="False" IsFirstData="True" IsEncrypt="True">
+      <Path Value="Download/DataTable" />
+    </Item>
+    <Item Name="xLuaLogic" Tag="Lua" IsFolder="False" IsFirstData="True" IsEncrypt="True">
+      <Path Value="Download/xLuaLogic" />
+    </Item>
+    <Item Name="Role" Tag="Role" IsFolder="True" IsFirstData="False" IsEncrypt="False">
+      <Path Value="Download/Role" />
+    </Item>
+    <Item Name="Effect" Tag="Effect" IsFolder="True" IsFirstData="False" IsEncrypt="False">
+      <Path Value="Download/Effect" />
+    </Item>
+    <Item Name="初始场景" Tag="Scene" IsFolder="False" IsFirstData="True" IsEncrypt="False">
+      <Path Value="Download/Scenes/GameScene_HuPaoCun.unity" />
+      <Path Value="Download/Scenes/GameScene_HuPaoCun_02.unity" />
+      <Path Value="Download/Scenes/GameScene_HuPaoCun_03.unity" />
+      <Path Value="Download/Scenes/GameScene_DaLi.unity" />
+      <Path Value="Download/Scenes/GameScene_ErHai.unity" />
+    </Item>
+    <Item Name="其他场景" Tag="Scene" IsFolder="False" IsFirstData="False" IsEncrypt="False">
+      <Path Value="Download/Scenes/GameScene_JingHu.unity" />
+      <Path Value="Download/Scenes/GameScene_LuoYang.unity" />
+      <Path Value="Download/Scenes/GameScene_ShiLin.unity" />
+      <Path Value="Download/Scenes/GameScene_WuYi.unity" />
+      <Path Value="Download/Scenes/GameScene_YuXi.unity" />
+    </Item>
+    <Item Name="UI预设" Tag="UI" IsFolder="False" IsFirstData="True" IsEncrypt="False">
+      <Path Value="Download/UI/UIPrefab" />
+    </Item>
+    <Item Name="UI字体" Tag="UIFont" IsFolder="False" IsFirstData="True" IsEncrypt="False">
+      <Path Value="Download/UI/UIFont" />
+    </Item>
+    <Item Name="UI图集" Tag="UI" IsFolder="False" IsFirstData="True" IsEncrypt="False">
+      <Path Value="Download/UI/UIRes/UICommon" />
+      <Path Value="Download/UI/UIRes/UIFrame" />
+      <Path Value="Download/UI/UIRes/UITitleBar" />
+    </Item>
+    <Item Name="UILoading" Tag="UI" IsFolder="True" IsFirstData="True" IsEncrypt="False">
+      <Path Value="Download/UI/UIRes/Loading" />
+    </Item>
+  </AssetBundle>
+</Root>

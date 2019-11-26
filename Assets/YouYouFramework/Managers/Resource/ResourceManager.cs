@@ -9,6 +9,10 @@ namespace YouYouFramework
     /// </summary>
     public class ResourceManager : ManagerBase
     {
-
+        public static Dictionary<string, AssetBundleInfoEntity> GetAssetBundleVersionList(byte[] buffer, ref string version)
+        {
+            Dictionary<string, AssetBundleInfoEntity> res = new Dictionary<string, AssetBundleInfoEntity>();
+            return res;
+        }
     }
 }

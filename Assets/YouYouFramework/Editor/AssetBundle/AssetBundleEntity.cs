@@ -38,6 +38,11 @@ public class AssetBundleEntity
     public bool IsFirstData;
 
     /// <summary>
+    /// 是否加密
+    /// </summary>
+    public bool IsEncrypt;
+
+    /// <summary>
     /// 是否被选中
     /// </summary>
     public bool IsChecked;

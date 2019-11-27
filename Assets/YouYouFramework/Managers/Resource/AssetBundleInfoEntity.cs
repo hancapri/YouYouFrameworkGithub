@@ -18,7 +18,7 @@ public class AssetBundleInfoEntity
     /// <summary>
     /// AB包大小
     /// </summary>
-    public string Size;
+    public int Size;
     /// <summary>
     /// 是否为初始化资源
     /// </summary>

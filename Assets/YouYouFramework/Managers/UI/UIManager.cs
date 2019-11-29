@@ -66,8 +66,8 @@ namespace YouYouFramework
                 formBase.gameObject.SetActive(true);
                 formBase.Open(userData);
             }
-#endif
             m_OpenUIFormList.AddLast(formBase);
+#endif
         }
 
         /// <summary>

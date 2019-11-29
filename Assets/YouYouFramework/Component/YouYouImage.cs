@@ -23,12 +23,13 @@ namespace YouYouFramework
             {
                 string path = GameUtil.GetUIResPath(GameEntry.Localization.GetString(m_Localization));
                 Debug.Log(path);
-
+#if UNITY_EDITOR
                 Texture2D texture = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>(path) as Texture2D;
 
                 Sprite obj = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                 sprite = obj;
                 SetNativeSize();
+#endif
             }
         }
     }

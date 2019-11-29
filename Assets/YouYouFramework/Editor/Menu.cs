@@ -175,8 +175,7 @@ public class Menu
         {
             FileInfo file = arrFiles[i];
             string fullName = file.FullName.Replace("\\", "/"); //全名 包含路径扩展名
-            string name = fullName.Replace(toPath, "").Replace(".assetbundle", "").Replace(".unity3d", "");
-
+            string name = fullName.Replace(toPath, "");
             if (name.Equals("AssetInfo.json", StringComparison.CurrentCultureIgnoreCase)
                 || name.Equals("Windows", StringComparison.CurrentCultureIgnoreCase)
                 || name.Equals("Windows.manifest", StringComparison.CurrentCultureIgnoreCase)
@@ -231,7 +230,7 @@ public class Menu
                 string[] arrInner = arr[i].Split('|');
                 ms.WriteUTF8String(arrInner[0]);
                 ms.WriteUTF8String(arrInner[1]);
-                ms.WriteInt(int.Parse(arrInner[2]));
+                ms.WriteULong(ulong.Parse(arrInner[2]));
                 ms.WriteByte(byte.Parse(arrInner[3]));
                 ms.WriteByte(byte.Parse(arrInner[4]));
             }

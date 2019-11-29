@@ -17,7 +17,16 @@ namespace YouYouFramework
 
         public SysDataManager()
         {
+            CurrChannelConfig = new ChannelConfigEntity();
+        }
 
+        /// <summary>
+        /// 当前的渠道设置
+        /// </summary>
+        public ChannelConfigEntity CurrChannelConfig
+        {
+            get;
+            private set;
         }
 
         /// <summary>

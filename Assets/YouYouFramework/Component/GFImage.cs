@@ -19,12 +19,14 @@ namespace YouYouFramework
             if (GameEntry.Localization != null)
             {
                 string imagePath = GameUtil.GetUIPath(GameEntry.Localization.GetString(m_Localization));
-   
+
+#if UNITY_EDITOR
                 //编辑器模式下
                 Texture2D texture = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>(imagePath);
                 Sprite obj = Sprite.Create(texture, new Rect(0,0,texture.width,texture.height),new Vector2(0.5f,0.5f));
                 sprite = obj;
                 SetNativeSize();
+#endif
             }
         }
     }

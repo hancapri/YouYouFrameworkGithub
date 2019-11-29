@@ -16,11 +16,11 @@ namespace YouYouFramework
         /// <param name="callBack"></param>
         /// <param name="isPost"></param>
         /// <param name="json"></param>
-        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false, Dictionary<string, object> dic = null)
+        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false,bool isGetData = false, Dictionary<string, object> dic = null)
         {
             //支持多个HttpRoutine，从对象池中取出HttpRoutine
             HttpRoutine http = GameEntry.Pool.DequeueClassObject<HttpRoutine>();
-            http.SendData(url, callBack, isPost, dic);
+            http.SendData(url, callBack, isPost, isGetData, dic);
         }
     }
 }

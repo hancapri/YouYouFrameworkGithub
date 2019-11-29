@@ -23,7 +23,7 @@ public class TestProcedure : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log("当前的流程 = " + GameEntry.Procedure.CurrProcedure);
+            GameEntry.Log(LogCategory.Procedure, "当前的流程 = " + GameEntry.Procedure.CurrProcedure);
         }
 
         if (Input.GetKeyDown(KeyCode.L))

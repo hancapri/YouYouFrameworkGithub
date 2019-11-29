@@ -12,7 +12,7 @@ namespace YouYouFramework
         public override void OnEnable()
         {
             base.OnEnable();
-            Debug.Log("OnEnable ProcedureCheckVersion");
+            GameEntry.Log(LogCategory.Procedure, "OnEnable ProcedureCheckVersion");
             GameEntry.Resource.InitStreamingAssetsBundleInfo();
             //GameEntry.Procedure.ChangeState(ProcedureState.Preload);
         }
@@ -20,7 +20,7 @@ namespace YouYouFramework
         public override void OnLeave()
         {
             base.OnLeave();
-            Debug.Log("OnLeave ProcedureCheckVersion");
+            GameEntry.Log(LogCategory.Procedure, "OnLeave ProcedureCheckVersion");
         }
     }
 }

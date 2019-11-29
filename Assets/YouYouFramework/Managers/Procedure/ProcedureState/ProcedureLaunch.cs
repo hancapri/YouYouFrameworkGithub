@@ -13,7 +13,7 @@ namespace YouYouFramework
         public override void OnEnable()
         {
             base.OnEnable();
-            Debug.Log("OnEnable ProcedureLaunch");
+            GameEntry.Log(LogCategory.Procedure,"OnEnable ProcedureLaunch");
 
             //访问账号服务器部分，等数据库搭建起来，再测试，暂时当做通过验证
             GameEntry.Data.SysDataManager.CurrChannelConfig.ChannelId = 0;

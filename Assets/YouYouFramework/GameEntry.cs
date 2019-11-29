@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+//using System.Diagnostics;
 using UnityEngine;
 
 namespace YouYouFramework
@@ -296,6 +296,34 @@ namespace YouYouFramework
             for (LinkedListNode<YouYouBaseComponent> curr = m_BaseComponentList.First; curr != null; curr = curr.Next)
             {
                 curr.Value.Shutdown();
+            }
+        }
+
+        public static void Log(LogCategory category,string message)
+        {
+            switch (category)
+            {
+                default:
+                case LogCategory.Normal:
+#if DEBUG_LOG_NORMAL
+                    Debug.Log(message);
+#endif
+                    break;
+                case LogCategory.Procedure:
+#if DEBUG_LOG_PROCEDURE
+                    Debug.Log(string.Format("<color=#ffffff>{0}</color>", message));
+#endif
+                    break;
+                case LogCategory.Resource:
+#if DEBUG_LOG_RESOURCE
+                    Debug.Log(string.Format("<color=#ace44a>{0}</color>", message));
+#endif
+                    break;
+                case LogCategory.Proto:
+#if DEBUG_LOG_PROTO
+                    Debug.Log(message);
+#endif
+                    break;
             }
         }
     }

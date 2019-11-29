@@ -60,6 +60,7 @@ namespace YouYouFramework
             StreamingAssetsManager = new StreamingAssetsManager();
         }
 
+        #region 只读区
         /// <summary>
         /// 只读区版本号
         /// </summary>
@@ -78,12 +79,14 @@ namespace YouYouFramework
             ReadStreamingAssetsBundle("VersionFile.bytes",(byte[] buffer)=>
             {
                 m_StreamingAssetsVersionDic = GetAssetBundleVersionList(buffer,ref m_StreamingAssetsVersion);
-                Debug.Log("只读区版本号："+ m_StreamingAssetsVersion);
-                Debug.Log("只读区资源个数："+ m_StreamingAssetsVersionDic.Count);
+                GameEntry.Log(LogCategory.Resource,"只读区版本号："+ m_StreamingAssetsVersion);
+                GameEntry.Log(LogCategory.Resource, "只读区资源个数：" + m_StreamingAssetsVersionDic.Count);
                 foreach (var item in m_StreamingAssetsVersionDic)
                 {
-                    Debug.Log(item.Value.AssetBundleName);
+                    GameEntry.Log(LogCategory.Resource, item.Value.AssetBundleName);
                 }
+
+                InitCDNAssetBundleInfo();
             });
         }
 
@@ -96,6 +99,47 @@ namespace YouYouFramework
         {
             StreamingAssetsManager.ReadAssetBundle(fileUrl,onComplete);
         }
+        #endregion
+
+        #region CDN
+        /// <summary>
+        /// CDN资源版本号
+        /// </summary>
+        private string m_CDNVersion;
+
+        /// <summary>
+        /// CDN资源包信息
+        /// </summary>
+        private Dictionary<string, AssetBundleInfoEntity> m_CDNVersionDic;
+
+        /// <summary>
+        /// 初始化CDN资源包信息
+        /// </summary>
+        private void InitCDNAssetBundleInfo()
+        {
+            string url = string.Format("{0}VersionFile.bytes",GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl);
+            GameEntry.Log(LogCategory.Resource, "url:" +url);
+            GameEntry.Http.SendData(url,OnInitCDNAssetBundleInfo,isGetData:true);
+        }
+
+        /// <summary>
+        /// 初始化CDN资源包信息回调
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnInitCDNAssetBundleInfo(HttpCallBackArgs args)
+        {
+            if (!args.HasError)
+            {
+                m_CDNVersionDic = GetAssetBundleVersionList(args.Data, ref m_CDNVersion);
+                GameEntry.Log(LogCategory.Resource, "cdn资源包总数" + m_CDNVersionDic.Count);
+            }
+            else
+            {
+                GameEntry.Log(LogCategory.Resource, args.Value);
+            }
+        }
+
+        #endregion
 
         public void Dispose()
         {

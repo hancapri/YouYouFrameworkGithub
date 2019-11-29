@@ -44,9 +44,9 @@ namespace YouYouFramework
         /// <param name="callBack"></param>
         /// <param name="isPost"></param>
         /// <param name="json"></param>
-        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false, Dictionary<string, object> dic = null)
+        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false,bool isGetData = false, Dictionary<string, object> dic = null)
         {
-            m_HttpManager.SendData(url, callBack, isPost, dic);
+            m_HttpManager.SendData(url, callBack, isPost, isGetData, dic);
         }
 
         public override void Shutdown()

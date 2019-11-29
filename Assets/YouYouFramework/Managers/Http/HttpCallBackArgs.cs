@@ -20,5 +20,10 @@ namespace YouYouFramework
         /// </summary>
         public string Value;
 
+        /// <summary>
+        /// 字节数组
+        /// </summary>
+        public byte[] Data;
+
     }
 }

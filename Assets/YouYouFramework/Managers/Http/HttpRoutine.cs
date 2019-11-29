@@ -32,6 +32,11 @@ namespace YouYouFramework
         /// 是否繁忙
         /// </summary>
         public bool IsBusy{ get;private set;}
+
+        /// <summary>
+        /// 是否获取byte[]数据
+        /// </summary>
+        private bool m_isGetData = false;
         #endregion
 
         public HttpRoutine()
@@ -47,12 +52,13 @@ namespace YouYouFramework
         /// <param name="callBack"></param>
         /// <param name="isPost"></param>
         /// <param name="json"></param>
-        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false, Dictionary<string, object> dic = null)
+        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false,bool isGetData = false, Dictionary<string, object> dic = null)
         {
             if (IsBusy) return;
 
             IsBusy = true;
             m_CallBack = callBack;
+            m_isGetData = isGetData;
 
             if (!isPost)
             {
@@ -140,6 +146,11 @@ namespace YouYouFramework
                 {
                     m_CallBackArgs.HasError = true;
                     m_CallBackArgs.Value = data.error;
+                    if (!m_isGetData)
+                    {
+                        GameEntry.Log(LogCategory.Proto, "<color=#00eaff>接收消息:</color><color=#00ff9c>" + data.url + "</color>");
+                        GameEntry.Log(LogCategory.Proto, "<color=#c5e1dc>==>>" + JsonUtility.ToJson(m_CallBackArgs) + "</color>");
+                    }
                     m_CallBack(m_CallBackArgs);
                 }
             }
@@ -149,6 +160,12 @@ namespace YouYouFramework
                 {
                     m_CallBackArgs.HasError = false;
                     m_CallBackArgs.Value = data.downloadHandler.text;
+                    if (!m_isGetData)
+                    {
+                        GameEntry.Log(LogCategory.Proto, "<color=#00eaff>接收消息:</color><color=#00ff9c>" + data.url + "</color>");
+                        GameEntry.Log(LogCategory.Proto, "<color=#c5e1dc>==>>" + JsonUtility.ToJson(m_CallBackArgs) + "</color>");
+                    }
+                    m_CallBackArgs.Data = data.downloadHandler.data;
                     m_CallBack(m_CallBackArgs);
                 }
             }

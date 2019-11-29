@@ -132,6 +132,10 @@ namespace YouYouFramework
             {
                 m_CDNVersionDic = GetAssetBundleVersionList(args.Data, ref m_CDNVersion);
                 GameEntry.Log(LogCategory.Resource, "cdn资源包总数" + m_CDNVersionDic.Count);
+                foreach (var item in m_CDNVersionDic)
+                {
+                    GameEntry.Log(LogCategory.Resource,item.Value.AssetBundleName);
+                }
             }
             else
             {

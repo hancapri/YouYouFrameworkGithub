@@ -1,0 +1,347 @@
+fileFormatVersion: 2
+guid: 687501ec107820942b2d61afee9b54b9
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Allplane
+    100002: Dummy02
+    100004: Dummy03
+    100006: Dummy04
+    100008: Dummy05
+    100010: Dummy06
+    100012: Dummy07
+    100014: Dummy08
+    100016: Dummy09
+    100018: Dummy10
+    100020: Dummy11
+    100022: Dummy12
+    100024: Dummy13
+    100026: Dummy14
+    100028: Dummy15
+    100030: Dummy16
+    100032: Dummy17
+    100034: Dummy18
+    100036: fatjump
+    100038: fatrun
+    100040: fatrun01
+    100042: fatstand
+    100044: fatstand01
+    100046: fatstand02
+    100048: jump
+    100050: //RootNode
+    100052: run
+    100054: run01
+    100056: stand
+    100058: stand01
+    100060: swordjump
+    100062: swordrun
+    100064: swordrun1
+    100066: swordstand
+    100068: swordstand01
+    100070: swordstand02
+    400000: Allplane
+    400002: Dummy02
+    400004: Dummy03
+    400006: Dummy04
+    400008: Dummy05
+    400010: Dummy06
+    400012: Dummy07
+    400014: Dummy08
+    400016: Dummy09
+    400018: Dummy10
+    400020: Dummy11
+    400022: Dummy12
+    400024: Dummy13
+    400026: Dummy14
+    400028: Dummy15
+    400030: Dummy16
+    400032: Dummy17
+    400034: Dummy18
+    400036: fatjump
+    400038: fatrun
+    400040: fatrun01
+    400042: fatstand
+    400044: fatstand01
+    400046: fatstand02
+    400048: jump
+    400050: //RootNode
+    400052: run
+    400054: run01
+    400056: stand
+    400058: stand01
+    400060: swordjump
+    400062: swordrun
+    400064: swordrun1
+    400066: swordstand
+    400068: swordstand01
+    400070: swordstand02
+    4300000: fatjump
+    4300002: fatrun
+    4300004: fatstand
+    4300006: fatstand01
+    4300008: jump
+    4300010: run
+    4300012: stand
+    4300014: swordjump
+    4300016: swordrun
+    4300018: swordrun1
+    4300020: swordstand
+    4300022: stand01
+    4300024: fatstand02
+    4300026: fatrun01
+    4300028: run01
+    4300030: swordstand01
+    4300032: swordstand02
+    7400000: Opening
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: fatjump
+    13700002: fatrun
+    13700004: fatrun01
+    13700006: fatstand
+    13700008: fatstand01
+    13700010: fatstand02
+    13700012: jump
+    13700014: run
+    13700016: run01
+    13700018: stand
+    13700020: stand01
+    13700022: swordjump
+    13700024: swordrun
+    13700026: swordrun1
+    13700028: swordstand
+    13700030: swordstand01
+    13700032: swordstand02
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: fatjump
+    second: {fileID: 2100000, guid: 756025733b3d751438625d670afe21dc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: fatrun
+    second: {fileID: 2100000, guid: 20cbfba56c315d44896d8f2c0eecb7ec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: fatstand
+    second: {fileID: 2100000, guid: 94a6429acd79eae4bbf883e1d8e41097, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: jump
+    second: {fileID: 2100000, guid: dc02b1bae37d55f49aab37b2bf173ddf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: run
+    second: {fileID: 2100000, guid: 61e01160a77c3864fadb013d8186729c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stand
+    second: {fileID: 2100000, guid: e5da2b5599b34c944be80dc4d6ead785, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: swordjump
+    second: {fileID: 2100000, guid: 94e3e85e741e71840af3a2f78ef81893, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: swordrun
+    second: {fileID: 2100000, guid: 17bbf3dea46c0f8418d95574e74ce237, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: swordrun1
+    second: {fileID: 2100000, guid: a4773e172ac0e8649a25b888239a36b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: swordstand
+    second: {fileID: 2100000, guid: e7ae479c003c9104a839823d573bcb88, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Opening
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 77
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Allplane
+        weight: 1
+      - path: Allplane/Dummy02
+        weight: 1
+      - path: Allplane/Dummy03
+        weight: 1
+      - path: Allplane/Dummy04
+        weight: 1
+      - path: Allplane/Dummy05
+        weight: 1
+      - path: Allplane/Dummy06
+        weight: 1
+      - path: Allplane/Dummy07
+        weight: 1
+      - path: Allplane/Dummy08
+        weight: 1
+      - path: Allplane/Dummy09
+        weight: 1
+      - path: Allplane/Dummy10
+        weight: 1
+      - path: Allplane/Dummy11
+        weight: 1
+      - path: Allplane/Dummy12
+        weight: 1
+      - path: Allplane/Dummy13
+        weight: 1
+      - path: Allplane/Dummy14
+        weight: 1
+      - path: Allplane/Dummy15
+        weight: 1
+      - path: Allplane/Dummy16
+        weight: 1
+      - path: Allplane/Dummy17
+        weight: 1
+      - path: Allplane/Dummy18
+        weight: 1
+      - path: fatjump
+        weight: 1
+      - path: fatrun
+        weight: 1
+      - path: fatrun01
+        weight: 1
+      - path: fatstand
+        weight: 1
+      - path: fatstand01
+        weight: 1
+      - path: fatstand02
+        weight: 1
+      - path: jump
+        weight: 1
+      - path: run
+        weight: 1
+      - path: run01
+        weight: 1
+      - path: stand
+        weight: 1
+      - path: stand01
+        weight: 1
+      - path: swordjump
+        weight: 1
+      - path: swordrun
+        weight: 1
+      - path: swordrun1
+        weight: 1
+      - path: swordstand
+        weight: 1
+      - path: swordstand01
+        weight: 1
+      - path: swordstand02
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.01
+    meshCompression: 2
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 2
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: download/role/rolesources/character/player/opening/back/back
+  assetBundleVariant: assetbundle

@@ -55,12 +55,22 @@ namespace YouYouFramework
             private set;
         }
 
+        /// <summary>
+        /// 可写区管理器
+        /// </summary>
+        public LocalAssetManager LocalAssetManager
+        {
+            get;
+            private set;
+        }
+
         public ResourceManager()
         {
             StreamingAssetsManager = new StreamingAssetsManager();
+            LocalAssetManager = new LocalAssetManager();
         }
 
-        #region 只读区
+        #region 只读区 StreamingAssets文件夹
         /// <summary>
         /// 只读区版本号
         /// </summary>
@@ -72,21 +82,28 @@ namespace YouYouFramework
         private Dictionary<string, AssetBundleInfoEntity> m_StreamingAssetsVersionDic;
 
         /// <summary>
+        /// 是否存在只读区资源包信息
+        /// </summary>
+        private bool m_IsExistsStreamingAssetBundleInfo = false;
+
+        /// <summary>
         /// 初始化只读区资源信息
         /// </summary>
         public void InitStreamingAssetsBundleInfo()
         {
+            GameEntry.Log(LogCategory.Resource, "InitStreamingAssetsBundleInfo");
             ReadStreamingAssetsBundle("VersionFile.bytes",(byte[] buffer)=>
             {
-                m_StreamingAssetsVersionDic = GetAssetBundleVersionList(buffer,ref m_StreamingAssetsVersion);
-                GameEntry.Log(LogCategory.Resource,"只读区版本号："+ m_StreamingAssetsVersion);
-                GameEntry.Log(LogCategory.Resource, "只读区资源个数：" + m_StreamingAssetsVersionDic.Count);
-                foreach (var item in m_StreamingAssetsVersionDic)
+                if (buffer == null)
                 {
-                    GameEntry.Log(LogCategory.Resource, item.Value.AssetBundleName);
+                    InitCDNAssetBundleInfo();
                 }
-
-                InitCDNAssetBundleInfo();
+                else
+                {
+                    m_IsExistsStreamingAssetBundleInfo = true;
+                    m_StreamingAssetsVersionDic = GetAssetBundleVersionList(buffer, ref m_StreamingAssetsVersion);
+                    InitCDNAssetBundleInfo();
+                }
             });
         }
 
@@ -101,7 +118,7 @@ namespace YouYouFramework
         }
         #endregion
 
-        #region CDN
+        #region CDN网络站点
         /// <summary>
         /// CDN资源版本号
         /// </summary>
@@ -117,6 +134,8 @@ namespace YouYouFramework
         /// </summary>
         private void InitCDNAssetBundleInfo()
         {
+            GameEntry.Log(LogCategory.Resource, "InitCDNAssetBundleInfo");
+
             string url = string.Format("{0}VersionFile.bytes",GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl);
             GameEntry.Log(LogCategory.Resource, "url:" +url);
             GameEntry.Http.SendData(url,OnInitCDNAssetBundleInfo,isGetData:true);
@@ -132,10 +151,7 @@ namespace YouYouFramework
             {
                 m_CDNVersionDic = GetAssetBundleVersionList(args.Data, ref m_CDNVersion);
                 GameEntry.Log(LogCategory.Resource, "cdn资源包总数" + m_CDNVersionDic.Count);
-                foreach (var item in m_CDNVersionDic)
-                {
-                    GameEntry.Log(LogCategory.Resource,item.Value.AssetBundleName);
-                }
+                CheckVersionFileExistsInLocal();
             }
             else
             {
@@ -144,6 +160,94 @@ namespace YouYouFramework
         }
 
         #endregion
+
+        #region 可写区 persistentDataPath文件夹
+        /// <summary>
+        /// 可写区版本号
+        /// </summary>
+        private string m_LocalAssetsVersion;
+
+        /// <summary>
+        /// 可写区资源包信息
+        /// </summary>
+        private Dictionary<string, AssetBundleInfoEntity> m_LocalAssetsVersionDic;
+
+        /// <summary>
+        /// 检查可写区版本文件是否存在
+        /// </summary>
+        private void CheckVersionFileExistsInLocal()
+        {
+            GameEntry.Log(LogCategory.Resource, "CheckVersionFileExistsInLocal");
+
+            if (LocalAssetManager.GetVersionFileExists())
+            {
+                //可写区版本文件存在
+                //加载可写区资源包信息
+                InitLocalAssetBundleInfo();
+            }
+            else
+            {
+                //可写区版本文件不存在
+                //判断只读区版本文件是否存在
+                if (m_IsExistsStreamingAssetBundleInfo)
+                {
+                    //只读区版本文件存在
+                    //将只读区版本文件初始化到可写区
+                    InitVersionFileFormStreamingAssetsToLocal();
+                }
+                CheckVersionChange();
+            }
+        }
+
+        /// <summary>
+        /// 初始化可写区资源包信息
+        /// </summary>
+        private void InitLocalAssetBundleInfo()
+        {
+            GameEntry.Log(LogCategory.Resource, "InitLocalAssetBundleInfo");
+            m_LocalAssetsVersionDic = LocalAssetManager.GetAssetBundleVersionList(ref m_LocalAssetsVersion);
+            CheckVersionChange();
+        }
+
+        /// <summary>
+        /// 将只读区版本文件初始化到可写区
+        /// </summary>
+        private void InitVersionFileFormStreamingAssetsToLocal()
+        {
+            GameEntry.Log(LogCategory.Resource, "InitVersionFileFormStreamingAssetsToLocal");
+
+            m_LocalAssetsVersionDic = new Dictionary<string, AssetBundleInfoEntity>();
+            var enumerator = m_StreamingAssetsVersionDic.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                AssetBundleInfoEntity entity = enumerator.Current.Value;
+                m_LocalAssetsVersionDic[enumerator.Current.Key] = new AssetBundleInfoEntity()
+                {
+                    AssetBundleName = entity.AssetBundleName,
+                    MD5 = entity.MD5,
+                    Size = entity.Size,
+                    IsFirstData = entity.IsFirstData,
+                    IsEncrypt = entity.IsEncrypt
+                };
+            }
+
+            //保存版本文件
+            LocalAssetManager.SaveVersionFile(m_LocalAssetsVersionDic);
+
+            //保存版本号
+            m_LocalAssetsVersion = m_StreamingAssetsVersion;
+            LocalAssetManager.SetResourceVersion(m_LocalAssetsVersion);
+        }
+        #endregion
+
+        /// <summary>
+        /// 检查更新
+        /// </summary>
+        private void CheckVersionChange()
+        {
+            GameEntry.Log(LogCategory.Resource, "CheckVersionChange");
+        }
+
 
         public void Dispose()
         {

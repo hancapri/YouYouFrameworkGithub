@@ -31,7 +31,7 @@ namespace YouYouFramework
         /// <summary>
         /// 是否繁忙
         /// </summary>
-        public bool IsBusy{ get;private set;}
+        public bool IsBusy { get; private set; }
 
         /// <summary>
         /// 是否获取byte[]数据
@@ -52,7 +52,7 @@ namespace YouYouFramework
         /// <param name="callBack"></param>
         /// <param name="isPost"></param>
         /// <param name="json"></param>
-        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false,bool isGetData = false, Dictionary<string, object> dic = null)
+        public void SendData(string url, HttpSendDataCallBack callBack, bool isPost = false, bool isGetData = false, Dictionary<string, object> dic = null)
         {
             if (IsBusy) return;
 
@@ -96,9 +96,9 @@ namespace YouYouFramework
                 PostUrl(url, json);
             }
         }
-#endregion
+        #endregion
 
-#region GetUrl Get请求
+        #region GetUrl Get请求
         /// <summary>
         /// Get请求
         /// </summary>
@@ -108,9 +108,9 @@ namespace YouYouFramework
             UnityWebRequest data = UnityWebRequest.Get(url);
             GameEntry.Http.StartCoroutine(Request(data));
         }
-#endregion
+        #endregion
 
-#region PostUrl Post请求
+        #region PostUrl Post请求
         /// <summary>
         /// Post请求
         /// </summary>
@@ -127,9 +127,9 @@ namespace YouYouFramework
             UnityWebRequest data = UnityWebRequest.Post(url, form);
             GameEntry.Http.StartCoroutine(Request(data));
         }
-#endregion
+        #endregion
 
-#region Request 请求服务器
+        #region Request 请求服务器
         /// <summary>
         /// 请求服务器
         /// </summary>
@@ -137,7 +137,7 @@ namespace YouYouFramework
         /// <returns></returns>
         private IEnumerator Request(UnityWebRequest data)
         {
-            yield return data.Send();
+            yield return data.SendWebRequest();
 
             IsBusy = false;
             if (data.isHttpError || data.isNetworkError)
@@ -148,6 +148,9 @@ namespace YouYouFramework
                     m_CallBackArgs.Value = data.error;
                     if (!m_isGetData)
                     {
+#if DEBUG_LOG_PROTO
+                        Debug.Log("打印Http接收数据");
+#endif
                         GameEntry.Log(LogCategory.Proto, "<color=#00eaff>接收消息:</color><color=#00ff9c>" + data.url + "</color>");
                         GameEntry.Log(LogCategory.Proto, "<color=#c5e1dc>==>>" + JsonUtility.ToJson(m_CallBackArgs) + "</color>");
                     }
@@ -162,6 +165,9 @@ namespace YouYouFramework
                     m_CallBackArgs.Value = data.downloadHandler.text;
                     if (!m_isGetData)
                     {
+#if DEBUG_LOG_PROTO
+                        Debug.Log("打印Http接收数据");
+#endif
                         GameEntry.Log(LogCategory.Proto, "<color=#00eaff>接收消息:</color><color=#00ff9c>" + data.url + "</color>");
                         GameEntry.Log(LogCategory.Proto, "<color=#c5e1dc>==>>" + JsonUtility.ToJson(m_CallBackArgs) + "</color>");
                     }
@@ -169,15 +175,13 @@ namespace YouYouFramework
                     m_CallBack(m_CallBackArgs);
                 }
             }
-#if DEBUG_LOG_PROTO
-            Debug.Log("打印Http接收数据");
-#endif
+
             data.Dispose();
             data = null;
 
             //支持多个HttpRoutine，结束之后回池
-            GameEntry.Pool.EnqueueClassObject(this); 
+            GameEntry.Pool.EnqueueClassObject(this);
         }
-#endregion
+        #endregion
     }
 }

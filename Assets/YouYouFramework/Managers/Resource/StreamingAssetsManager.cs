@@ -43,7 +43,10 @@ namespace YouYouFramework
                 }
                 else
                 {
-                    Debug.Log(www.error);
+                    if (onComplete != null)
+                    {
+                        onComplete(null);
+                    }
                 }
             }
         }

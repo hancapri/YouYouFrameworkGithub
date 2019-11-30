@@ -10,6 +10,7 @@ using System;
 
 public class IOUtil
 {
+    #region GetFileText 读取文本文件
     /// <summary>
     /// 读取文本文件
     /// </summary>
@@ -30,6 +31,7 @@ public class IOUtil
         }
         return content;
     }
+    #endregion
 
     #region CreateTextFile 创建文本文件
     /// <summary>

@@ -18,7 +18,7 @@ namespace YouYouFramework
             //访问账号服务器部分，等数据库搭建起来，再测试，暂时当做通过验证
             GameEntry.Data.SysDataManager.CurrChannelConfig.ChannelId = 0;
             GameEntry.Data.SysDataManager.CurrChannelConfig.InnerVersion = 1001;
-            GameEntry.Data.SysDataManager.CurrChannelConfig.SourceUrl = "http://192.168.9.118:8083/";
+            GameEntry.Data.SysDataManager.CurrChannelConfig.SourceUrl = "http://192.168.0.108:8081/";
             GameEntry.Data.SysDataManager.CurrChannelConfig.SourceVersion = "1.0.7";
 
             Debug.Log(GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl);

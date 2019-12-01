@@ -836,7 +836,7 @@ public class AssetBundleWindow : EditorWindow
     /// <returns></returns>
     private AssetCategory GetAssetCategory(string filePath)
     {
-        AssetCategory category = AssetCategory.Audio;
+        AssetCategory category = AssetCategory.None;
 
         if (filePath.IndexOf("Audio") != -1)
         {

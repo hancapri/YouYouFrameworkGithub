@@ -5,6 +5,10 @@ using UnityEngine;
 public enum AssetCategory
 {
     /// <summary>
+    /// None
+    /// </summary>
+    None = 0,
+    /// <summary>
     /// ÉùÒô
     /// </summary>
     Audio,

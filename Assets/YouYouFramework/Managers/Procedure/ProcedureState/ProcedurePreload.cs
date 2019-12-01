@@ -13,6 +13,7 @@ namespace YouYouFramework
         public override void OnEnable()
         {
             base.OnEnable();
+            GameEntry.Log(LogCategory.Procedure, "OnEnable ProcedurePreload");
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadOneDataTableComplete,OnLoadOneDataTableComplete);
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadDataTableComplete, OnLoadDataTableComplete);
             GameEntry.DataTable.LoadDataTableAsync();

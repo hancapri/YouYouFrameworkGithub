@@ -246,6 +246,28 @@ namespace YouYouFramework
         private void CheckVersionChange()
         {
             GameEntry.Log(LogCategory.Resource, "CheckVersionChange");
+
+            if (LocalAssetManager.GetVersionFileExists())
+            {
+                //判断只读区资源版本号和CDN资源版本号
+                if (m_StreamingAssetsVersion.Equals(m_CDNVersion))
+                {
+                    GameEntry.Log(LogCategory.Resource, "只读区资源版本号和CDN资源版本号一致");
+                    //一致，直接进入预加载流程
+                    GameEntry.Procedure.ChangeState(ProcedureState.Preload);
+                }
+                else
+                {
+                    GameEntry.Log(LogCategory.Resource, "只读区版本号和CDN版本号不一致");
+                    //TODO: 不一致 开始检查更新
+
+                    //最后进入预加载流程
+                }
+            }
+            else
+            {
+                //TODO: 下载初始资源
+            }
         }
 
 

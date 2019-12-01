@@ -48,15 +48,15 @@ namespace YouYouFramework
         {
             string path = Application.persistentDataPath + "/" + filePath + ".lua";
             byte[] buffer = null;
-            using (FileStream fs = new FileStream(path, FileMode.Open))
-            {
-                buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-            }
+            //using (FileStream fs = new FileStream(path, FileMode.Open))
+            //{
+            //    buffer = new byte[fs.Length];
+            //    fs.Read(buffer, 0, buffer.Length);
+            //}
 
-            buffer = SecurityUtil.Xor(buffer);
+            //buffer = SecurityUtil.Xor(buffer);
 
-            buffer = System.Text.Encoding.UTF8.GetBytes(System.Text.Encoding.UTF8.GetString(buffer).Trim());
+            //buffer = System.Text.Encoding.UTF8.GetBytes(System.Text.Encoding.UTF8.GetString(buffer).Trim());
             return buffer;
         }
 
@@ -66,7 +66,7 @@ namespace YouYouFramework
         /// <param name="str"></param>
         public void DoString(string str)
         {
-            luaEnv.DoString(str);
+            //luaEnv.DoString(str);
         }
     }
 }

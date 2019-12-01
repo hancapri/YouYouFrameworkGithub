@@ -19,6 +19,8 @@ public class ConstDefine
     /// </summary>
     public const string ResourceVersion = "ResourceVersion";
 
+    public const string AssetInfoName = "AssetInfo.bytes";
+
 #if UNITY_EDITOR
     public const string LogOn_AccountID = "LogOn_AccountID";
 #else

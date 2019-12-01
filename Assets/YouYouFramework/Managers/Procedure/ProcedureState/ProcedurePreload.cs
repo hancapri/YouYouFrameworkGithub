@@ -17,6 +17,7 @@ namespace YouYouFramework
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadOneDataTableComplete,OnLoadOneDataTableComplete);
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadDataTableComplete, OnLoadDataTableComplete);
             GameEntry.DataTable.LoadDataTableAsync();
+            GameEntry.Resource.InitAssetInfo();
             
         }
 

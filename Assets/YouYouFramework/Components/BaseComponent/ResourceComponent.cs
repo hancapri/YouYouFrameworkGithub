@@ -18,12 +18,26 @@ namespace YouYouFramework
         /// <summary>
         /// 资源管理器
         /// </summary>
-        private ResourceManager m_ResourceManager;
+        public ResourceManager ResourceManager
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 资源加载管理器
+        /// </summary>
+        public ResourceLoaderManager ResourceLoaderManager
+        {
+            get;
+            private set;
+        }
 
         protected override void OnAwake()
         {
             base.OnAwake();
-            m_ResourceManager = new ResourceManager();
+            ResourceManager = new ResourceManager();
+            ResourceLoaderManager = new ResourceLoaderManager();
 #if DISABLE_ASSETBUNDLE
             LocalFilePath = Application.dataPath;
 #else
@@ -36,7 +50,7 @@ namespace YouYouFramework
         /// </summary>
         public void InitStreamingAssetsBundleInfo()
         {
-            m_ResourceManager.InitStreamingAssetsBundleInfo();
+            ResourceManager.InitStreamingAssetsBundleInfo();
         }
 
         /// <summary>
@@ -56,9 +70,18 @@ namespace YouYouFramework
             return buffer;
         }
 
+        /// <summary>
+        /// 初始化所以资源的信息
+        /// </summary>
+        public void InitAssetInfo()
+        {
+            ResourceLoaderManager.InitAssetInfo();
+        }
+
         public override void Shutdown()
         {
-
+            ResourceManager.Dispose();
+            ResourceLoaderManager.Dispose();
         }
     }
 }

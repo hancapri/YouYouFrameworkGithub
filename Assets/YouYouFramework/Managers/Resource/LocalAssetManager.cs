@@ -27,6 +27,16 @@ namespace YouYouFramework
         }
 
         /// <summary>
+        /// 获取本地文件字节数组
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public byte[] GetFileBuffer(string path)
+        {
+            return IOUtil.GetFileBuffer(string.Format("{0}/{1}",Application.persistentDataPath, path));
+        }
+
+        /// <summary>
         /// 保存资源版本号
         /// </summary>
         /// <param name="version"></param>

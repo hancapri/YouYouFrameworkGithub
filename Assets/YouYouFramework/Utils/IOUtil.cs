@@ -121,6 +121,10 @@ public class IOUtil
     /// <returns></returns>
     public static byte[] GetFileBuffer(string path)
     {
+        if (!File.Exists(path))
+        {
+            return null;
+        }
         byte[] buffer = null;
 
         using (FileStream fs = new FileStream(path, FileMode.Open))

@@ -36,6 +36,10 @@ namespace YouYouFramework
     public enum AssetCategory
     {
         /// <summary>
+        /// None
+        /// </summary>
+        None = 0,
+        /// <summary>
         /// …˘“Ù
         /// </summary>
         Audio,

@@ -270,6 +270,18 @@ namespace YouYouFramework
             }
         }
 
+        /// <summary>
+        /// 获取资源包信息（这个方法一定要能返回资源信息）
+        /// </summary>
+        /// <param name="assetBundlePath"></param>
+        /// <returns></returns>
+        public AssetBundleInfoEntity GetAssetBundleInfo(string assetBundlePath)
+        {
+            AssetBundleInfoEntity entity = null;
+            m_CDNVersionDic.TryGetValue(assetBundlePath, out entity);
+            return entity;
+        }
+
 
         public void Dispose()
         {

@@ -54,6 +54,7 @@ namespace YouYouFramework
         {
             SetClassObjectResideCount<HttpRoutine>(3);
             SetClassObjectResideCount<Dictionary<string,object>>(3);
+            SetClassObjectResideCount<AssetBundleLoaderRoutine>(10);
         }
 
         /// <summary>

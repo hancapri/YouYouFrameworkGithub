@@ -52,11 +52,24 @@ namespace YouYouFramework
         }
 
         /// <summary>
+        /// 表格ab包
+        /// </summary>
+        public AssetBundle m_DataTableBundle;
+        /// <summary>
         /// 异步加载表格
         /// </summary>
         public void LoadDataTableAsync()
         {
+#if DISABLE_ASSETBUNDLE
             Task.Factory.StartNew(LoadDataTable);
+#else
+            GameEntry.Resource.ResourceLoaderManager.LoadAssetBundle("download/datatable.assetbundle",onComplete:(AssetBundle assetBundle)=>
+            {
+                m_DataTableBundle = assetBundle;
+                Debug.LogError("LoadDataTableAsync 拿到了bundle");
+
+            });
+#endif
         }
 
         public void LoadDataTable()

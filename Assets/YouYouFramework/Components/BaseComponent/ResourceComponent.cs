@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace YouYouFramework
     /// <summary>
     /// 资源组件
     /// </summary>
-    public class ResourceComponent : YouYouBaseComponent
+    public class ResourceComponent : YouYouBaseComponent, IUpdateComponent
     {
         /// <summary>
         /// 本地文件路径
@@ -22,7 +23,7 @@ namespace YouYouFramework
         {
             get;
             private set;
-        }
+        }      
 
         /// <summary>
         /// 资源加载管理器
@@ -36,6 +37,8 @@ namespace YouYouFramework
         protected override void OnAwake()
         {
             base.OnAwake();
+            GameEntry.RegisterUpdateComponent(this);
+
             ResourceManager = new ResourceManager();
             ResourceLoaderManager = new ResourceLoaderManager();
 #if DISABLE_ASSETBUNDLE
@@ -82,6 +85,13 @@ namespace YouYouFramework
         {
             ResourceManager.Dispose();
             ResourceLoaderManager.Dispose();
+
+            GameEntry.RemoveUpdateComponent(this);
+        }
+
+        public void OnUpdate()
+        {
+            ResourceLoaderManager.OnUpdate();
         }
     }
 }

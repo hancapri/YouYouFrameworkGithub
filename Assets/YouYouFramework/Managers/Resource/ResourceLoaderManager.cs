@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,20 +6,25 @@ using UnityEngine;
 namespace YouYouFramework
 {
     /// <summary>
-    /// ×ÊÔ´¼ÓÔØ¹ÜÀíÆ÷
+    /// èµ„æºåŠ è½½ç®¡ç†å™¨
     /// </summary>
     public class ResourceLoaderManager : ManagerBase, IDisposable
     {
         /// <summary>
-        /// ×ÊÔ´ĞÅÏ¢×Öµä
+        /// èµ„æºä¿¡æ¯å­—å…¸
         /// </summary>
         private Dictionary<AssetCategory, Dictionary<string, AssetEntity>> m_AssetInfoDic;
+
+        /// <summary>
+        /// èµ„æºåŒ…åŠ è½½å™¨é“¾è¡¨
+        /// </summary>
+        private LinkedList<AssetBundleLoaderRoutine> m_AssetBundleLoaderList;
 
         public ResourceLoaderManager()
         {
             m_AssetInfoDic = new Dictionary<AssetCategory, Dictionary<string, AssetEntity>>();
-
-            //ÓÎÏ·Ò»¿ªÊ¼Ê±³õÊ¼»¯·ÖÀà×Öµä
+            m_AssetBundleLoaderList = new LinkedList<AssetBundleLoaderRoutine>();
+            //æ¸¸æˆä¸€å¼€å§‹æ—¶åˆå§‹åŒ–åˆ†ç±»å­—å…¸
             var enumerator = Enum.GetValues(typeof(AssetCategory)).GetEnumerator();
             while (enumerator.MoveNext())
             {
@@ -29,19 +34,19 @@ namespace YouYouFramework
         }
 
         /// <summary>
-        /// ³õÊ¼»¯×ÊÔ´ĞÅÏ¢
+        /// åˆå§‹åŒ–èµ„æºä¿¡æ¯
         /// </summary>
         public void InitAssetInfo()
         {
             byte[] buffer = GameEntry.Resource.ResourceManager.LocalAssetManager.GetFileBuffer(ConstDefine.AssetInfoName);
             if (buffer == null)
             {
-                //Èç¹û¿ÉĞ´ÇøÃ»ÓĞ ÄÇÃ´¾Í´ÓÖ»¶ÁÇø»ñÈ¡
+                //å¦‚æœå¯å†™åŒºæ²¡æœ‰ é‚£ä¹ˆå°±ä»åªè¯»åŒºè·å–
                 GameEntry.Resource.ResourceManager.StreamingAssetsManager.ReadAssetBundle(ConstDefine.AssetInfoName, (byte[] buff) =>
                  {
                      if (buff == null)
                      {
-                         //Èç¹ûÖ»¶ÁÇøÒ²Ã»ÓĞ£¬´ÓCDN¶ÁÈ¡
+                         //å¦‚æœåªè¯»åŒºä¹Ÿæ²¡æœ‰ï¼Œä»CDNè¯»å–
                          string url = string.Format("{0}{1}", GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl, ConstDefine.AssetInfoName);
                          GameEntry.Http.SendData(url, OnLoadAssetInfoFromCDN, isGetData: true);
                      }
@@ -59,7 +64,7 @@ namespace YouYouFramework
         }
 
         /// <summary>
-        /// ´ÓCDN¼ÓÔØ×ÊÔ´ĞÅÏ¢
+        /// ä»CDNåŠ è½½èµ„æºä¿¡æ¯
         /// </summary>
         /// <param name="args"></param>
         private void OnLoadAssetInfoFromCDN(HttpCallBackArgs args)
@@ -74,8 +79,9 @@ namespace YouYouFramework
             }
         }
 
+        #region InitAssetInfo åˆå§‹åŒ–èµ„æºä¿¡æ¯
         /// <summary>
-        /// ³õÊ¼»¯×ÊÔ´ĞÅÏ¢£¬¸³Öµ×Öµä
+        /// åˆå§‹åŒ–èµ„æºä¿¡æ¯ï¼Œèµ‹å€¼å­—å…¸
         /// </summary>
         /// <param name="buffer"></param>
         private void InitAssetInfo(byte[] buffer)
@@ -105,6 +111,56 @@ namespace YouYouFramework
                 }
 
                 m_AssetInfoDic[entity.Category][entity.AssetFullName] = entity;
+            }
+        }
+        #endregion
+
+
+        /// <summary>
+        /// åŠ è½½abåŒ…
+        /// </summary>
+        /// <param name="assetBundlePath"></param>
+        /// <param name="onUpdate"></param>
+        /// <param name="onComplete"></param>
+        public void LoadAssetBundle(string assetBundlePath, Action<float> onUpdate = null, Action<AssetBundle> onComplete = null)
+        {
+            AssetBundleLoaderRoutine routine = GameEntry.Pool.DequeueClassObject<AssetBundleLoaderRoutine>();
+            if (routine == null)
+            {
+                routine = new AssetBundleLoaderRoutine();
+            }
+            Debug.LogError("èµ„æºåŒ…åŠ è½½å–æ± ");
+
+            m_AssetBundleLoaderList.AddLast(routine);
+
+            routine.LoadAssetBundle(assetBundlePath);
+            routine.OnAssetBundleCreateUpdate = (float progress) =>
+            {
+                if (onUpdate != null)
+                {
+                    onUpdate(progress);
+                }
+            };
+
+            routine.OnLoadAssetBundleComplete = (AssetBundle assetBundle) =>
+            {
+                if (onComplete != null)
+                {
+                    onComplete(assetBundle);
+                }
+
+                //ç»“æŸå›æ± 
+                m_AssetBundleLoaderList.Remove(routine);
+                GameEntry.Pool.EnqueueClassObject(routine);
+                Debug.LogError("èµ„æºåŒ…åŠ è½½å›æ± ");
+            };
+        }
+
+        public void OnUpdate()
+        {
+            for (LinkedListNode<AssetBundleLoaderRoutine> curr = m_AssetBundleLoaderList.First; curr != null; curr = curr.Next)
+            {
+                curr.Value.OnUpdate();
             }
         }
 

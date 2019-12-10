@@ -40,19 +40,16 @@ namespace YouYouFramework
         /// </summary>
         public void LoadData()
         {
+            GameEntry.DataTable.DataTableManager.TotalTableCount++;
             //1.获取数据表的buffer
-            byte[] buffer = GameEntry.Resource.GetFileBuffer(string.Format("{0}/download/DataTable/{1}.bytes",GameEntry.Resource.LocalFilePath, DataTableName));
-
-            //2.加载数据表数据
-            using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
-            {
-                LoadList(ms);
-            }
-
-            //加载完成单个表，发布事件
-            VarString dataName = VarString.Alloc(DataTableName);
-            GameEntry.Event.CommonEvent.Dispatch(SysEventId.LoadOneDataTableComplete, dataName);
-            dataName.Release();
+            GameEntry.DataTable.DataTableManager.GetDataTableBuffer(DataTableName, (byte[] buffer) =>
+             {
+                 using (MMO_MemoryStream ms = new MMO_MemoryStream(buffer))
+                 {
+                     LoadList(ms);
+                 }
+                 GameEntry.Event.CommonEvent.Dispatch(SysEventId.LoadOneDataTableComplete, DataTableName);
+             });
         }
         #endregion
 

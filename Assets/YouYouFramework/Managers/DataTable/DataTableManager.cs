@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -28,6 +29,16 @@ namespace YouYouFramework
         /// </summary>
         public GameLevelDBModel GameLevelDBModel { get; private set; }
 
+        /// <summary>
+        /// 总共需要加载的表格数量
+        /// </summary>
+        public int TotalTableCount = 0;
+
+        /// <summary>
+        /// 当前已加载的表格数量
+        /// </summary>
+        public int CurrLoadTableCount = 0;
+
         public DataTableManager()
         {
             InitDBModel();
@@ -55,6 +66,7 @@ namespace YouYouFramework
         /// 表格ab包
         /// </summary>
         public AssetBundle m_DataTableBundle;
+        
         /// <summary>
         /// 异步加载表格
         /// </summary>
@@ -66,8 +78,7 @@ namespace YouYouFramework
             GameEntry.Resource.ResourceLoaderManager.LoadAssetBundle("download/datatable.assetbundle",onComplete:(AssetBundle assetBundle)=>
             {
                 m_DataTableBundle = assetBundle;
-                Debug.LogError("LoadDataTableAsync 拿到了bundle");
-
+                LoadDataTable();
             });
 #endif
         }
@@ -85,9 +96,31 @@ namespace YouYouFramework
             Sys_StorySoundDBModel.LoadData();
             Sys_UIFormDBModel.LoadData();
             LocalizationDBModel.LoadData();
+        }
 
-            //所有表加载完毕
-            GameEntry.Event.CommonEvent.Dispatch(SysEventId.LoadDataTableComplete);
+        /// <summary>
+        /// 获取表格的数组
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="onComplete"></param>
+        public void GetDataTableBuffer(string tableName, Action<byte[]> onComplete)
+        {
+#if DISABLE_ASSETBUNDLE
+            byte[] buffer = GameEntry.Resource.GetFileBuffer(string.Format("{0}/download/DataTable/{1}.bytes", GameEntry.Resource.LocalFilePath, tableName));
+            if (onComplete != null)
+            {
+                onComplete(buffer);
+            }
+#else
+            GameEntry.Resource.ResourceLoaderManager.LoadAsset(GameEntry.Resource.GetLastPathName(tableName),m_DataTableBundle,onComplete:(UnityEngine.Object obj)=>
+            {
+                TextAsset asset = obj as TextAsset;
+                if (onComplete != null)
+                {
+                    onComplete(asset.bytes);
+                }
+            });
+#endif
         }
 
         public void Clear()

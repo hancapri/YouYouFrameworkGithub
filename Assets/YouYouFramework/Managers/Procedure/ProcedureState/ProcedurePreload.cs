@@ -35,18 +35,22 @@ namespace YouYouFramework
 
         private void OnLoadOneDataTableComplete(object param)
         {
-            string name = ((VarString)param).Value;
+            string name = (string)param;
             Debug.Log("加载单一表完毕："+ name);
+            GameEntry.DataTable.DataTableManager.CurrLoadTableCount++;
+            if (GameEntry.DataTable.DataTableManager.CurrLoadTableCount == GameEntry.DataTable.DataTableManager.TotalTableCount)
+            {
+                GameEntry.Event.CommonEvent.Dispatch(SysEventId.LoadDataTableComplete);
+            }
         }
 
         private void OnLoadDataTableComplete(object param)
         {
             Debug.Log("加载所有表完毕");
-            List<Sys_UIFormEntity> lst = GameEntry.DataTable.DataTableManager.Sys_UIFormDBModel.GetList();
+            List<ChapterEntity> lst = GameEntry.DataTable.DataTableManager.ChapterDBModel.GetList();
             foreach (var item in lst)
             {
-                Debug.Log(item.Desc);
-                Debug.Log(item.AssetPath_Chinese);
+                Debug.Log(item.ChapterName);
             }
         }
     }

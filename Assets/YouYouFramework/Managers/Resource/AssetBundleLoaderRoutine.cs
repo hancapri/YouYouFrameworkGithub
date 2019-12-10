@@ -107,7 +107,7 @@ namespace YouYouFramework
                     }
                     else
                     {
-                        GameEntry.Log(LogCategory.Resource, string.Format("资源包=>{0} 加载失败", m_CurrAssetBundleInfo.AssetBundleName));
+                        GameEntry.LogError("资源包=>{0} 加载失败", m_CurrAssetBundleInfo.AssetBundleName);
                         Reset();
 
                         if (OnLoadAssetBundleComplete != null)

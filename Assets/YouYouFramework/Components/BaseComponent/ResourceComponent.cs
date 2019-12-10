@@ -81,17 +81,31 @@ namespace YouYouFramework
             ResourceLoaderManager.InitAssetInfo();
         }
 
+        /// <summary>
+        /// 获取路径的最后名称
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public string GetLastPathName(string path)
+        {
+            if (path.IndexOf("/") == -1)
+            {
+                return path;
+            }
+            return path.Substring(path.LastIndexOf("/")+1);
+        }
+
+        public void OnUpdate()
+        {
+            ResourceLoaderManager.OnUpdate();
+        }
+
         public override void Shutdown()
         {
             ResourceManager.Dispose();
             ResourceLoaderManager.Dispose();
 
             GameEntry.RemoveUpdateComponent(this);
-        }
-
-        public void OnUpdate()
-        {
-            ResourceLoaderManager.OnUpdate();
         }
     }
 }

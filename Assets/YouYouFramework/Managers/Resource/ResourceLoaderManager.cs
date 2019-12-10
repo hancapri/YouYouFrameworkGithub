@@ -20,10 +20,16 @@ namespace YouYouFramework
         /// </summary>
         private LinkedList<AssetBundleLoaderRoutine> m_AssetBundleLoaderList;
 
+        /// <summary>
+        /// 资源加载器链表
+        /// </summary>
+        private LinkedList<AssetLoaderRoutine> m_AssetLoaderList;
+
         public ResourceLoaderManager()
         {
             m_AssetInfoDic = new Dictionary<AssetCategory, Dictionary<string, AssetEntity>>();
             m_AssetBundleLoaderList = new LinkedList<AssetBundleLoaderRoutine>();
+            m_AssetLoaderList = new LinkedList<AssetLoaderRoutine>();
             //游戏一开始时初始化分类字典
             var enumerator = Enum.GetValues(typeof(AssetCategory)).GetEnumerator();
             while (enumerator.MoveNext())
@@ -129,7 +135,6 @@ namespace YouYouFramework
             {
                 routine = new AssetBundleLoaderRoutine();
             }
-            Debug.LogError("资源包加载取池");
 
             m_AssetBundleLoaderList.AddLast(routine);
 
@@ -152,13 +157,56 @@ namespace YouYouFramework
                 //结束回池
                 m_AssetBundleLoaderList.Remove(routine);
                 GameEntry.Pool.EnqueueClassObject(routine);
-                Debug.LogError("资源包加载回池");
+            };
+        }
+
+        /// <summary>
+        /// 加载资源
+        /// </summary>
+        /// <param name="assetName"></param>
+        /// <param name="assetBundle"></param>
+        /// <param name="onUpdate"></param>
+        /// <param name="onComplete"></param>
+        public void LoadAsset(string assetName, AssetBundle assetBundle, Action<float> onUpdate = null, Action<UnityEngine.Object> onComplete = null)
+        {
+            AssetLoaderRoutine routine = GameEntry.Pool.DequeueClassObject<AssetLoaderRoutine>();
+            if (routine == null)
+            {
+                routine = new AssetLoaderRoutine();
+            }
+
+            //加入链表
+            m_AssetLoaderList.AddLast(routine);
+
+            routine.LoadAsset(assetName, assetBundle);
+            routine.OnAssetUpdate = (float progress) =>
+            {
+                if (onUpdate != null)
+                {
+                    onUpdate(progress);
+                }
+            };
+            routine.OnLoadAssetComplete = (UnityEngine.Object obj) =>
+            {
+                if (onComplete != null)
+                {
+                    onComplete(obj);
+                }
+
+                //结束循环 回池
+                m_AssetLoaderList.Remove(routine);
+                GameEntry.Pool.EnqueueClassObject(routine);
             };
         }
 
         public void OnUpdate()
         {
             for (LinkedListNode<AssetBundleLoaderRoutine> curr = m_AssetBundleLoaderList.First; curr != null; curr = curr.Next)
+            {
+                curr.Value.OnUpdate();
+            }
+
+            for (LinkedListNode<AssetLoaderRoutine> curr = m_AssetLoaderList.First; curr != null; curr = curr.Next)
             {
                 curr.Value.OnUpdate();
             }

@@ -326,5 +326,12 @@ namespace YouYouFramework
                     break;
             }
         }
+
+        public static void LogError(string message, params object[] args)
+        {
+#if DEBUG_LOG_ERROR
+            Debug.LogError(args.Length == 0?message:string.Format(message,args));
+#endif
+        }
     }
 }

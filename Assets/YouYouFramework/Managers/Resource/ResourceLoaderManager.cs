@@ -64,7 +64,6 @@ namespace YouYouFramework
             }
             else
             {
-                Debug.Log(3);
                 InitAssetInfo(buffer);
             }
         }

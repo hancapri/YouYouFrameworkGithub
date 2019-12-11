@@ -10,11 +10,18 @@ namespace YouYouFramework
     /// </summary>
     public class PoolManager : ManagerBase, IDisposable
     {
+        /// <summary>
+        /// 类对象池
+        /// </summary>
         public ClassObjectPool ClassObjectPool
         {
             get;
             private set;
         }
+
+        /// <summary>
+        /// 游戏问题对象池
+        /// </summary>
         public GameObjectPool GameObjectPool
         {
             get;

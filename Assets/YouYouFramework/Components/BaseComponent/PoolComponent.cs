@@ -15,6 +15,8 @@ namespace YouYouFramework
         /// </summary>
         public int ClearInterval = 30;
 
+        public int ReleaseResourceInterval = 60;
+
         private float m_NextClearTime;
 
         public PoolManager PoolManager

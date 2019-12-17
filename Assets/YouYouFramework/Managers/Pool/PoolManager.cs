@@ -27,10 +27,21 @@ namespace YouYouFramework
             get;
             private set;
         }
+
+        /// <summary>
+        /// 资源池
+        /// </summary>
+        public ResourcePool AssetBundlePool
+        {
+            get;
+            private set;
+        }
+
         public PoolManager()
         {
             ClassObjectPool = new ClassObjectPool();
             GameObjectPool = new GameObjectPool();
+            AssetBundlePool = new ResourcePool("AssetBundlePool");
         }
 
         /// <summary>
@@ -41,9 +52,18 @@ namespace YouYouFramework
             ClassObjectPool.ClearPool();
         }
 
+        /// <summary>
+        /// 释放资源包池
+        /// </summary>
+        public void ReleaseAssetBundlePool()
+        {
+            AssetBundlePool.Release();
+        }
+
         public void Dispose()
         {
             ClassObjectPool.Dispose();
+            GameObjectPool.Dispose();
         }
     }
 }

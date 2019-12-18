@@ -68,6 +68,7 @@ namespace YouYouFramework
         {
             StreamingAssetsManager = new StreamingAssetsManager();
             LocalAssetManager = new LocalAssetManager();
+            m_StreamingAssetsVersionDic = new Dictionary<string, AssetBundleInfoEntity>();
         }
 
         #region 只读区 StreamingAssets文件夹

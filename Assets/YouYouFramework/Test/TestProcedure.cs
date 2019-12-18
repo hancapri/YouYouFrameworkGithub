@@ -26,9 +26,9 @@ public class TestProcedure : MonoBehaviour {
             GameEntry.Log(LogCategory.Procedure, "当前的流程 = " + GameEntry.Procedure.CurrProcedure);
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            GameEntry.Procedure.ChangeState(ProcedureState.Preload);
+            GameEntry.DataTable.LoadDataTableAsync();
         }
     }
 

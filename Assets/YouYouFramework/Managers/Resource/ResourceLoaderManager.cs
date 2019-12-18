@@ -129,6 +129,21 @@ namespace YouYouFramework
         /// <param name="onComplete"></param>
         public void LoadAssetBundle(string assetBundlePath, Action<float> onUpdate = null, Action<AssetBundle> onComplete = null)
         {
+            //1.判断资源是否在资源池中
+            ResourceEntity assetBundleEntity = GameEntry.Pool.PoolManager.AssetBundlePool.Spawn(assetBundlePath);
+            if (assetBundleEntity != null)
+            {
+                //说明ab包在资源池中存在
+                AssetBundle assetbundle = assetBundleEntity.Target as AssetBundle;
+                Debug.LogError("从资源池中加载AssetBundle");
+                if (onComplete != null)
+                {
+                    onComplete(assetbundle);
+                }
+                return;
+            }
+
+            //2.没有再加载
             AssetBundleLoaderRoutine routine = GameEntry.Pool.DequeueClassObject<AssetBundleLoaderRoutine>();
             if (routine == null)
             {
@@ -148,6 +163,16 @@ namespace YouYouFramework
 
             routine.OnLoadAssetBundleComplete = (AssetBundle assetBundle) =>
             {
+                //将ab包注册进资源池
+                assetBundleEntity = GameEntry.Pool.DequeueClassObject<ResourceEntity>();
+                assetBundleEntity.ResourceName = assetBundlePath;
+                assetBundleEntity.IsAssetBundle = true;
+                assetBundleEntity.Target = assetBundle;
+                GameEntry.Pool.PoolManager.AssetBundlePool.Register(assetBundleEntity);
+
+                Debug.LogError("把加载的ab包加入资源池");
+
+
                 if (onComplete != null)
                 {
                     onComplete(assetBundle);

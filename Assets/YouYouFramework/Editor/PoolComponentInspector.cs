@@ -14,6 +14,9 @@ namespace YouYouFramework
         //关联PoolComponent组件上的游戏对象池集合
         private SerializedProperty m_GameObjectPoolGroups;
 
+        //关联PoolComponent组件上的ReleaseResourceInterval（释放资源池的时间间隔）字段的值
+        private SerializedProperty ReleaseResourceInterval;
+
         public override void OnInspectorGUI()
         {
             //base.OnInspectorGUI();
@@ -79,6 +82,40 @@ namespace YouYouFramework
 
             GUILayout.Space(10);
             EditorGUILayout.PropertyField(m_GameObjectPoolGroups, true);
+
+            //绘制滑动条 释放资源池的间隔
+            int releaseAssetBundleInterval = (int)EditorGUILayout.Slider("释放资源池的间隔", ReleaseResourceInterval.intValue, 10, 1800);
+            if (releaseAssetBundleInterval != ReleaseResourceInterval.intValue)
+            {
+                component.ReleaseResourceInterval = releaseAssetBundleInterval;
+            }
+            else
+            {
+                ReleaseResourceInterval.intValue = releaseAssetBundleInterval;
+            }
+
+            //======================资源包统计开始========================
+            GUILayout.Space(10);
+            GUILayout.BeginVertical("box");
+            GUILayout.BeginHorizontal("box");
+            GUILayout.Label("资源包");
+            GUILayout.Label("数量", GUILayout.Width(60));
+            GUILayout.EndHorizontal();
+
+            if (component != null && component.PoolManager != null)
+            {
+                foreach (var item in component.PoolManager.AssetBundlePool.InspectorDic)
+                {
+                    GUILayout.BeginHorizontal("box");
+                    GUILayout.Label(item.Key);
+                    GUILayout.Label(item.Value.ToString(), GUILayout.Width(50));
+
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndVertical();
+            //======================资源包统计结束========================
+
             serializedObject.ApplyModifiedProperties();
             //重绘
             Repaint();
@@ -89,6 +126,8 @@ namespace YouYouFramework
             //建立字段关联
             m_ClearInterval = serializedObject.FindProperty("ClearInterval");
             m_GameObjectPoolGroups = serializedObject.FindProperty("m_GameObjectPoolGroups");
+            ReleaseResourceInterval = serializedObject.FindProperty("ReleaseResourceInterval");
+
             serializedObject.ApplyModifiedProperties();
         }
     }

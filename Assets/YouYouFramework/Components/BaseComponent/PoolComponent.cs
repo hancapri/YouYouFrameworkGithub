@@ -15,9 +15,14 @@ namespace YouYouFramework
         /// </summary>
         public int ClearInterval = 30;
 
+        private float m_NextClearTime;
+
+        /// <summary>
+        /// 释放资源池的时间间隔
+        /// </summary>
         public int ReleaseResourceInterval = 60;
 
-        private float m_NextClearTime;
+        private float m_ReleaseResourceNextRunTime = 0f;
 
         public PoolManager PoolManager
         {
@@ -39,6 +44,7 @@ namespace YouYouFramework
 
             GameEntry.RegisterUpdateComponent(this);
             m_NextClearTime = Time.time;
+            m_ReleaseResourceNextRunTime = Time.time;
 
             InitGameObjectPool();
         }
@@ -189,6 +195,15 @@ namespace YouYouFramework
                 //类对象池该释放了
                 m_NextClearTime = Time.time;
                 PoolManager.ClearClassObjectPool();
+                GameEntry.Log(LogCategory.Normal,"释放类对象池");
+            }
+
+            if (Time.time > m_ReleaseResourceNextRunTime + ReleaseResourceInterval)
+            {
+                //资源池该释放了
+                m_ReleaseResourceNextRunTime = Time.time;
+                PoolManager.ReleaseAssetBundlePool();
+                GameEntry.Log(LogCategory.Normal, "释放资源对象池");
             }
         }
 

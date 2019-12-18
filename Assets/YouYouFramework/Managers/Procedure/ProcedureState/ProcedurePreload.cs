@@ -16,9 +16,10 @@ namespace YouYouFramework
             GameEntry.Log(LogCategory.Procedure, "OnEnable ProcedurePreload");
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadOneDataTableComplete,OnLoadOneDataTableComplete);
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadDataTableComplete, OnLoadDataTableComplete);
-            GameEntry.DataTable.LoadDataTableAsync();
+            GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadLuaDataTableComplete, OnLoadLuaDataTableComplete);
+
             GameEntry.Resource.InitAssetInfo();
-            
+            GameEntry.DataTable.LoadDataTableAsync(); 
         }
 
         public override void OnUpdate()
@@ -31,6 +32,7 @@ namespace YouYouFramework
             base.OnLeave();
             GameEntry.Event.CommonEvent.RemoveEventListener(SysEventId.LoadOneDataTableComplete, OnLoadOneDataTableComplete);
             GameEntry.Event.CommonEvent.RemoveEventListener(SysEventId.LoadDataTableComplete, OnLoadDataTableComplete);
+            GameEntry.Event.CommonEvent.RemoveEventListener(SysEventId.LoadLuaDataTableComplete, OnLoadLuaDataTableComplete);
         }
 
         private void OnLoadOneDataTableComplete(object param)
@@ -45,12 +47,15 @@ namespace YouYouFramework
 
         private void OnLoadDataTableComplete(object param)
         {
-            Debug.Log("加载所有表完毕");
-            List<ChapterEntity> lst = GameEntry.DataTable.DataTableManager.ChapterDBModel.GetList();
-            foreach (var item in lst)
-            {
-                Debug.Log(item.ChapterName);
-            }
+            GameEntry.Log(LogCategory.Normal, "加载c#表格完毕");
+
+            //执行Lua初始化
+            GameEntry.Lua.Init();
+        }
+
+        private void OnLoadLuaDataTableComplete(object param)
+        {
+            GameEntry.Log(LogCategory.Normal, "加载Lua表格完毕");
         }
     }
 }

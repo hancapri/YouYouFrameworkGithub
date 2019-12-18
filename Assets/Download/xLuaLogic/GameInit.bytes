@@ -1,4 +1,6 @@
 ﻿print('启动GameInit')
+require "Common/Define"
+require "Common/SysEventId"
 
 GameInit = {};
 local this = GameInit;
@@ -37,4 +39,24 @@ function GameInit.InitProto()
 	require('DataNode/Proto/ProtoCodeDef');
 	require('DataNode/ProtoHandler/SocketProtoListenerForLua');
 	SocketProtoListenerForLua.AddProtoListener();
+end
+
+local m_TotalTableCount = 0		--总共需要加载的表格数量
+local m_CurrLoadTableCount = 0	--当前加载的表格数量
+
+function GameInit.AddTotalLoadCount()
+	m_TotalTableCount = m_DataTableBundle + 1
+end
+
+function GameInit.LoadOneTableComplete()
+	m_CurrLoadTableCount = m_CurrLoadTableCount + 1
+	if m_TotalTableCount == m_CurrLoadTableCount then
+		CS.YouYouFramework.GameEntity.Event.CommonEvent:Dispatch(SysEventId.LoadLuaDataTableComplete)
+		local rows = ChapterDBModel.GetList()
+		for i = 1, #rows do
+			local entity = rows[i]
+			print(entity.Id)
+			print(entity.ChapterName)
+		end
+	end
 end

@@ -484,11 +484,15 @@ namespace ExcelTool
             sbr.AppendFormat("local {0}Table = {{ }}; --定义表格\r\n", fileName.ToLower());
             sbr.Append("\r\n");
             sbr.AppendFormat("function {0}DBModel.LoadList()\r\n", fileName);
-            sbr.AppendFormat("    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable(\"{0}\");\r\n", fileName);
+            sbr.Append("    GameInit.AddTotalLoadTableCount();\r\n");
+            sbr.AppendFormat("    CS.YouYouFramework.GameEntry.Lua:LoadDataTable(\"{0}\", this.LoadFormMS);\r\n", fileName);
+            sbr.Append("end\r\n");
+            sbr.Append("\r\n");
+            sbr.AppendFormat("function {0}DBModel.LoadFormMS(ms)\r\n", fileName);
             sbr.Append("    local rows = ms:ReadInt();\r\n");
             sbr.Append("    ms:ReadInt();\r\n");
             sbr.Append("\r\n");
-            sbr.Append("    for i = 1, rows, 1 do\r\n");
+            sbr.Append("    for i = 0, rows, 1 do\r\n");
             sbr.AppendFormat("        {0}Table[#{0}Table + 1] = {1}Entity.New(\r\n", fileName.ToLower(), fileName);
 
             string str = "";
@@ -507,7 +511,7 @@ namespace ExcelTool
             sbr.AppendFormat("{0}\r\n", str);
             sbr.Append("        );\r\n");
             sbr.Append("    end\r\n");
-            sbr.Append("\r\n");
+            sbr.Append("    GameInit.LoadOneTableComplete();\r\n");
             sbr.Append("end\r\n");
             sbr.Append("\r\n");
             sbr.AppendFormat("function {0}DBModel.GetList()\r\n", fileName);
@@ -708,5 +712,13 @@ namespace ExcelTool
             }
         }
         #endregion
+
+        /// <summary>
+        /// 创建UIFormId
+        /// </summary>
+        private static void CreateUIFormId()
+        {
+
+        }
     }
 }

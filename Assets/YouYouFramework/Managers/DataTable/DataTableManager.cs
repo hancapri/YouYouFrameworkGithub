@@ -75,7 +75,7 @@ namespace YouYouFramework
 #if DISABLE_ASSETBUNDLE
             Task.Factory.StartNew(LoadDataTable);
 #else
-            GameEntry.Resource.ResourceLoaderManager.LoadAssetBundle("download/datatable.assetbundle",onComplete:(AssetBundle assetBundle)=>
+            GameEntry.Resource.ResourceLoaderManager.LoadAssetBundle(ConstDefine.DataTableAssetBundlePath, onComplete:(AssetBundle assetBundle)=>
             {
                 m_DataTableBundle = assetBundle;
                 LoadDataTable();
@@ -103,7 +103,7 @@ namespace YouYouFramework
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="onComplete"></param>
-        public void GetDataTableBuffer(string tableName, Action<byte[]> onComplete)
+        public void GetDataTableBuffer(string tableName, BaseAction<byte[]> onComplete)
         {
 #if DISABLE_ASSETBUNDLE
             byte[] buffer = GameEntry.Resource.GetFileBuffer(string.Format("{0}/download/DataTable/{1}.bytes", GameEntry.Resource.LocalFilePath, tableName));

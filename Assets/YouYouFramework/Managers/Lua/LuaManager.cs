@@ -32,11 +32,31 @@ namespace YouYouFramework
 #if DISABLE_ASSETBUNDLE && UNITY_EDITOR
             //2.设置xLua的脚本路径
             luaEnv.DoString(string.Format("package.path = '{0}/?.bytes'", Application.dataPath + "/Download/xLuaLogic/"));
-#else
-        luaEnv.AddLoader(MyLoader);
-        //luaEnv.DoString(string.Format("package.path = '{0}/?.bytes'", Application.persistentDataPath));
-#endif
             DoString("require 'Main'");
+#else
+            //1.添加自定义Loader
+            luaEnv.AddLoader(MyLoader);
+
+            //2.加载Bundle
+            LoadLuaAssetBundle();
+#endif
+        }
+
+        /// <summary>
+        /// 当前xLua脚本资源包
+        /// </summary>
+        private AssetBundle m_CurrAssetBundle;
+        
+        /// <summary>
+        /// 加载xlua脚本的资源包
+        /// </summary>
+        private void LoadLuaAssetBundle()
+        {
+            GameEntry.Resource.ResourceLoaderManager.LoadAssetBundle(ConstDefine.XLuaAssetBundlePath,onComplete:(AssetBundle assetbundle)=>
+            {
+                m_CurrAssetBundle = assetbundle;
+                DoString("require 'Main'");
+            });
         }
 
         /// <summary>
@@ -46,8 +66,9 @@ namespace YouYouFramework
         /// <returns></returns>
         private byte[] MyLoader(ref string filePath)
         {
-            string path = Application.persistentDataPath + "/" + filePath + ".lua";
-            byte[] buffer = null;
+            //本地加载lua脚本方式
+            //string path = Application.persistentDataPath + "/" + filePath + ".lua";
+            //byte[] buffer = null;
             //using (FileStream fs = new FileStream(path, FileMode.Open))
             //{
             //    buffer = new byte[fs.Length];
@@ -57,6 +78,17 @@ namespace YouYouFramework
             //buffer = SecurityUtil.Xor(buffer);
 
             //buffer = System.Text.Encoding.UTF8.GetBytes(System.Text.Encoding.UTF8.GetString(buffer).Trim());
+            //return buffer;
+
+            //ab包加载lua脚本方式
+            string path = GameEntry.Resource.GetLastPathName(filePath);
+            TextAsset asset = m_CurrAssetBundle.LoadAsset<TextAsset>(path);
+            byte[] buffer = asset.bytes;
+            if (buffer[0] == 239 && buffer[1] == 187 && buffer[2] == 191)
+            {
+                //处理UTF-8 BOM头
+                buffer[0] = buffer[1] = buffer[2] = 32;
+            }
             return buffer;
         }
 
@@ -66,7 +98,7 @@ namespace YouYouFramework
         /// <param name="str"></param>
         public void DoString(string str)
         {
-            //luaEnv.DoString(str);
+            luaEnv.DoString(str);
         }
     }
 }

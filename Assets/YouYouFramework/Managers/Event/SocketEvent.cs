@@ -13,7 +13,7 @@ namespace YouYouFramework
     {
         [CSharpCallLua]
         public delegate void OnActionHandler(byte[] buffer);
-        public Dictionary<ushort, List<OnActionHandler>> dic = new Dictionary<ushort, List<OnActionHandler>>();
+        public Dictionary<ushort, LinkedList<OnActionHandler>> dic = new Dictionary<ushort, LinkedList<OnActionHandler>>();
 
         #region AddEventListener 添加监听
         /// <summary>
@@ -23,14 +23,14 @@ namespace YouYouFramework
         /// <param name="handler"></param>
         public void AddEventListener(ushort key, OnActionHandler handler)
         {
-            List<OnActionHandler> lstHandler = null;
+            LinkedList<OnActionHandler> lstHandler = null;
             dic.TryGetValue(key, out lstHandler);
             if (lstHandler == null)
             {
-                lstHandler = new List<OnActionHandler>();
+                lstHandler = new LinkedList<OnActionHandler>();
                 dic[key] = lstHandler;
             }
-            lstHandler.Add(handler);
+            lstHandler.AddLast(handler);
         }
         #endregion
 
@@ -42,7 +42,7 @@ namespace YouYouFramework
         /// <param name="handler"></param>
         public void RemoveEventListener(ushort key, OnActionHandler handler)
         {
-            List<OnActionHandler> lstHandler = null;
+            LinkedList<OnActionHandler> lstHandler = null;
             dic.TryGetValue(key, out lstHandler);
             if (lstHandler != null)
             {
@@ -63,14 +63,13 @@ namespace YouYouFramework
         /// <param name="p"></param>
         public void Dispatch(ushort key, byte[] buffer)
         {
-            List<OnActionHandler> lstHandler = null;
+            LinkedList<OnActionHandler> lstHandler = null;
             dic.TryGetValue(key, out lstHandler);
             if (lstHandler != null)
             {
-                int listCount = lstHandler.Count;
-                for (int i = 0; i < listCount; i++)
+                for (LinkedListNode<OnActionHandler> curr = lstHandler.First; curr != null; curr = curr.Next)
                 {
-                    OnActionHandler handler = lstHandler[i];
+                    OnActionHandler handler = curr.Value;
                     if (handler != null)
                     {
                         handler(buffer);

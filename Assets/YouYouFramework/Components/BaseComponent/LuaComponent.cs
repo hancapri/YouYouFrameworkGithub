@@ -36,6 +36,10 @@ namespace YouYouFramework
         {
             base.OnStart();
             LoadDataTableMS = new MMO_MemoryStream();
+        }
+
+        public void Init()
+        {
             m_LuaManager.Init();
         }
 
@@ -53,15 +57,26 @@ namespace YouYouFramework
         /// </summary>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public MMO_MemoryStream LoadDataTable(string tableName)
+        public void LoadDataTable(string tableName, BaseAction<MMO_MemoryStream> onComplete)
         {
-            byte[] buffer = GameEntry.Resource.GetFileBuffer(string.Format("{0}/download/DataTable/{1}.bytes", GameEntry.Resource.LocalFilePath, tableName));
+            GameEntry.DataTable.DataTableManager.GetDataTableBuffer(tableName,(byte[] buffer)=>
+            {
+                LoadDataTableMS.SetLength(0);
+                LoadDataTableMS.Write(buffer, 0, buffer.Length);
+                LoadDataTableMS.Position = 0;
+                if (onComplete != null)
+                {
+                    onComplete(LoadDataTableMS);
+                }
+            });
 
-            LoadDataTableMS.SetLength(0);
-            LoadDataTableMS.Write(buffer, 0, buffer.Length);
-            LoadDataTableMS.Position = 0;
+            //byte[] buffer = GameEntry.Resource.GetFileBuffer(string.Format("{0}/download/DataTable/{1}.bytes", GameEntry.Resource.LocalFilePath, tableName));
 
-            return LoadDataTableMS;
+            //LoadDataTableMS.SetLength(0);
+            //LoadDataTableMS.Write(buffer, 0, buffer.Length);
+            //LoadDataTableMS.Position = 0;
+
+            //return LoadDataTableMS;
         }
 
         /// <summary>

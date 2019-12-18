@@ -15,6 +15,16 @@ public class ConstDefine
     public const string VersionFileName = "VersionFile.bytes";
 
     /// <summary>
+    /// 表格资源包路径
+    /// </summary>
+    public const string DataTableAssetBundlePath = "download/datatable.assetbundle";
+
+    /// <summary>
+    /// lua脚本资源包路径
+    /// </summary>
+    public const string XLuaAssetBundlePath = "download/xlualogic.assetbundle";
+
+    /// <summary>
     /// 资源版本号
     /// </summary>
     public const string ResourceVersion = "ResourceVersion";

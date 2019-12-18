@@ -18,5 +18,10 @@ namespace YouYouFramework
         /// 单个表格加载完毕
         /// </summary>
         public const ushort LoadOneDataTableComplete = 1002;
+
+        /// <summary>
+        /// 加载Lua表格完毕
+        /// </summary>
+        public const ushort LoadLuaDataTableComplete = 1003;
     }
 }

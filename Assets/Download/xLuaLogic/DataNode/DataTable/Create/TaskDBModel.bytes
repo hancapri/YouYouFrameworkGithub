@@ -6,7 +6,11 @@ local this = TaskDBModel;
 local taskTable = { }; --定义表格
 
 function TaskDBModel.LoadList()
-    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Task");
+    GameInit.AddTotalLoadTableCount();
+    CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Task", this.LoadFormMS);
+end
+
+function TaskDBModel.LoadFormMS(ms)
     local rows = ms:ReadInt();
     ms:ReadInt();
 
@@ -18,7 +22,7 @@ function TaskDBModel.LoadList()
                 ms:ReadUTF8String()
         );
     end
-
+    GameInit.LoadOneTableComplete();
 end
 
 function TaskDBModel.GetList()

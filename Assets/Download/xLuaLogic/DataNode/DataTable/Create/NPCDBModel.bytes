@@ -6,7 +6,11 @@ local this = NPCDBModel;
 local npcTable = { }; --定义表格
 
 function NPCDBModel.LoadList()
-    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("NPC");
+    GameInit.AddTotalLoadTableCount();
+    CS.YouYouFramework.GameEntry.Lua:LoadDataTable("NPC", this.LoadFormMS);
+end
+
+function NPCDBModel.LoadFormMS(ms)
     local rows = ms:ReadInt();
     ms:ReadInt();
 
@@ -20,7 +24,7 @@ function NPCDBModel.LoadList()
                 ms:ReadUTF8String()
         );
     end
-
+    GameInit.LoadOneTableComplete();
 end
 
 function NPCDBModel.GetList()

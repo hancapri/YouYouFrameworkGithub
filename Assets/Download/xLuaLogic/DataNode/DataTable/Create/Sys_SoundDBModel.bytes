@@ -6,7 +6,11 @@ local this = Sys_SoundDBModel;
 local sys_soundTable = { }; --定义表格
 
 function Sys_SoundDBModel.LoadList()
-    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Sys_Sound");
+    GameInit.AddTotalLoadTableCount();
+    CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Sys_Sound", this.LoadFormMS);
+end
+
+function Sys_SoundDBModel.LoadFormMS(ms)
     local rows = ms:ReadInt();
     ms:ReadInt();
 
@@ -19,7 +23,7 @@ function Sys_SoundDBModel.LoadList()
                 ms:ReadFloat()
         );
     end
-
+    GameInit.LoadOneTableComplete();
 end
 
 function Sys_SoundDBModel.GetList()

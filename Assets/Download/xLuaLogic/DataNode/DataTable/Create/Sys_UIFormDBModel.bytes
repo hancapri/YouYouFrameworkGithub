@@ -6,7 +6,11 @@ local this = Sys_UIFormDBModel;
 local sys_uiformTable = { }; --定义表格
 
 function Sys_UIFormDBModel.LoadList()
-    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Sys_UIForm");
+    GameInit.AddTotalLoadTableCount();
+    CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Sys_UIForm", this.LoadFormMS);
+end
+
+function Sys_UIFormDBModel.LoadFormMS(ms)
     local rows = ms:ReadInt();
     ms:ReadInt();
 
@@ -22,7 +26,7 @@ function Sys_UIFormDBModel.LoadList()
                 ms:ReadUTF8String()
         );
     end
-
+    GameInit.LoadOneTableComplete();
 end
 
 function Sys_UIFormDBModel.GetList()

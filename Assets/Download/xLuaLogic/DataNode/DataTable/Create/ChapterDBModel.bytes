@@ -6,7 +6,11 @@ local this = ChapterDBModel;
 local chapterTable = { }; --定义表格
 
 function ChapterDBModel.LoadList()
-    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Chapter");
+    GameInit.AddTotalLoadTableCount();
+    CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Chapter", this.LoadFormMS);
+end
+
+function ChapterDBModel.LoadFormMS(ms)
     local rows = ms:ReadInt();
     ms:ReadInt();
 
@@ -20,7 +24,7 @@ function ChapterDBModel.LoadList()
                 ms:ReadFloat()
         );
     end
-
+    GameInit.LoadOneTableComplete();
 end
 
 function ChapterDBModel.GetList()

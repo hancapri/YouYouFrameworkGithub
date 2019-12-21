@@ -6,7 +6,11 @@ local this = MessageDBModel;
 local messageTable = { }; --定义表格
 
 function MessageDBModel.LoadList()
-    local ms = CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Message");
+    GameInit.AddTotalLoadTableCount();
+    CS.YouYouFramework.GameEntry.Lua:LoadDataTable("Message", this.LoadFormMS);
+end
+
+function MessageDBModel.LoadFormMS(ms)
     local rows = ms:ReadInt();
     ms:ReadInt();
 
@@ -18,7 +22,7 @@ function MessageDBModel.LoadList()
                 ms:ReadUTF8String()
         );
     end
-
+    GameInit.LoadOneTableComplete();
 end
 
 function MessageDBModel.GetList()

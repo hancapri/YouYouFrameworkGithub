@@ -1,0 +1,13 @@
+﻿1.设置打包配置AssetBundleConfig
+2.悠游工具-资源管理-资源包管理-保存设置-打AssetBundle包
+3.打包之后会生成一个AssetBundle文件夹，和工程Asset目录同级
+4.将AssetBundle文件夹里面的ab包、版本文件、资源引用文件，拷贝到cdn站点
+5.将AssetBundle文件夹里面的初始资源ab包、版本文件、资源引用文件，拷贝到StreamingAssets文件夹下
+6.运行游戏进入版本检测热更新
+
+版本比对流程：
+1.读取StreamingAssets里面的VersionFile.bytes版本文件
+2.从cdn上下载VersionFile.bytes版本文件
+3.初始化可写区persistentDataPath的版本文件VersionFile.bytes，
+  如果没有，将cdn上下载的VersionFile.bytes文件拷贝到persistentDataPath
+4.三方版本文件对比

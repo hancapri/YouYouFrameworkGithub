@@ -37,7 +37,6 @@ namespace YouYouFramework
 
         private void OnLoadOneDataTableComplete(object param)
         {
-            string name = (string)param;
             GameEntry.DataTable.DataTableManager.CurrLoadTableCount++;
             if (GameEntry.DataTable.DataTableManager.CurrLoadTableCount == GameEntry.DataTable.DataTableManager.TotalTableCount)
             {

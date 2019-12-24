@@ -9,6 +9,19 @@ namespace YouYouFramework
     /// </summary>
     public class ProcedureLogOn : ProcedureBase
     {
-        
+        public override void OnEnable()
+        {
+            base.OnEnable();
+            GameEntry.Log(LogCategory.Procedure, "OnEnable ProcedureLogOn");
+
+            GameEntry.UI.OpenUIForm(UIFormId.UI_Task);
+
+        }
+
+        public override void OnLeave()
+        {
+            GameEntry.Log(LogCategory.Procedure, "OnLeave ProcedureLogOn");
+        }
+
     }
 }

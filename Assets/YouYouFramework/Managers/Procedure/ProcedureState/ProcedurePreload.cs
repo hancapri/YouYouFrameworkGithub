@@ -55,6 +55,7 @@ namespace YouYouFramework
         private void OnLoadLuaDataTableComplete(object param)
         {
             GameEntry.Log(LogCategory.Normal, "加载Lua表格完毕");
+            GameEntry.Procedure.ChangeState(ProcedureState.LogOn);
         }
     }
 }

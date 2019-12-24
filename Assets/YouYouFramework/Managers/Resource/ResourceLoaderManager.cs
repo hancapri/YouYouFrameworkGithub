@@ -114,12 +114,38 @@ namespace YouYouFramework
                         entity.DependsAssetList.Add(dep);
                     }
                 }
-
+                
                 m_AssetInfoDic[entity.Category][entity.AssetFullName] = entity;
             }
         }
         #endregion
 
+        #region GetAssetEntity 根据资源分类和资源路径获取资源信息
+        /// <summary>
+        /// 根据资源分类和资源路径获取资源信息
+        /// </summary>
+        /// <param name="assetCategory"></param>
+        /// <param name="assetFullName"></param>
+        /// <returns></returns>
+        public AssetEntity GetAssetEntity(AssetCategory assetCategory, string assetFullName)
+        {
+            Dictionary<string, AssetEntity> dicCategory = null;
+            if (m_AssetInfoDic.TryGetValue(assetCategory, out dicCategory))
+            {
+                AssetEntity entity = null;
+                if (dicCategory.TryGetValue(assetFullName, out entity))
+                {
+                    return entity;
+                }
+            }
+            GameEntry.LogError("assetFullName=>{0}不存在", assetFullName);
+            return null;
+        }
+        #endregion
+
+        #region LoadAssetBundle 加载ab包
+
+        private Dictionary<string, LinkedList<Action<AssetBundle>>> m_LoadingAssetBundle = new Dictionary<string, LinkedList<Action<AssetBundle>>>();
 
         /// <summary>
         /// 加载ab包
@@ -144,6 +170,19 @@ namespace YouYouFramework
             }
 
             //2.没有再加载
+            LinkedList<Action<AssetBundle>> lst = null;
+            if (m_LoadingAssetBundle.TryGetValue(assetBundlePath, out lst))
+            {
+                lst.AddLast(onComplete);
+                return;
+            }
+            else
+            {
+                lst = GameEntry.Pool.DequeueClassObject<LinkedList<Action<AssetBundle>>>();
+                lst.AddLast(onComplete);
+                m_LoadingAssetBundle[assetBundlePath] = lst;
+            }
+
             AssetBundleLoaderRoutine routine = GameEntry.Pool.DequeueClassObject<AssetBundleLoaderRoutine>();
             if (routine == null)
             {
@@ -172,18 +211,26 @@ namespace YouYouFramework
 
                 Debug.LogError("把加载的ab包加入资源池");
 
-
-                if (onComplete != null)
+                for (LinkedListNode<Action<AssetBundle>> curr = lst.First; curr != null; curr = curr.Next)
                 {
-                    onComplete(assetBundle);
+                    if (curr.Value != null)
+                    {
+                        curr.Value(assetBundle);
+                    }
                 }
+
+                lst.Clear();
+                GameEntry.Pool.EnqueueClassObject(lst);
+                m_LoadingAssetBundle.Remove(assetBundlePath);
 
                 //结束回池
                 m_AssetBundleLoaderList.Remove(routine);
                 GameEntry.Pool.EnqueueClassObject(routine);
             };
         }
+        #endregion
 
+        #region LoadAsset 加载资源
         /// <summary>
         /// 加载资源
         /// </summary>
@@ -222,6 +269,24 @@ namespace YouYouFramework
                 GameEntry.Pool.EnqueueClassObject(routine);
             };
         }
+        #endregion
+
+        #region LoadMainAsset 加载主资源
+        /// <summary>
+        /// 加载主资源
+        /// </summary>
+        public void LoadMainAsset(AssetCategory assetCategory, string assetFullName, BaseAction<UnityEngine.Object> onComplete = null)
+        {
+            MainAssetLoaderRoutine routine = GameEntry.Pool.DequeueClassObject<MainAssetLoaderRoutine>();
+            routine.Load(assetCategory,assetFullName,(ResourceEntity resEntity)=>
+            {
+                if (onComplete != null)
+                {
+                    onComplete(resEntity.Target as UnityEngine.Object);
+                }
+            });
+        }
+        #endregion
 
         public void OnUpdate()
         {

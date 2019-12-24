@@ -35,11 +35,12 @@ namespace YouYouFramework
                 return;
             }
 
-#if DISABLE_ASSETBUNDLE && UNITY_EDITOR
             UIFormBase formBase = GameEntry.UI.Dequeue(uiFormId);
 
             if (formBase == null)
             {
+                //TODO:异步加载UI需要时间 过滤正在加载的UI
+
                 string assetPath = string.Empty;
                 switch (GameEntry.Localization.CurrLanguage)
                 {
@@ -50,23 +51,49 @@ namespace YouYouFramework
                         assetPath = entity.AssetPath_English;
                         break;
                 }
-                string path = string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath);
-                //加载镜像
-                Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                GameObject UIObj = Object.Instantiate(obj) as GameObject;
-                UIObj.transform.SetParent(GameEntry.UI.GetUIGroup(entity.UIGroupId).Group);
-                UIObj.transform.localPosition = Vector3.zero;
-                UIObj.transform.localScale = Vector3.one;
+                LoadUIAsset(assetPath,(Object obj) =>
+                {
+                    GameObject UIObj = Object.Instantiate(obj) as GameObject;
+                    UIObj.transform.SetParent(GameEntry.UI.GetUIGroup(entity.UIGroupId).Group);
+                    UIObj.transform.localPosition = Vector3.zero;
+                    UIObj.transform.localScale = Vector3.one;
 
-                formBase = UIObj.GetComponent<UIFormBase>();
-                formBase.Init(uiFormId, entity.UIGroupId, entity.DisableUILayer == 1, entity.IsLock == 1, userData);
+                    formBase = UIObj.GetComponent<UIFormBase>();
+                    formBase.Init(uiFormId, entity.UIGroupId, entity.DisableUILayer == 1, entity.IsLock == 1, userData);
+                    m_OpenUIFormList.AddLast(formBase);
+                });
             }
             else
             {
                 formBase.gameObject.SetActive(true);
                 formBase.Open(userData);
+                m_OpenUIFormList.AddLast(formBase);
             }
-            m_OpenUIFormList.AddLast(formBase);
+        }
+
+        /// <summary>
+        /// 加载UI资源
+        /// </summary>
+        /// <param name="assetPath"></param>
+        /// <param name="onComplete"></param>
+        private void LoadUIAsset(string assetPath,BaseAction<Object> onComplete)
+        {
+#if DISABLE_ASSETBUNDLE && UNITY_EDITOR
+            string path = string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath);
+            //加载镜像
+            Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (onComplete != null)
+            {
+                onComplete(obj);
+            }
+#else
+            GameEntry.Resource.ResourceLoaderManager.LoadMainAsset(AssetCategory.UIPrefab, string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath),(Object obj)=>
+            {
+                if (onComplete != null)
+                {
+                    onComplete(obj);
+                }
+            });
 #endif
         }
 

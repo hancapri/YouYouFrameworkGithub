@@ -64,6 +64,8 @@ namespace YouYouFramework
             SetClassObjectResideCount<Dictionary<string,object>>(3);
             SetClassObjectResideCount<AssetBundleLoaderRoutine>(10);
             SetClassObjectResideCount<AssetLoaderRoutine>(10);
+            SetClassObjectResideCount<ResourceEntity>(10);
+            SetClassObjectResideCount<MainAssetLoaderRoutine>(30);
         }
 
         /// <summary>

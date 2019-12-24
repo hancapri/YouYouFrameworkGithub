@@ -14,12 +14,12 @@ public class TestUI : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown(KeyCode.U))
         {
-            GameEntry.UI.OpenUIForm(UIFormId.UI_GameLevelMap);
+            GameEntry.UI.OpenUIForm(UIFormId.UI_Task);
         }
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            GameEntry.UI.CloseUIForm(UIFormId.UI_GameLevelMap);
+            GameEntry.UI.CloseUIForm(UIFormId.UI_Task);
         }
         if (Input.GetKeyDown(KeyCode.A))
         {

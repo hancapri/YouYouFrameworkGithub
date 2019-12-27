@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 namespace YouYouFramework
 {
@@ -16,6 +17,9 @@ namespace YouYouFramework
 
         //关联PoolComponent组件上的ReleaseResourceInterval（释放资源池的时间间隔）字段的值
         private SerializedProperty ReleaseResourceInterval;
+
+        //关联PoolComponent组件上的是否显示资源池选项
+        private SerializedProperty ShowAssetPool;
 
         public override void OnInspectorGUI()
         {
@@ -116,6 +120,52 @@ namespace YouYouFramework
             GUILayout.EndVertical();
             //======================资源包统计结束========================
 
+            //======================资源统计开始========================
+            GUILayout.Space(10);
+            bool showAssetPool = EditorGUILayout.Toggle("显示分类资源池", ShowAssetPool.boolValue);
+            if (showAssetPool != ShowAssetPool.boolValue)
+            {
+                component.ShowAssetPool = showAssetPool;
+            }
+            else
+            {
+                ShowAssetPool.boolValue = showAssetPool;
+            }
+            if (showAssetPool)
+            {
+                GUILayout.Space(10);
+                var enumerator = Enum.GetValues(typeof(AssetCategory)).GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    AssetCategory assetCategory = (AssetCategory)enumerator.Current;
+                    if (assetCategory == AssetCategory.None)
+                    {
+                        continue;
+                    }
+
+                    GUILayout.Space(10);
+                    GUILayout.BeginVertical("box");
+                    GUILayout.BeginHorizontal("box");
+                    GUILayout.Label("资源分类-"+assetCategory.ToString());
+                    GUILayout.Label("计数", GUILayout.Width(50));
+                    GUILayout.EndHorizontal();
+
+                    if (component != null && component.PoolManager != null)
+                    {
+                        foreach (var item in component.PoolManager.AssetPool[assetCategory].InspectorDic)
+                        {
+                            GUILayout.BeginHorizontal("box");
+                            GUILayout.Label(item.Key);
+                            GUILayout.Label(item.Value.ToString(), GUILayout.Width(50));
+
+                            GUILayout.EndHorizontal();
+                        }
+                    }
+                    GUILayout.EndVertical();
+                }
+            }
+            //======================资源统计结束========================
+
             serializedObject.ApplyModifiedProperties();
             //重绘
             Repaint();
@@ -127,6 +177,7 @@ namespace YouYouFramework
             m_ClearInterval = serializedObject.FindProperty("ClearInterval");
             m_GameObjectPoolGroups = serializedObject.FindProperty("m_GameObjectPoolGroups");
             ReleaseResourceInterval = serializedObject.FindProperty("ReleaseResourceInterval");
+            ShowAssetPool = serializedObject.FindProperty("ShowAssetPool");
 
             serializedObject.ApplyModifiedProperties();
         }

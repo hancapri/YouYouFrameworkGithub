@@ -1,36 +1,36 @@
-using System.Collections;
+锘縰sing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace YouYouFramework
 {
     /// <summary>
-    /// 资源实体
+    /// 璧勬簮瀹炰綋
     /// </summary>
     public class AssetEntity
     {
         /// <summary>
-        /// 资源分类
+        /// 璧勬簮鍒嗙被
         /// </summary>
         public AssetCategory Category;
 
         /// <summary>
-        /// 资源名称
+        /// 璧勬簮鍚嶇О
         /// </summary>
         public string AssetName;
 
         /// <summary>
-        /// 资源完成名称
+        /// 璧勬簮瀹屾暣鍚嶇О
         /// </summary>
         public string AssetFullName;
 
         /// <summary>
-        /// 所依赖的资源包
+        /// 鎵�渚濊禆鐨勮祫婧愬寘
         /// </summary>
         public string AssetBundleName;
 
         /// <summary>
-        /// 依赖资源
+        /// 渚濊禆璧勬簮
         /// </summary>
         public List<AssetDependsEntity> DependsAssetList;
     }

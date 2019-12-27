@@ -47,21 +47,35 @@ namespace YouYouFramework
         /// </summary>
         private void LoadMainAsset()
         {
+            //1.先从分类资源池中（AssetPool）中取资源
+            ResourceEntity assetEntity = GameEntry.Pool.PoolManager.AssetPool[m_CurrAssetEntity.Category].Spawn(m_CurrAssetEntity.AssetFullName);
+            if (assetEntity != null)
+            {
+                Debug.LogError("从资源池中加载"+assetEntity.ResourceName);
+                if (m_OnComplete != null)
+                {
+                    m_OnComplete(assetEntity);
+                }
+                return;
+            }
+
+            //2.没有再从ab包中取
             //加载ab包
             GameEntry.Resource.ResourceLoaderManager.LoadAssetBundle(m_CurrAssetEntity.AssetBundleName,onComplete:(AssetBundle assetBundle)=>
             {
                 //加载资源
                 GameEntry.Resource.ResourceLoaderManager.LoadAsset(m_CurrAssetEntity.AssetFullName, assetBundle, onComplete: (UnityEngine.Object obj) =>
                 {
-                    ResourceEntity resEntity = new ResourceEntity();
-                    resEntity.Category = m_CurrAssetEntity.Category;
-                    resEntity.IsAssetBundle = false;
-                    resEntity.ResourceName = m_CurrAssetEntity.AssetFullName;
-                    resEntity.Target = obj;
+                    assetEntity = GameEntry.Pool.DequeueClassObject<ResourceEntity>();
+                    assetEntity.Category = m_CurrAssetEntity.Category;
+                    assetEntity.IsAssetBundle = false;
+                    assetEntity.ResourceName = m_CurrAssetEntity.AssetFullName;
+                    assetEntity.Target = obj;
+                    GameEntry.Pool.PoolManager.AssetPool[m_CurrAssetEntity.Category].Register(assetEntity);
 
                     if (m_OnComplete != null)
                     {
-                        m_OnComplete(resEntity);
+                        m_OnComplete(assetEntity);
                     }
                     Reset();
                 });

@@ -36,6 +36,12 @@ namespace YouYouFramework
         [SerializeField]
         private GameObjectPoolEntity[] m_GameObjectPoolGroups;
 
+        /// <summary>
+        /// 显示分类资源池
+        /// </summary>
+        [SerializeField]
+        public bool ShowAssetPool = false;
+
         protected override void OnAwake()
         {
             base.OnAwake();

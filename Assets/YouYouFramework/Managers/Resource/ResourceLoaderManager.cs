@@ -231,6 +231,9 @@ namespace YouYouFramework
         #endregion
 
         #region LoadAsset 加载资源
+
+        private Dictionary<string, LinkedList<Action<UnityEngine.Object>>> m_LoadingAsset = new Dictionary<string, LinkedList<Action<UnityEngine.Object>>>();
+
         /// <summary>
         /// 加载资源
         /// </summary>
@@ -240,6 +243,19 @@ namespace YouYouFramework
         /// <param name="onComplete"></param>
         public void LoadAsset(string assetName, AssetBundle assetBundle, Action<float> onUpdate = null, Action<UnityEngine.Object> onComplete = null)
         {
+            LinkedList<Action<UnityEngine.Object>> lst = null;
+            if (m_LoadingAsset.TryGetValue(assetName, out lst))
+            {
+                lst.AddLast(onComplete);
+                return;
+            }
+            else
+            {
+                lst = GameEntry.Pool.DequeueClassObject<LinkedList<Action<UnityEngine.Object>>>();
+                lst.AddLast(onComplete);
+                m_LoadingAsset[assetName] = lst;
+            }
+
             AssetLoaderRoutine routine = GameEntry.Pool.DequeueClassObject<AssetLoaderRoutine>();
             if (routine == null)
             {
@@ -259,10 +275,17 @@ namespace YouYouFramework
             };
             routine.OnLoadAssetComplete = (UnityEngine.Object obj) =>
             {
-                if (onComplete != null)
+                for (LinkedListNode<Action<UnityEngine.Object>> curr = lst.First; curr != null; curr = curr.Next)
                 {
-                    onComplete(obj);
+                    if (curr.Value != null)
+                    {
+                        curr.Value(obj);
+                    }
                 }
+
+                lst.Clear();
+                GameEntry.Pool.EnqueueClassObject(lst);
+                m_LoadingAsset.Remove(assetName);
 
                 //结束循环 回池
                 m_AssetLoaderList.Remove(routine);

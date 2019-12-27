@@ -29,9 +29,18 @@ namespace YouYouFramework
         }
 
         /// <summary>
-        /// 资源池
+        /// 资源包池
         /// </summary>
         public ResourcePool AssetBundlePool
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 分类资源池
+        /// </summary>
+        public Dictionary<AssetCategory, ResourcePool> AssetPool
         {
             get;
             private set;
@@ -42,6 +51,18 @@ namespace YouYouFramework
             ClassObjectPool = new ClassObjectPool();
             GameObjectPool = new GameObjectPool();
             AssetBundlePool = new ResourcePool("AssetBundlePool");
+            AssetPool = new Dictionary<AssetCategory, ResourcePool>();
+
+            var enumerator = Enum.GetValues(typeof(AssetCategory)).GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                AssetCategory assetCategory = (AssetCategory)enumerator.Current;
+                if (assetCategory == AssetCategory.None)
+                {
+                    continue;
+                }
+                AssetPool[assetCategory] = new ResourcePool(assetCategory.ToString());
+            }
         }
 
         /// <summary>

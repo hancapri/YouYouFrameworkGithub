@@ -15,8 +15,14 @@ namespace YouYouFramework
         //关联PoolComponent组件上的游戏对象池集合
         private SerializedProperty m_GameObjectPoolGroups;
 
-        //关联PoolComponent组件上的ReleaseResourceInterval（释放资源池的时间间隔）字段的值
+        //关联PoolComponent组件上的ReleaseResourceInterval（释放AssetBundle池的时间间隔）字段的值
         private SerializedProperty ReleaseResourceInterval;
+
+        //关联PoolComponent组件上的LockedAssetBundle（锁定资源包）
+        private SerializedProperty LockedAssetBundle;
+
+        //关联PoolComponent组件上的ReleaseAssetInterval（释放Asset池的时间间隔）字段的值
+        private SerializedProperty ReleaseAssetInterval;
 
         //关联PoolComponent组件上的是否显示资源池选项
         private SerializedProperty ShowAssetPool;
@@ -88,7 +94,8 @@ namespace YouYouFramework
             EditorGUILayout.PropertyField(m_GameObjectPoolGroups, true);
 
             //绘制滑动条 释放资源池的间隔
-            int releaseAssetBundleInterval = (int)EditorGUILayout.Slider("释放资源池的间隔", ReleaseResourceInterval.intValue, 10, 1800);
+            GUILayout.Space(50);
+            int releaseAssetBundleInterval = (int)EditorGUILayout.Slider("释放AssetBundle池的间隔", ReleaseResourceInterval.intValue, 10, 1800);
             if (releaseAssetBundleInterval != ReleaseResourceInterval.intValue)
             {
                 component.ReleaseResourceInterval = releaseAssetBundleInterval;
@@ -97,6 +104,11 @@ namespace YouYouFramework
             {
                 ReleaseResourceInterval.intValue = releaseAssetBundleInterval;
             }
+
+            //======================锁定资源包开始========================
+            //GUILayout.Space(10);
+            EditorGUILayout.PropertyField(LockedAssetBundle, true);
+            //======================锁定资源包结束========================
 
             //======================资源包统计开始========================
             GUILayout.Space(10);
@@ -119,6 +131,18 @@ namespace YouYouFramework
             }
             GUILayout.EndVertical();
             //======================资源包统计结束========================
+
+            //绘制滑动条 释放资源池的间隔
+            GUILayout.Space(50);
+            int releaseAssetInterval = (int)EditorGUILayout.Slider("释放Asset池的间隔", ReleaseAssetInterval.intValue, 10, 1800);
+            if (releaseAssetInterval != ReleaseAssetInterval.intValue)
+            {
+                component.ReleaseAssetInterval = releaseAssetInterval;
+            }
+            else
+            {
+                ReleaseAssetInterval.intValue = releaseAssetInterval;
+            }
 
             //======================资源统计开始========================
             GUILayout.Space(10);
@@ -177,6 +201,8 @@ namespace YouYouFramework
             m_ClearInterval = serializedObject.FindProperty("ClearInterval");
             m_GameObjectPoolGroups = serializedObject.FindProperty("m_GameObjectPoolGroups");
             ReleaseResourceInterval = serializedObject.FindProperty("ReleaseResourceInterval");
+            ReleaseAssetInterval = serializedObject.FindProperty("ReleaseAssetInterval");
+            LockedAssetBundle = serializedObject.FindProperty("LockedAssetBundle");
             ShowAssetPool = serializedObject.FindProperty("ShowAssetPool");
 
             serializedObject.ApplyModifiedProperties();

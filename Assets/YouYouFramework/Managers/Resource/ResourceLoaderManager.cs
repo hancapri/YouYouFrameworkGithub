@@ -298,14 +298,14 @@ namespace YouYouFramework
         /// <summary>
         /// 加载主资源
         /// </summary>
-        public void LoadMainAsset(AssetCategory assetCategory, string assetFullName, BaseAction<UnityEngine.Object> onComplete = null)
+        public void LoadMainAsset(AssetCategory assetCategory, string assetFullName, BaseAction<ResourceEntity> onComplete = null)
         {
             MainAssetLoaderRoutine routine = GameEntry.Pool.DequeueClassObject<MainAssetLoaderRoutine>();
             routine.Load(assetCategory,assetFullName,(ResourceEntity resEntity)=>
             {
                 if (onComplete != null)
                 {
-                    onComplete(resEntity.Target as UnityEngine.Object);
+                    onComplete(resEntity);
                 }
             });
         }

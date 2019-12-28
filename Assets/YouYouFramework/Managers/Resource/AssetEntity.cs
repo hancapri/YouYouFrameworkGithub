@@ -5,7 +5,7 @@ using UnityEngine;
 namespace YouYouFramework
 {
     /// <summary>
-    /// 资源实体
+    /// 资源信息实体
     /// </summary>
     public class AssetEntity
     {

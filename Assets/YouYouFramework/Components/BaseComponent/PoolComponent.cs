@@ -10,6 +10,17 @@ namespace YouYouFramework
     /// </summary>
     public class PoolComponent : YouYouBaseComponent, IUpdateComponent
     {
+        [Header("锁定的资源包")]
+        /// <summary>
+        /// 锁定的资源包（不释放）
+        /// </summary>
+        public string[] LockedAssetBundle;
+
+        /// <summary>
+        /// 锁定资源包长度
+        /// </summary>
+        private int m_LockedAssetBundleLength;
+
         /// <summary>
         /// 释放池中对象的时间间隔
         /// </summary>
@@ -18,11 +29,20 @@ namespace YouYouFramework
         private float m_NextClearTime;
 
         /// <summary>
-        /// 释放资源池的时间间隔
+        /// 释放AssetBundle池的时间间隔
         /// </summary>
+        [SerializeField]
         public int ReleaseResourceInterval = 60;
 
         private float m_ReleaseResourceNextRunTime = 0f;
+
+        /// <summary>
+        /// 释放Asset池的时间间隔
+        /// </summary>
+        [SerializeField]
+        public int ReleaseAssetInterval = 120;
+
+        private float m_ReleaseAssetNextRunTime = 0f;
 
         public PoolManager PoolManager
         {
@@ -58,7 +78,27 @@ namespace YouYouFramework
         protected override void OnStart()
         {
             base.OnStart();
+
+            m_LockedAssetBundleLength = LockedAssetBundle.Length;
+
             InitReside();
+        }
+
+        /// <summary>
+        /// 检查资源包是否锁定
+        /// </summary>
+        /// <param name="assetBundleName"></param>
+        /// <returns></returns>
+        public bool CheckAssetBundleIsLock(string assetBundleName)
+        {
+            for (int i = 0; i < m_LockedAssetBundleLength; i++)
+            {
+                if (LockedAssetBundle[i].Equals(assetBundleName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -196,6 +236,53 @@ namespace YouYouFramework
         }
         #endregion
 
+        #region 实例对象资源管理和分类资源池释放
+        /// <summary>
+        /// 克隆出来的实例资源字典
+        /// </summary>
+        private Dictionary<int, ResourceEntity> m_InstanceResourceDic = new Dictionary<int, ResourceEntity>();
+
+        /// <summary>
+        /// 注册到实例字典
+        /// </summary>
+        /// <param name="instanceId"></param>
+        /// <param name="resourceEntity"></param>
+        public void RegisterInstanceResource(int instanceId, ResourceEntity resourceEntity)
+        {
+            m_InstanceResourceDic[instanceId] = resourceEntity;
+        }
+
+        /// <summary>
+        /// 释放实例资源
+        /// </summary>
+        /// <param name="instanceId"></param>
+        public void ReleaseInstanceResource(int instanceId)
+        {
+            ResourceEntity resourceEntity = null;
+            if (m_InstanceResourceDic.TryGetValue(instanceId, out resourceEntity))
+            {
+                UnspawnResourceEntity(resourceEntity);
+                m_InstanceResourceDic.Remove(instanceId);
+            }
+        }
+
+        /// <summary>
+        /// 资源实体回池
+        /// </summary>
+        /// <param name="resourceEntity"></param>
+        private void UnspawnResourceEntity(ResourceEntity entity)
+        {
+            var curr = entity.DependsResourceList.First;
+            while (curr != null)
+            {
+                UnspawnResourceEntity(curr.Value);
+                curr = curr.Next;
+            }
+
+            GameEntry.Pool.PoolManager.AssetPool[entity.Category].UnSpawn(entity.ResourceName);
+        }
+        #endregion
+
         public void OnUpdate()
         {
             if (Time.time > m_NextClearTime + ClearInterval)
@@ -211,7 +298,16 @@ namespace YouYouFramework
                 //资源池该释放了
                 m_ReleaseResourceNextRunTime = Time.time;
                 PoolManager.ReleaseAssetBundlePool();
-                GameEntry.Log(LogCategory.Normal, "释放资源对象池");
+                GameEntry.Log(LogCategory.Normal, "释放AssetBundle池");
+            }
+
+            if (Time.time > m_ReleaseAssetNextRunTime + ReleaseAssetInterval)
+            {
+                //资源池该释放了
+                m_ReleaseAssetNextRunTime = Time.time;
+                PoolManager.ReleaseAssetPool();
+                Resources.UnloadUnusedAssets();
+                GameEntry.Log(LogCategory.Normal, "释放Asset池");
             }
         }
 

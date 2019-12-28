@@ -51,9 +51,13 @@ namespace YouYouFramework
                         assetPath = entity.AssetPath_English;
                         break;
                 }
-                LoadUIAsset(assetPath,(Object obj) =>
+                LoadUIAsset(assetPath,(ResourceEntity resourceEntity) =>
                 {
-                    GameObject UIObj = Object.Instantiate(obj) as GameObject;
+                    GameObject UIObj = Object.Instantiate((Object)resourceEntity.Target) as GameObject;
+
+                    //把克隆出来的资源加入实例对象资源池
+                    GameEntry.Pool.RegisterInstanceResource(UIObj.GetInstanceID(),resourceEntity);
+
                     UIObj.transform.SetParent(GameEntry.UI.GetUIGroup(entity.UIGroupId).Group);
                     UIObj.transform.localPosition = Vector3.zero;
                     UIObj.transform.localScale = Vector3.one;
@@ -76,7 +80,7 @@ namespace YouYouFramework
         /// </summary>
         /// <param name="assetPath"></param>
         /// <param name="onComplete"></param>
-        private void LoadUIAsset(string assetPath,BaseAction<Object> onComplete)
+        private void LoadUIAsset(string assetPath,BaseAction<ResourceEntity> onComplete)
         {
 #if DISABLE_ASSETBUNDLE && UNITY_EDITOR
             string path = string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath);
@@ -87,11 +91,11 @@ namespace YouYouFramework
                 onComplete(obj);
             }
 #else
-            GameEntry.Resource.ResourceLoaderManager.LoadMainAsset(AssetCategory.UIPrefab, string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath),(Object obj)=>
+            GameEntry.Resource.ResourceLoaderManager.LoadMainAsset(AssetCategory.UIPrefab, string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath),(ResourceEntity entity)=>
             {
                 if (onComplete != null)
                 {
-                    onComplete(obj);
+                    onComplete(entity);
                 }
             });
 #endif

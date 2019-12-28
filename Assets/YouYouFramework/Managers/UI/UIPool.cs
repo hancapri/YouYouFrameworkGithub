@@ -55,6 +55,8 @@ namespace YouYouFramework
                 {
                     //销毁UI
                     Object.Destroy(curr.Value.gameObject);
+                    GameEntry.Pool.ReleaseInstanceResource(curr.Value.gameObject.GetInstanceID());
+
                     LinkedListNode<UIFormBase> next = curr.Next;
                     m_UIFormList.Remove(curr.Value);
                     curr = next;
@@ -84,6 +86,8 @@ namespace YouYouFramework
                 {
                     //销毁UI
                     Object.Destroy(curr.Value.gameObject);
+                    GameEntry.Pool.ReleaseInstanceResource(curr.Value.gameObject.GetInstanceID());
+
                     LinkedListNode<UIFormBase> next = curr.Next;
                     m_UIFormList.Remove(curr.Value);
                     curr = next;

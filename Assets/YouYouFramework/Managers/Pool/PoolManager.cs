@@ -81,6 +81,23 @@ namespace YouYouFramework
             AssetBundlePool.Release();
         }
 
+        /// <summary>
+        /// 卸载分类资源池中的所有资源
+        /// </summary>
+        public void ReleaseAssetPool()
+        {
+            var enumerator = Enum.GetValues(typeof(AssetCategory)).GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                AssetCategory assetCategory = (AssetCategory)enumerator.Current;
+                if (assetCategory == AssetCategory.None)
+                {
+                    continue;
+                }
+                AssetPool[assetCategory].Release();
+            }
+        }
+
         public void Dispose()
         {
             ClassObjectPool.Dispose();

@@ -1,0 +1,42 @@
+资源加载和卸载流程，以ui资源为例
+
+打开一个UI窗口过程和回收流程
+--打开UI
+1.UIComponent的OpenUIForm方法
+2.UIManager的LoadUIAsset方法
+3.ResourceLoaderManager的LoadMainAsset方法
+4.生成一个MainAssetLoaderRoutine加载器
+5.MainAssetLoaderRoutine的Load方法
+6.MainAssetLoaderRoutine的LoadDependsAsset方法，先加载所有的依赖资源，并存储依赖资源实体ResourceEntity的列表
+7.当所有依赖加载完毕之后，MainAssetLoaderRoutine的LoadMainAsset方法，加载主ui资源实体ResourceEntity，并关联它的依赖资源实体ResourceEntity的列表
+	将主ui资源实体ResourceEntity注册到PoolManager.AssetPool中
+8.将加载的ui资源实体ResourceEntity抛出给ResourceLoaderManager的LoadMainAsset方法回调，再抛出给UIManager的LoadUIAsset方法回调
+9.将ui资源实体ResourceEntity根据ResourceEntity.Target.GetInstanceID()的id，注册到PoolComponent的实例资源字典m_InstanceResourceDic，
+	并获取UI预制体上的UIFormBase组件，存储到UIManager的m_OpenUIFormList列表中
+--打开完成，此时ui资源实体ResourceEntity的引用计数+1
+
+--关闭UI
+1.UIComponent的CloseUIForm方法
+2.UIManager的CloseUIForm方法
+3.将UIFormBase从m_OpenUIFormList中移除，调用UIFormBase的ToClose方法
+4.记录UIFormBase的关闭时间CloseTime，调用UIComponent的Enqueue方法
+5.关闭UI实体的显示，将UIFormBase放入UI池，加入到UIPool的m_UIFormList列表中，等待释放
+6.UIComponent中，设置有UIExpire（已关闭的UI的过期时间）和m_ClearInterval（释放过期UI的时间间隔），
+	当时间到达时，调用UIPool的CheckClear方法，检查可以释放的已关闭并且过期了的UI
+7.遍历UIPool的m_UIFormList列表，根据关闭时间和过期时间，满足条件的，开始释放
+8.根据UIFormBase.gameObject.GetInstanceID()找到PoolComponent的实例资源字典m_InstanceResourceDic中存储的资源实体ResourceEntity，
+	调用PoolComponent的ReleaseInstanceResource方法，再调用PoolComponent的UnspawnResourceEntity方法，
+	根据资源实体ResourceEntity的DependsResourceList参数，依赖资源实体ResourceEntity列表，
+	递归释放依赖，将依赖ResourceEntity的引用计数减一，最后将主资源实体ResourceEntity的引用计数减一
+--关闭完成
+
+--释放Asset
+9.PoolComponent上设置了ReleaseAssetInterval（释放Asset池的时间间隔），当时间满足时，调用PoolManager的ReleaseAssetPool方法
+10.遍历AssetPool，如果ResourceEntity引用计数为0并且满足最后使用时间大于ReleaseAssetInterval时间间隔，调用ResourceEntity的Release方法
+	ResourceEntity的Target = null;ResourceEntity类对象回池，UI预制体和他的依赖资源，没有引用了
+11.Resources.UnloadUnusedAssets()，没有引用的预制体资源和它的依赖，全部释放
+
+	
+
+
+

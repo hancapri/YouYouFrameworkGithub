@@ -44,6 +44,20 @@ namespace YouYouFramework
         }
 
         /// <summary>
+        /// 依赖的资源实体链表
+        /// </summary>
+        public LinkedList<ResourceEntity> DependsResourceList
+        {
+            get;
+            private set;
+        }
+
+        public ResourceEntity()
+        {
+            DependsResourceList = new LinkedList<ResourceEntity>();
+        }
+
+        /// <summary>
         /// 对象取池
         /// </summary>
         public void Spawn()
@@ -53,6 +67,14 @@ namespace YouYouFramework
             if (!IsAssetBundle)
             {
                 ReferenceCount++;
+            }
+            else
+            {
+                //如果锁定包不释放
+                if (GameEntry.Pool.CheckAssetBundleIsLock(ResourceName))
+                {
+                    ReferenceCount = 1;
+                }
             }
         }
 
@@ -75,9 +97,19 @@ namespace YouYouFramework
         /// <returns></returns>
         public bool GetCanRelease()
         {
-            if (ReferenceCount == 0 && Time.time - LastUseTime >GameEntry.Pool.ReleaseResourceInterval)
+            if (IsAssetBundle)
             {
-                return true;
+                if (ReferenceCount == 0 && Time.time - LastUseTime > GameEntry.Pool.ReleaseResourceInterval)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (ReferenceCount == 0 && Time.time - LastUseTime > GameEntry.Pool.ReleaseAssetInterval)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -95,6 +127,8 @@ namespace YouYouFramework
                 Debug.LogError("卸载了资源包");
             }
             Target = null;
+
+            DependsResourceList.Clear();
             GameEntry.Pool.EnqueueClassObject(this);//把资源实体回池
         }
     }

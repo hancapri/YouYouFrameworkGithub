@@ -15,6 +15,16 @@ namespace YouYouFramework
         private AssetEntity m_CurrAssetEntity;
 
         /// <summary>
+        /// 当前的资源实体
+        /// </summary>
+        private ResourceEntity m_CurrResourceEntity;
+
+        /// <summary>
+        /// 当前的资源的依赖资源实体链表（临时存储）
+        /// </summary>
+        private LinkedList<ResourceEntity> m_DependsResourceList = new LinkedList<ResourceEntity>();
+
+        /// <summary>
         /// 需要加载的依赖项资源数量
         /// </summary>
         private int m_NeedLoadAssetDependCount = 0;
@@ -48,13 +58,13 @@ namespace YouYouFramework
         private void LoadMainAsset()
         {
             //1.先从分类资源池中（AssetPool）中取资源
-            ResourceEntity assetEntity = GameEntry.Pool.PoolManager.AssetPool[m_CurrAssetEntity.Category].Spawn(m_CurrAssetEntity.AssetFullName);
-            if (assetEntity != null)
+            ResourceEntity m_CurrResourceEntity = GameEntry.Pool.PoolManager.AssetPool[m_CurrAssetEntity.Category].Spawn(m_CurrAssetEntity.AssetFullName);
+            if (m_CurrResourceEntity != null)
             {
-                Debug.LogError("从资源池中加载"+assetEntity.ResourceName);
+                Debug.LogError("从资源池中加载"+ m_CurrResourceEntity.ResourceName);
                 if (m_OnComplete != null)
                 {
-                    m_OnComplete(assetEntity);
+                    m_OnComplete(m_CurrResourceEntity);
                 }
                 return;
             }
@@ -66,16 +76,26 @@ namespace YouYouFramework
                 //加载资源
                 GameEntry.Resource.ResourceLoaderManager.LoadAsset(m_CurrAssetEntity.AssetFullName, assetBundle, onComplete: (UnityEngine.Object obj) =>
                 {
-                    assetEntity = GameEntry.Pool.DequeueClassObject<ResourceEntity>();
-                    assetEntity.Category = m_CurrAssetEntity.Category;
-                    assetEntity.IsAssetBundle = false;
-                    assetEntity.ResourceName = m_CurrAssetEntity.AssetFullName;
-                    assetEntity.Target = obj;
-                    GameEntry.Pool.PoolManager.AssetPool[m_CurrAssetEntity.Category].Register(assetEntity);
+                    m_CurrResourceEntity = GameEntry.Pool.DequeueClassObject<ResourceEntity>();
+                    m_CurrResourceEntity.Category = m_CurrAssetEntity.Category;
+                    m_CurrResourceEntity.IsAssetBundle = false;
+                    m_CurrResourceEntity.ResourceName = m_CurrAssetEntity.AssetFullName;
+                    m_CurrResourceEntity.Target = obj;
+                    GameEntry.Pool.PoolManager.AssetPool[m_CurrAssetEntity.Category].Register(m_CurrResourceEntity);
+
+                    //加入到这个资源的依赖资源链表里
+                    var currDependsResource = m_DependsResourceList.First;
+                    while (currDependsResource != null)
+                    {
+                        var next = currDependsResource.Next;
+                        m_DependsResourceList.Remove(currDependsResource);
+                        m_CurrResourceEntity.DependsResourceList.AddLast(currDependsResource);
+                        currDependsResource = next;
+                    }
 
                     if (m_OnComplete != null)
                     {
-                        m_OnComplete(assetEntity);
+                        m_OnComplete(m_CurrResourceEntity);
                     }
                     Reset();
                 });
@@ -110,6 +130,8 @@ namespace YouYouFramework
         /// </summary>
         private void OnLoadDependsAssetComplete(ResourceEntity entity)
         {
+            m_DependsResourceList.AddLast(entity);
+
             m_CurrLoadAssetDependCount++;
 
             if (m_NeedLoadAssetDependCount == m_CurrLoadAssetDependCount)
@@ -125,8 +147,10 @@ namespace YouYouFramework
         {
             m_OnComplete = null;
             m_CurrAssetEntity = null;
+            m_CurrResourceEntity = null;
             m_NeedLoadAssetDependCount = 0;
             m_CurrLoadAssetDependCount = 0;
+            m_DependsResourceList.Clear();
             GameEntry.Pool.EnqueueClassObject(this);
         }
     }

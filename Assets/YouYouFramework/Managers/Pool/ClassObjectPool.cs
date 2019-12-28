@@ -131,7 +131,6 @@ namespace YouYouFramework
         {
             lock (m_ClassObjectPoolDic)
             {
-                Debug.Log("释放类对象池" + DateTime.Now);
                 int queueCount = 0;
                 var enumerator = m_ClassObjectPoolDic.GetEnumerator();
                 while (enumerator.MoveNext())

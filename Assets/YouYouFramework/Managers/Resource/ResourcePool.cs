@@ -110,7 +110,7 @@ namespace YouYouFramework
             while (curr != null)
             {
                 ResourceEntity entity = curr.Value;
-                //LinkedListNode<ResourceEntity> next = curr.Next;
+                LinkedListNode<ResourceEntity> next = curr.Next;
                 if (entity.GetCanRelease())
                 {
 #if UNITY_EDITOR
@@ -122,7 +122,29 @@ namespace YouYouFramework
                     m_List.Remove(entity);
                     entity.Release();
                 }
-                curr = curr.Next;
+                curr = next;
+            }
+        }
+
+        /// <summary>
+        /// 强制释放池内所有资源
+        /// </summary>
+        public void ReleaseAll()
+        {
+            LinkedListNode<ResourceEntity> curr = m_List.First;
+            while (curr != null)
+            {
+                ResourceEntity entity = curr.Value;
+                LinkedListNode<ResourceEntity> next = curr.Next;
+#if UNITY_EDITOR
+                if (InspectorDic.ContainsKey(entity.ResourceName))
+                {
+                    InspectorDic.Remove(entity.ResourceName);
+                }
+#endif
+                m_List.Remove(entity);
+                entity.Release();
+                curr = next;
             }
         }
     }

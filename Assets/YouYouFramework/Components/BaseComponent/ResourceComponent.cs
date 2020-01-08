@@ -107,5 +107,15 @@ namespace YouYouFramework
 
             GameEntry.RemoveUpdateComponent(this);
         }
+
+        /// <summary>
+        /// 获取场景的ab包路径
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <returns></returns>
+        public string GetSceneAssetBundlePath(string sceneName)
+        {
+            return string.Format("download/scenes/{0}.assetbundle",sceneName.ToLower());
+        }
     }
 }

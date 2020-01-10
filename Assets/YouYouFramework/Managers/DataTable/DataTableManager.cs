@@ -18,7 +18,8 @@ namespace YouYouFramework
         public Sys_StorySoundDBModel Sys_StorySoundDBModel { get; private set; }
         public Sys_UIFormDBModel Sys_UIFormDBModel { get; private set; }
         public LocalizationDBModel LocalizationDBModel { get; private set; }
-
+        public Sys_SceneDBModel Sys_SceneDBModel { get; private set; }
+        public Sys_SceneDetailDBModel Sys_SceneDetailDBModel { get; private set; }
         /// <summary>
         /// 章节表
         /// </summary>
@@ -59,6 +60,8 @@ namespace YouYouFramework
             Sys_StorySoundDBModel = new Sys_StorySoundDBModel();
             Sys_UIFormDBModel = new Sys_UIFormDBModel();
             LocalizationDBModel = new LocalizationDBModel();
+            Sys_SceneDBModel = new Sys_SceneDBModel();
+            Sys_SceneDetailDBModel = new Sys_SceneDetailDBModel();
             //load完毕
         }
 
@@ -96,6 +99,8 @@ namespace YouYouFramework
             Sys_StorySoundDBModel.LoadData();
             Sys_UIFormDBModel.LoadData();
             LocalizationDBModel.LoadData();
+            Sys_SceneDBModel.LoadData();
+            Sys_SceneDetailDBModel.LoadData();
         }
 
         /// <summary>

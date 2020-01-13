@@ -160,7 +160,49 @@ namespace YouYouFramework
             if (m_CurrSceneIsLoading)
             {
                 var curr = m_SceneLoaderList.First;
+                while (curr != null)
+                {
+                    curr.Value.OnUpdate();
+                    curr = curr.Next;
+                }
+
+                float currTarget = GetCurrTotalProgress();
+                float finalTarget = 0.9f * m_NeedLoadOrUnLoadSceneDetailCount;
+                if (currTarget >= finalTarget)
+                {
+                    currTarget = m_NeedLoadOrUnLoadSceneDetailCount;
+                }
+
+                if (m_CurrProgress < m_NeedLoadOrUnLoadSceneDetailCount && m_CurrProgress <= currTarget)
+                {
+                    m_CurrProgress = m_CurrProgress + Time.deltaTime * m_NeedLoadOrUnLoadSceneDetailCount * 1;
+
+                    Debug.LogError("m_CurrProgress=" + (m_CurrProgress / m_NeedLoadOrUnLoadSceneDetailCount));
+                }
+                else if (m_CurrProgress >= m_NeedLoadOrUnLoadSceneDetailCount)
+                {
+                    Debug.LogError("场景加载完毕");
+                    m_NeedLoadOrUnLoadSceneDetailCount = 0;
+                    m_CurrLoadOrUnLoadSceneDetailCount = 0;
+                    m_CurrSceneIsLoading = false;
+                }
+
             }
+        }
+
+        /// <summary>
+        /// 获取当前的总进度
+        /// </summary>
+        /// <returns></returns>
+        private float GetCurrTotalProgress()
+        {
+            float progress = 0;
+            var lst = m_TargetProgressDic.GetEnumerator();
+            while (lst.MoveNext())
+            {
+                progress += lst.Current.Value;
+            }
+            return progress;
         }
     }
 }

@@ -19,7 +19,7 @@ public partial class Sys_SceneDetailDBModel {
         for (int i = 0; i < len; i++)
         {
             Sys_SceneDetailEntity entity = lst[i];
-            if (entity.SceneGrade <= sceneGrade)
+            if (entity.SceneId == sceneId && entity.SceneGrade <= sceneGrade)
             {
                 m_retLst.Add(entity);
             }

@@ -25,9 +25,14 @@ namespace YouYouFramework
         /// </summary>
         public Action<UnityEngine.Object> OnLoadAssetComplete;
 
+        /// <summary>
+        /// 当前加载的资源名称
+        /// </summary>
+        private string currAssetName = "";
 
         public void LoadAsset(string assetName, AssetBundle assetBundle)
         {
+            currAssetName = assetName;
             m_CurrAssetBundleRequest = assetBundle.LoadAssetAsync(assetName);
         }
 
@@ -36,6 +41,7 @@ namespace YouYouFramework
         /// </summary>
         public void Reset()
         {
+            currAssetName = "";
             m_CurrAssetBundleRequest = null;
         }
 
@@ -69,7 +75,7 @@ namespace YouYouFramework
                     }
                     else
                     {
-                        GameEntry.LogError("资源包=>{0} 加载失败", "???");
+                        GameEntry.LogError("资源包=>{0} 加载失败", currAssetName);
                         Reset();
 
                         if (OnLoadAssetComplete != null)

@@ -14,7 +14,7 @@ namespace YouYouFramework
             base.OnEnable();
             GameEntry.Log(LogCategory.Procedure, "OnEnable ProcedureLogOn");
 
-            GameEntry.UI.OpenUIForm(UIFormId.UI_Task);
+            //GameEntry.UI.OpenUIForm(UIFormId.UI_Task);
 
         }
 

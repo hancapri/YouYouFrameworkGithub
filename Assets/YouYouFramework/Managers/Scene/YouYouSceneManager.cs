@@ -72,6 +72,7 @@ namespace YouYouFramework
             if (m_CurrLoadSceneId == sceneId)
             {
                 GameEntry.LogError("正在重复加载场景{0}", m_CurrLoadSceneId);
+                return;
             }
 
             m_CurrLoadingParam = GameEntry.Pool.DequeueClassObject<BaseParams>();

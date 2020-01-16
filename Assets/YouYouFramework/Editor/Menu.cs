@@ -65,7 +65,7 @@ public class Menu
         sbr.AppendFormat("end\n");
         sbr.AppendFormat("\n");
         sbr.AppendFormat("function {0}View.InitView(transform)\n", viewName);
-        sbr.AppendFormat("    this.LuaForm = transform:GetComponent(typeof(CS.YouYou.LuaForm));\n");
+        sbr.AppendFormat("    this.LuaForm = transform:GetComponent(typeof(CS.YouYouFramework.LuaForm));\n");
         for (int i = 0; i < len; i++)
         {
             LuaCom com = luaComs[i];

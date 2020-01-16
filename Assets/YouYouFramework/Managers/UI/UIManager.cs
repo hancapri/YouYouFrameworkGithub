@@ -98,7 +98,15 @@ namespace YouYouFramework
             Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);
             if (onComplete != null)
             {
-                onComplete(obj);
+                AssetEntity m_CurrAssetEntity = GameEntry.Resource.ResourceLoaderManager.GetAssetEntity(AssetCategory.UIPrefab, string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath));
+                ResourceEntity m_CurrResourceEntity = GameEntry.Pool.DequeueClassObject<ResourceEntity>();
+                m_CurrResourceEntity.Category = m_CurrAssetEntity.Category;
+                m_CurrResourceEntity.IsAssetBundle = false;
+                m_CurrResourceEntity.ResourceName = m_CurrAssetEntity.AssetFullName;
+                m_CurrResourceEntity.Target = obj;
+                GameEntry.Pool.PoolManager.AssetPool[m_CurrAssetEntity.Category].Register(m_CurrResourceEntity);
+
+                onComplete(m_CurrResourceEntity);
             }
 #else
             GameEntry.Resource.ResourceLoaderManager.LoadMainAsset(AssetCategory.UIPrefab, string.Format("Assets/Download/UI/UIPrefab/{0}.prefab", assetPath),(ResourceEntity entity)=>

@@ -17,7 +17,9 @@ namespace YouYouFramework
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadOneDataTableComplete,OnLoadOneDataTableComplete);
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadDataTableComplete, OnLoadDataTableComplete);
             GameEntry.Event.CommonEvent.AddEventListener(SysEventId.LoadLuaDataTableComplete, OnLoadLuaDataTableComplete);
-
+#if DISABLE_ASSETBUNDLE
+            GameEntry.Lua.Init();
+#endif
             GameEntry.Resource.InitAssetInfo();
             GameEntry.DataTable.LoadDataTableAsync(); 
         }
@@ -48,8 +50,10 @@ namespace YouYouFramework
         {
             GameEntry.Log(LogCategory.Normal, "加载c#表格完毕");
 
+#if !DISABLE_ASSETBUNDLE
             //执行Lua初始化
             GameEntry.Lua.Init();
+#endif
         }
 
         private void OnLoadLuaDataTableComplete(object param)

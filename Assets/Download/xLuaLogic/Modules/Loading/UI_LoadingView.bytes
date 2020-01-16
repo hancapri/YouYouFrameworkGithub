@@ -11,7 +11,7 @@ function UI_LoadingView.OnInit(transform, userData)
 end
 
 function UI_LoadingView.InitView(transform)
-    this.LuaForm = transform:GetComponent(typeof(CS.YouYou.LuaForm));
+    this.LuaForm = transform:GetComponent(typeof(CS.YouYouFramework.LuaForm));
     this.Scrollbar = this.LuaForm:GetLuaComs(ScrollbarIndex);
     this.txtTip = this.LuaForm:GetLuaComs(txtTipIndex);
     this.imgBG = this.LuaForm:GetLuaComs(imgBGIndex);

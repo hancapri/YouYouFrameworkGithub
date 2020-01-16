@@ -120,6 +120,10 @@ namespace YouYouFramework
                     {
                         OnProgressUpdate(m_SceneDetailId, m_CurrAsync.progress);
                     }
+                    if (OnUnLoadSceneComplete != null)
+                    {
+                        OnUnLoadSceneComplete(this);
+                    }
                 }
             }
             else
@@ -128,6 +132,10 @@ namespace YouYouFramework
                 if (OnLoadSceneComplete != null)
                 {
                     OnLoadSceneComplete(this);
+                }
+                if (OnUnLoadSceneComplete != null)
+                {
+                    OnUnLoadSceneComplete(this);
                 }
             }
         }

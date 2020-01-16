@@ -1,37 +1,37 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace YouYouFramework
 {
     /// <summary>
-    /// ÈÕÖ¾·ÖÀà
+    /// æ—¥å¿—åˆ†ç±»
     /// </summary>
     public enum LogCategory
     {
         /// <summary>
-        /// ÆÕÍ¨ÈÕÖ¾
+        /// æ™®é€šæ—¥å¿—
         /// </summary>
         Normal,
 
         /// <summary>
-        /// Á÷³ÌÈÕÖ¾
+        /// æµç¨‹æ—¥å¿—
         /// </summary>
         Procedure,
 
         /// <summary>
-        /// ×ÊÔ´ÈÕÖ¾
+        /// èµ„æºæ—¥å¿—
         /// </summary>
         Resource,
 
         /// <summary>
-        /// Ğ­ÒéÈÕÖ¾
+        /// åè®®æ—¥å¿—
         /// </summary>
         Proto
     }
 
     /// <summary>
-    /// ×ÊÔ´·ÖÀà
+    /// èµ„æºåˆ†ç±»
     /// </summary>
     public enum AssetCategory
     {
@@ -40,56 +40,72 @@ namespace YouYouFramework
         /// </summary>
         None = 0,
         /// <summary>
-        /// ÉùÒô
+        /// å£°éŸ³
         /// </summary>
         Audio,
         /// <summary>
-        /// ×Ô¶¨Òåshader
+        /// è‡ªå®šä¹‰shader
         /// </summary>
         CusShaders,
         /// <summary>
-        /// ±í¸ñ
+        /// è¡¨æ ¼
         /// </summary>
         DataTable,
         /// <summary>
-        /// ÌØĞ§×ÊÔ´
+        /// ç‰¹æ•ˆèµ„æº
         /// </summary>
         EffectSources,
         /// <summary>
-        /// ½ÇÉ«ÌØĞ§Ô¤Éè
+        /// è§’è‰²ç‰¹æ•ˆé¢„è®¾
         /// </summary>
         RoleEffectPrefab,
         /// <summary>
-        /// UIÌØĞ§Ô¤Éè
+        /// UIç‰¹æ•ˆé¢„è®¾
         /// </summary>
         UIEffectPrefab,
         /// <summary>
-        /// ½ÇÉ«Ô¤Éè
+        /// è§’è‰²é¢„è®¾
         /// </summary>
         RolePrefab,
         /// <summary>
-        /// ½ÇÉ«×ÊÔ´
+        /// è§’è‰²èµ„æº
         /// </summary>
         RoleSources,
         /// <summary>
-        /// ³¡¾°
+        /// åœºæ™¯
         /// </summary>
         Scenes,
         /// <summary>
-        /// ×ÖÌå
+        /// å­—ä½“
         /// </summary>
         UIFont,
         /// <summary>
-        /// UIÔ¤Éè
+        /// UIé¢„è®¾
         /// </summary>
         UIPrefab,
         /// <summary>
-        /// UI×ÊÔ´
+        /// UIèµ„æº
         /// </summary>
         UIRes,
         /// <summary>
-        /// Lua½Å±¾
+        /// Luaè„šæœ¬
         /// </summary>
         xLuaLogic
+    }
+
+    /// <summary>
+    /// Loadingç±»å‹
+    /// </summary>
+    public enum LoadingType
+    {
+        /// <summary>
+        /// æ£€æŸ¥æ›´æ–°
+        /// </summary>
+        CheckVersion = 0,
+
+        /// <summary>
+        /// åˆ‡æ¢åœºæ™¯
+        /// </summary>
+        ChangeScene = 1
     }
 }

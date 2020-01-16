@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UIFormId
 {
-    public const int UI_Task = 1;
+    public const int Loading = 1;
+    public const int UI_Task = 101;
 }
     

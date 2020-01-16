@@ -1,0 +1,27 @@
+UI_LoadingCtrl = { };
+
+local this = UI_LoadingCtrl;
+
+function UI_LoadingCtrl.OnInit(userData)
+    GameEntry.Event.CommonEvent:AddEvenetListener(Sys_EventId.LoadingProgressChange,this.OnLoadingProgressChange)
+end
+
+function UI_LoadingCtrl.OnOpen(userData)
+
+end
+
+function UI_LoadingCtrl.OnClose()
+    GameEntry.Event.CommonEvent:RemoveEvenetListener(Sys_EventId.LoadingProgressChange,this.OnLoadingProgressChange)
+end
+
+function UI_LoadingCtrl.OnBeforDestroy()
+
+end
+
+function UI_LoadingCtrl. OnLoadingProgressChange(userData)
+    local progress = math.min(userData.FloatParam1*100,100);
+    if userData.IntParam1 == 1 then
+        UI_LoadingView.txtTip.text = GameEntry.Localization:GetString("Loading.ChangeScene",math.floor(progress))
+    end
+    UI_LoadingView.Scrollbar.size = userData.FloatParam1
+end

@@ -23,5 +23,10 @@ namespace YouYouFramework
         /// 加载Lua表格完毕
         /// </summary>
         public const ushort LoadLuaDataTableComplete = 1003;
+
+        /// <summary>
+        /// 加载进度条更新
+        /// </summary>
+        public const ushort LoadingProgressChange = 1004;
     }
 }

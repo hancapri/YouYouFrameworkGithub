@@ -19,6 +19,9 @@ function GameInit.InitCtrlAndViews()
 
 	require('Modules/Task/UI_TaskCtrl');
 	require('Modules/Task/UI_TaskView');
+
+	require('Modules/Loading/UI_LoadingCtrl');
+	require('Modules/Loading/UI_LoadingView');
 end
 
 function GameInit.LoadDataTables()

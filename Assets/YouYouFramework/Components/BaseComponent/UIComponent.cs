@@ -142,10 +142,10 @@ namespace YouYouFramework
         /// </summary>
         /// <param name="uiFormId"></param>
         /// <param name="userData"></param>
-        public void OpenUIForm(int uiFormId, object userData = null)
+        public void OpenUIForm(int uiFormId, object userData = null,BaseAction<UIFormBase> onOpen = null)
         {
             m_UIPool.CheckByOpenUI();
-            m_UIManager.OpenUIForm(uiFormId, userData);
+            m_UIManager.OpenUIForm(uiFormId, userData, onOpen);
         }
 
         /// <summary>

@@ -6,5 +6,8 @@ SysEventId = {
     LoadOneDataTableComplete = 1002,
 
     --加载Lua表格完毕
-    LoadLuaDataTableComplete = 1003
+    LoadLuaDataTableComplete = 1003,
+
+    --加载进度条更新
+    LoadingProgressChange = 1004
 }

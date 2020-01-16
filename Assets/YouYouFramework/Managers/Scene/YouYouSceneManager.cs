@@ -54,6 +54,7 @@ namespace YouYouFramework
         /// </summary>
         private Dictionary<int, float> m_TargetProgressDic;
 
+        private BaseParams m_CurrLoadingParam;
         public YouYouSceneManager()
         {
             m_SceneLoaderList = new LinkedList<SceneLoaderRoutine>();
@@ -73,14 +74,20 @@ namespace YouYouFramework
                 GameEntry.LogError("正在重复加载场景{0}", m_CurrLoadSceneId);
             }
 
-            m_CurrProgress = 0;
-            m_TargetProgressDic.Clear();
+            m_CurrLoadingParam = GameEntry.Pool.DequeueClassObject<BaseParams>();
 
-            m_CurrSceneIsLoading = true;
-            m_CurrLoadSceneId = sceneId;
+            //加载Loading
+            GameEntry.UI.OpenUIForm(UIFormId.Loading, onOpen: (UIFormBase formBase) =>
+              {
+                  m_CurrProgress = 0;
+                  m_TargetProgressDic.Clear();
 
-            //先卸载当前场景
-            UnLoadCurrScene();
+                  m_CurrSceneIsLoading = true;
+                  m_CurrLoadSceneId = sceneId;
+
+                  //先卸载当前场景
+                  UnLoadCurrScene();
+              });
         }
 
         /// <summary>
@@ -176,6 +183,9 @@ namespace YouYouFramework
                 if (m_CurrProgress < m_NeedLoadOrUnLoadSceneDetailCount && m_CurrProgress <= currTarget)
                 {
                     m_CurrProgress = m_CurrProgress + Time.deltaTime * m_NeedLoadOrUnLoadSceneDetailCount * 1;
+                    m_CurrLoadingParam.IntParam1 = (int)LoadingType.ChangeScene;
+                    m_CurrLoadingParam.FloatParam1 = (m_CurrProgress / m_NeedLoadOrUnLoadSceneDetailCount);
+                    GameEntry.Event.CommonEvent.Dispatch(SysEventId.LoadingProgressChange, m_CurrLoadingParam);
 
                     Debug.LogError("m_CurrProgress=" + (m_CurrProgress / m_NeedLoadOrUnLoadSceneDetailCount));
                 }
@@ -185,6 +195,9 @@ namespace YouYouFramework
                     m_NeedLoadOrUnLoadSceneDetailCount = 0;
                     m_CurrLoadOrUnLoadSceneDetailCount = 0;
                     m_CurrSceneIsLoading = false;
+                    GameEntry.UI.CloseUIForm(UIFormId.Loading);
+                    m_CurrLoadingParam.Reset();
+                    GameEntry.Pool.EnqueueClassObject(m_CurrLoadingParam);
                 }
 
             }

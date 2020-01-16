@@ -1,0 +1,34 @@
+UI_LoadingView = { };
+local this = UI_LoadingView;
+
+local ScrollbarIndex = 0;
+local txtTipIndex = 1;
+local imgBGIndex = 2;
+
+function UI_LoadingView.OnInit(transform, userData)
+    this.InitView(transform);
+    UI_LoadingCtrl.OnInit(userData);
+end
+
+function UI_LoadingView.InitView(transform)
+    this.LuaForm = transform:GetComponent(typeof(CS.YouYou.LuaForm));
+    this.Scrollbar = this.LuaForm:GetLuaComs(ScrollbarIndex);
+    this.txtTip = this.LuaForm:GetLuaComs(txtTipIndex);
+    this.imgBG = this.LuaForm:GetLuaComs(imgBGIndex);
+end
+
+function UI_LoadingView.OnOpen(userData)
+    UI_LoadingCtrl.OnOpen(userData);
+end
+
+function UI_LoadingView.OnClose()
+    UI_LoadingCtrl.OnClose();
+end
+
+function UI_LoadingView.OnBeforDestroy()
+    UI_LoadingCtrl.OnBeforDestroy();
+    this.LuaForm = nil;
+    this.Scrollbar = nil;
+    this.txtTip = nil;
+    this.imgBG = nil;
+end

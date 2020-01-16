@@ -24,7 +24,7 @@ namespace YouYouFramework
         /// </summary>
         /// <param name="uiFormId"></param>
         /// <param name="userData"></param>
-        internal void OpenUIForm(int uiFormId, object userData = null)
+        internal void OpenUIForm(int uiFormId, object userData = null,BaseAction<UIFormBase> onOpen = null)
         {
             if (IsExists(uiFormId)) return;
 
@@ -65,6 +65,11 @@ namespace YouYouFramework
                     formBase = UIObj.GetComponent<UIFormBase>();
                     formBase.Init(uiFormId, entity.UIGroupId, entity.DisableUILayer == 1, entity.IsLock == 1, userData);
                     m_OpenUIFormList.AddLast(formBase);
+
+                    if (onOpen != null)
+                    {
+                        onOpen(formBase);
+                    }
                 });
             }
             else
@@ -72,6 +77,11 @@ namespace YouYouFramework
                 formBase.gameObject.SetActive(true);
                 formBase.Open(userData);
                 m_OpenUIFormList.AddLast(formBase);
+
+                if (onOpen != null)
+                {
+                    onOpen(formBase);
+                }
             }
         }
 

@@ -25,6 +25,11 @@ public class ConstDefine
     public const string XLuaAssetBundlePath = "download/xlualogic.assetbundle";
 
     /// <summary>
+    /// 自定义shader资源包路径
+    /// </summary>
+    public const string CusShaderAssetBundlePath = "download/cusshaders.assetbundle";
+
+    /// <summary>
     /// 资源版本号
     /// </summary>
     public const string ResourceVersion = "ResourceVersion";

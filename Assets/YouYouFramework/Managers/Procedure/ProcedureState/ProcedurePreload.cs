@@ -59,7 +59,27 @@ namespace YouYouFramework
         private void OnLoadLuaDataTableComplete(object param)
         {
             GameEntry.Log(LogCategory.Normal, "加载Lua表格完毕");
+
+#if !DISABLE_ASSETBUNDLE
+            //ab包模式下，先加载shader
+            LoadShader();
+#else
             GameEntry.Procedure.ChangeState(ProcedureState.LogOn);
+#endif
+        }
+
+        /// <summary>
+        /// 加载自定义shader
+        /// </summary>
+        private void LoadShader()
+        {
+            GameEntry.Resource.ResourceLoaderManager.LoadAssetBundle(ConstDefine.CusShaderAssetBundlePath,onComplete:(AssetBundle bundle)=>
+            {
+                bundle.LoadAllAssets();
+                Shader.WarmupAllShaders();
+                GameEntry.Log(LogCategory.Normal, "加载资源包中的自定义shader完毕");
+                GameEntry.Procedure.ChangeState(ProcedureState.LogOn);
+            });
         }
     }
 }

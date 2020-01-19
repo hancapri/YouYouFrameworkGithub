@@ -13,6 +13,9 @@ namespace YouYouFramework
         [Header("写入磁盘的缓存大小")]
         public int FlushSize = 1024 * 1024;
 
+        [Header("下载器数量")]
+        public int DownloadRoutineCount = 5;
+
         private DownloadManager m_DownloadManager;
 
         protected override void OnAwake()
@@ -28,9 +31,14 @@ namespace YouYouFramework
         /// <param name="url"></param>
         /// <param name="onUpdate"></param>
         /// <param name="onComplete"></param>
-        public void BeginDownload(string url, BaseAction<float> onUpdate = null, BaseAction<string> onComplete = null)
+        public void BeginDownloadSingle(string url, BaseAction<string,ulong,float> onUpdate = null, BaseAction<string> onComplete = null)
         {
-            m_DownloadManager.BeginDownload(url, onUpdate, onComplete);
+            m_DownloadManager.BeginDownloadSingle(url, onUpdate, onComplete);
+        }
+
+        public void BeginDownloadMulit(LinkedList<string> lstUrl, BaseAction<int,int,ulong,ulong> onDownloadMulitUpdate = null, BaseAction onDownloadMulitComplete = null)
+        {
+            m_DownloadManager.BeginDownloadMulit(lstUrl, onDownloadMulitUpdate, onDownloadMulitComplete);
         }
 
 

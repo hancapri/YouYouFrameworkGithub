@@ -76,7 +76,7 @@ namespace YouYouFramework
                 return;
             }
             DownloadRoutine routine = GameEntry.Pool.DequeueClassObject<DownloadRoutine>();
-            routine.BeginDownload(url, onUpdate, onComplete:(string fileUrl,DownloadRoutine rou)=>
+            routine.BeginDownload(url, entity, onUpdate, onComplete:(string fileUrl,DownloadRoutine rou)=>
             {
                 m_DownloadRoutineList.Remove(rou);
                 GameEntry.Pool.EnqueueClassObject(routine);
@@ -134,7 +134,8 @@ namespace YouYouFramework
                 string url = m_NeedDownloadList.First.Value;
                 m_NeedDownloadList.RemoveFirst();
 
-                routine.BeginDownload(url, OnDownloadMulitUpdate, OnDownloadMulitComplete);
+                AssetBundleInfoEntity entity = GameEntry.Resource.ResourceManager.GetAssetBundleInfo(url);
+                routine.BeginDownload(url, entity, OnDownloadMulitUpdate, OnDownloadMulitComplete);
                 m_DownloadRoutineList.AddLast(routine);
             }
         }
@@ -168,7 +169,9 @@ namespace YouYouFramework
             {
                 string url = m_NeedDownloadList.First.Value;
                 m_NeedDownloadList.RemoveFirst();
-                routine.BeginDownload(url, OnDownloadMulitUpdate, OnDownloadMulitComplete);
+
+                AssetBundleInfoEntity entity = GameEntry.Resource.ResourceManager.GetAssetBundleInfo(url);
+                routine.BeginDownload(url, entity, OnDownloadMulitUpdate, OnDownloadMulitComplete);
             }
             else
             {

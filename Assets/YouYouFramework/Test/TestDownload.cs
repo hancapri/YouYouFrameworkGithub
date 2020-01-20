@@ -18,7 +18,6 @@ public class TestDownload : MonoBehaviour {
             //GameEntry.Download.BeginDownload("download/ssss.rar");
             LinkedList<string> lstUrl = new LinkedList<string>();
             lstUrl.AddLast("download/cusshaders.assetbundle");
-            lstUrl.AddLast("download/datatable.assetbundle");
             lstUrl.AddLast("download/xlualogic.assetbundle");
             lstUrl.AddLast("download/ui/uifont.assetbundle");
             lstUrl.AddLast("download/ui/uiprefab.assetbundle");

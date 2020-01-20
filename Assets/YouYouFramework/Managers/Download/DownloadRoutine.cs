@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
+using System;
 
 namespace YouYouFramework
 {
@@ -59,49 +60,78 @@ namespace YouYouFramework
         /// <summary>
         /// 下载中委托
         /// </summary>
-        private BaseAction<float> m_OnUpdate;
+        private BaseAction<string, ulong, float> m_OnUpdate;
 
         /// <summary>
         /// 下载完毕委托
         /// </summary>
-        private BaseAction<string> m_OnComplete;
+        private BaseAction<string, DownloadRoutine> m_OnComplete;
 
+        /// <summary>
+        /// 当前的资源包信息
+        /// </summary>
+        private AssetBundleInfoEntity m_CurrAssetBundleInfo;
         /// <summary>
         /// 开始下载
         /// </summary>
-        public void BeginDownload(string url, BaseAction<float> onUpdate = null, BaseAction<string> onComplete = null)
+        public void BeginDownload(string url, AssetBundleInfoEntity assetbundleInfo, BaseAction<string,ulong,float> onUpdate = null, BaseAction<string,DownloadRoutine> onComplete = null)
         {
+            m_CurrFileUrl = url;
+            m_CurrAssetBundleInfo = assetbundleInfo;
             m_OnUpdate = onUpdate;
             m_OnComplete = onComplete;
-
-            m_CurrFileUrl = url;
+            
             m_DownloadLocalFilePath = string.Format("{0}/{1}.temp",GameEntry.Resource.LocalFilePath,m_CurrFileUrl);
-            Debug.Log("m_DownloadLocalFilePath:"+ m_DownloadLocalFilePath);
+            
             if (File.Exists(m_DownloadLocalFilePath))
             {
-                m_FileStream = File.OpenWrite(m_DownloadLocalFilePath);
-                m_FileStream.Seek(0, SeekOrigin.End);
-
-                m_BeginPos = (uint)m_FileStream.Length;
-
-                Debug.LogError("继续下载beginpos = " + m_BeginPos);
-
-                Download(string.Format("{0}/{1}", GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl, m_CurrFileUrl), m_BeginPos);
+                Debug.LogError("验证MD5 如果以前残留文件的MD5和CDN的不一致 则删除本地临时文件重新下载");
+                if (PlayerPrefs.HasKey(m_CurrFileUrl))
+                {
+                    //验证
+                    if (PlayerPrefs.GetString(m_CurrFileUrl).Equals(assetbundleInfo.MD5, System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Debug.LogError("md5不一致 删除本地临时文件 重新下载");
+                        File.Delete(m_DownloadLocalFilePath);
+                        BeginDownload();
+                    }
+                    else
+                    {
+                        Debug.LogError("一致 继续下载");
+                        m_FileStream = File.OpenWrite(m_DownloadLocalFilePath);
+                        m_FileStream.Seek(0, SeekOrigin.End);
+                        m_BeginPos = (uint)m_FileStream.Length;
+                        Download(string.Format("{0}/{1}", GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl, m_CurrFileUrl), m_BeginPos);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("本地没md5记录 重新下载");
+                    File.Delete(m_DownloadLocalFilePath);
+                    BeginDownload();
+                }
             }
             else
             {
-                string directory = Path.GetDirectoryName(m_DownloadLocalFilePath);
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-
-                m_FileStream = new FileStream(m_DownloadLocalFilePath,FileMode.Create,FileAccess.Write);
-
-                Debug.LogError("从头下载");
-
-                Download(string.Format("{0}/{1}", GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl, m_CurrFileUrl));
+                BeginDownload();
             }
+        }
+
+        /// <summary>
+        /// 进行下载
+        /// </summary>
+        private void BeginDownload()
+        {
+            string directory = Path.GetDirectoryName(m_DownloadLocalFilePath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            m_FileStream = new FileStream(m_DownloadLocalFilePath,FileMode.Create,FileAccess.Write);
+
+            PlayerPrefs.SetString(m_CurrFileUrl, m_CurrAssetBundleInfo.MD5);
+            Download(string.Format("{0}/{1}", GameEntry.Data.SysDataManager.CurrChannelConfig.RealSourceUrl, m_CurrFileUrl));
         }
 
         /// <summary>
@@ -174,7 +204,7 @@ namespace YouYouFramework
 
                     if (m_OnUpdate != null)
                     {
-                        m_OnUpdate(m_CurrDownloadedSize / (float)m_TotalSize);
+                        m_OnUpdate(m_CurrFileUrl,m_CurrDownloadedSize,m_CurrDownloadedSize / (float)m_TotalSize);
                     }
                 }
                 return;
@@ -194,20 +224,25 @@ namespace YouYouFramework
 
                 if (m_OnUpdate != null)
                 {
-                    m_OnUpdate(m_CurrDownloadedSize/(float)m_TotalSize);
+                    m_OnUpdate(m_CurrFileUrl,m_CurrDownloadedSize, m_CurrDownloadedSize / (float)m_TotalSize);
                 }
 
                 Reset();
                 File.Move(m_DownloadLocalFilePath,m_DownloadLocalFilePath.Replace(".temp",""));
                 m_DownloadLocalFilePath = null;
 
+                if (PlayerPrefs.HasKey(m_CurrFileUrl))
+                {
+                    PlayerPrefs.DeleteKey(m_CurrFileUrl);
+                }
+
                 if (m_OnComplete != null)
                 {
-                    m_OnComplete(m_CurrFileUrl);
+                    m_OnComplete(m_CurrFileUrl,this);
                 }
-                m_CurrFileUrl = null;
+                //m_CurrFileUrl = null;
 
-                Debug.LogError("下载完毕");
+                //Debug.LogError("下载完毕");
             }
         }
 
@@ -220,7 +255,7 @@ namespace YouYouFramework
 
             int len = buffer.Length;
             int count = len - m_PrevWriteSize;
-            m_FileStream.Write(buffer,m_PrevWriteSize,count);
+            m_FileStream.Write(buffer, m_PrevWriteSize, count);
             m_PrevWriteSize = len;
 
             m_CurrWaitFlushSize += count;

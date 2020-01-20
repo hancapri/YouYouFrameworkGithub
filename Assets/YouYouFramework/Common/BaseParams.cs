@@ -21,6 +21,12 @@ namespace YouYouFramework
         public float FloatParam4;
         public float FloatParam5;
 
+        public ulong ULongParam1;
+        public ulong ULongParam2;
+        public ulong ULongParam3;
+        public ulong ULongParam4;
+        public ulong ULongParam5;
+
         public string StringParam1;
         public string StringParam2;
         public string StringParam3;
@@ -34,6 +40,7 @@ namespace YouYouFramework
         {
             IntParam1 = IntParam2 = IntParam3 = IntParam4 = IntParam5 = 0;
             FloatParam1 = FloatParam2 = FloatParam3 = FloatParam4 = FloatParam5 = 0;
+            ULongParam1 = ULongParam2 = ULongParam3 = ULongParam4 = ULongParam5 = 0;
             StringParam1 = StringParam2 = StringParam3 = StringParam4 = StringParam5 = null;
         }
     }

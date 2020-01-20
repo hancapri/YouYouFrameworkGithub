@@ -28,5 +28,20 @@ namespace YouYouFramework
         /// 加载进度条更新
         /// </summary>
         public const ushort LoadingProgressChange = 1004;
+
+        /// <summary>
+        /// 检查版本更新开始下载
+        /// </summary>
+        public const ushort CheckVersionBeginDownload = 1201;
+
+        /// <summary>
+        /// 检查版本更新下载中
+        /// </summary>
+        public const ushort CheckVersionDownloadUpdate = 1202;
+
+        /// <summary>
+        /// 检查版本更新下载完毕
+        /// </summary>
+        public const ushort CheckVersionDownloadComplete = 1203;
     }
 }

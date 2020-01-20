@@ -64,11 +64,22 @@ namespace YouYouFramework
             private set;
         }
 
+        /// <summary>
+        /// 需要下载的资源包列表
+        /// </summary>
+        private LinkedList<string> m_NeedDownloadList;
+
+        /// <summary>
+        /// 检查版本更新下载时候的参数
+        /// </summary>
+        private BaseParams m_DownloadingParams;
+
         public ResourceManager()
         {
             StreamingAssetsManager = new StreamingAssetsManager();
             LocalAssetManager = new LocalAssetManager();
             m_StreamingAssetsVersionDic = new Dictionary<string, AssetBundleInfoEntity>();
+            m_NeedDownloadList = new LinkedList<string>();
         }
 
         #region 只读区 StreamingAssets文件夹
@@ -267,8 +278,48 @@ namespace YouYouFramework
             }
             else
             {
-                //TODO: 下载初始资源
+                //下载初始资源
+                DownloadInitResource();
             }
+        }
+
+        /// <summary>
+        /// 下载初始资源
+        /// </summary>
+        private void DownloadInitResource()
+        {
+            GameEntry.Event.CommonEvent.Dispatch(SysEventId.CheckVersionBeginDownload);
+            m_DownloadingParams = GameEntry.Pool.DequeueClassObject<BaseParams>();
+            m_NeedDownloadList.Clear();
+
+            var enumerator = m_CDNVersionDic.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                AssetBundleInfoEntity entity = enumerator.Current.Value;
+                if (entity.IsFirstData)
+                {
+                    m_NeedDownloadList.AddLast(entity.AssetBundleName);
+                }
+            }
+            GameEntry.Download.BeginDownloadMulit(m_NeedDownloadList, OnDownloadMulitUpdate, OnDownloadMulitComplete);
+        }
+
+        private void OnDownloadMulitComplete()
+        {
+            GameEntry.Event.CommonEvent.Dispatch(SysEventId.CheckVersionDownloadComplete);
+            GameEntry.Pool.EnqueueClassObject(m_DownloadingParams);
+            //进入预加载流程
+            GameEntry.Procedure.ChangeState(ProcedureState.Preload);
+        }
+
+        private void OnDownloadMulitUpdate(int t1, int t2, ulong t3, ulong t4)
+        {
+            m_DownloadingParams.IntParam1 = t1;
+            m_DownloadingParams.IntParam2 = t2;
+
+            m_DownloadingParams.ULongParam1 = t3;
+            m_DownloadingParams.ULongParam2 = t4;
+            GameEntry.Event.CommonEvent.Dispatch(SysEventId.CheckVersionDownloadUpdate, m_DownloadingParams);
         }
 
         /// <summary>

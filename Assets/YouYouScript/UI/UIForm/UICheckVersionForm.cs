@@ -5,7 +5,7 @@ using YouYouFramework;
 using UnityEngine.UI;
 using System;
 
-public class UICheckVersionForm : UIFormBase {
+public class UICheckVersionForm : MonoBehaviour {
     [SerializeField]
     private Text txtTip;
 
@@ -14,12 +14,11 @@ public class UICheckVersionForm : UIFormBase {
 
     private BaseParams args;
 
-    protected override void OnInit(object userData)
+    private  void Start()
     {
-        base.OnInit(userData);
         GameEntry.Event.CommonEvent.AddEventListener(SysEventId.CheckVersionBeginDownload,OnCheckVersionBeginDownload);
-        GameEntry.Event.CommonEvent.AddEventListener(SysEventId.CheckVersionBeginDownload, OnCheckVersionDownloadUpdate);
-        GameEntry.Event.CommonEvent.AddEventListener(SysEventId.CheckVersionBeginDownload, OnCheckVersionDownloadComplete);
+        GameEntry.Event.CommonEvent.AddEventListener(SysEventId.CheckVersionDownloadUpdate, OnCheckVersionDownloadUpdate);
+        GameEntry.Event.CommonEvent.AddEventListener(SysEventId.CheckVersionDownloadComplete, OnCheckVersionDownloadComplete);
 
         txtTip.gameObject.SetActive(false);
         scrollbar.gameObject.SetActive(false);
@@ -44,9 +43,8 @@ public class UICheckVersionForm : UIFormBase {
         scrollbar.gameObject.SetActive(true);
     }
 
-    protected override void OnBeforeDestroy()
+    private void OnDestroy()
     {
-        base.OnBeforeDestroy();
         GameEntry.Event.CommonEvent.RemoveEventListener(SysEventId.CheckVersionBeginDownload, OnCheckVersionBeginDownload);
         GameEntry.Event.CommonEvent.RemoveEventListener(SysEventId.CheckVersionBeginDownload, OnCheckVersionDownloadUpdate);
         GameEntry.Event.CommonEvent.RemoveEventListener(SysEventId.CheckVersionBeginDownload, OnCheckVersionDownloadComplete);
